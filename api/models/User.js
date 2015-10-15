@@ -5,7 +5,9 @@
 * @docs        :: http://sailsjs.org/#!documentation/models
 */
 
-module.exports = {
+var User = {
+
+  schema: true,
 
   attributes: {
     username:{
@@ -13,6 +15,14 @@ module.exports = {
       required: true,
       unique: true,
       minLength: 3
+    },
+    email : {
+      type: 'email',
+      unique: true
+    },
+    passports : {
+      collection: 'Passport',
+      via: 'user'
     },
     password:{
       type: 'string',
@@ -25,3 +35,4 @@ module.exports = {
   }
 };
 
+module.exports = User;
