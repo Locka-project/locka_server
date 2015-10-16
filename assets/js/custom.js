@@ -6,15 +6,15 @@ socket.on('connect', function(){
 	io.socket.on("device", function(event){console.log(event);});
 	
 	io.socket.get('/device/subscribe', function (resData) {
- 		console.log(resData[0]['deviceList']);
- 		
+ 		console.log(resData);
+
  		$.each(resData[0]['deviceList'],function(){
 	 		if(this['state'] == 'closed'){
 		 		var $lock = 'lock_outline';
 	 		} else {
 		 		var $lock = 'lock_open';
 	 		}
-	 			
+
 	 		 var $row = $('<tr>'+
       '<td>'+this['id']+'</td>'+
       '<td>'+this['name']+'</td>'+
@@ -24,6 +24,6 @@ socket.on('connect', function(){
       '</tr>');
 
 			$('table> tbody').append($row);
- 		});		
+ 		});
 	});
 });
