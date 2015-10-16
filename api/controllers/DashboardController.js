@@ -7,5 +7,8 @@
 
 module.exports = {
 	
+	getDashboard:function(req,res){
+			return res.view('dashboard')
+	}
 };
 
