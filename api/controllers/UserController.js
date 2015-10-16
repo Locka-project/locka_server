@@ -29,7 +29,8 @@ function UserCtrl(){
                 }
                 var log = "User correctly updated."
                 console.log(log);
-                res.redirect('/user');
+//                 res.redirect('/user');
+								return res.json(log);
             });
         },
         changePassword: function (req, res) {
