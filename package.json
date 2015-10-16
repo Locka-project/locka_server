@@ -33,6 +33,10 @@
     "sails-disk": "~0.10.0",
     "sails-generate-auth": "^0.3.1",
     "sails-hook-autoreload": "^0.12.0",
+<<<<<<< HEAD
+=======
+    "sails-hook-email": "^0.12.1",
+>>>>>>> d85ec24ee82189bf0182e7fccd617d47b04946ad
     "sails-mysql": "^0.11.0",
     "validator": "^4.2.0"
   },

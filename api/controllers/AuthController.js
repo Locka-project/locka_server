@@ -30,7 +30,8 @@ var AuthController = {
    * @param {Object} req
    * @param {Object} res
    */
-  login: function (req, res) {
+
+  getProviders: function() {
     var strategies = sails.config.passport
       , providers  = {};
 
@@ -48,10 +49,26 @@ var AuthController = {
       };
     });
 
+    return providers
+  },
+
+  login: function (req, res) {
+
+    var providers = this.getProviders();
+
     // Render the `auth/login.ext` view
     res.view({
       providers : providers
     , errors    : req.flash('error')
+    });
+  },
+
+  register: function (req, res) {
+    var providers = this.getProviders();
+
+    res.view({
+      providers: providers,
+      errors: req.flash('error')
     });
   },
 
@@ -71,10 +88,10 @@ var AuthController = {
    */
   logout: function (req, res) {
     req.logout();
-    
+
     // mark the user as logged out for auth purposes
     req.session.authenticated = false;
-    
+
     res.redirect('/login');
   },
 
@@ -93,11 +110,6 @@ var AuthController = {
    * @param {Object} req
    * @param {Object} res
    */
-  register: function (req, res) {
-    res.view({
-      errors: req.flash('error')
-    });
-  },
 
   /**
    * Create a third-party authentication endpoint
@@ -166,10 +178,10 @@ var AuthController = {
         if (err) {
           return tryAgain(err);
         }
-        
+
         // Mark the session as authenticated to work with default Sails sessionAuth.js policy
         req.session.authenticated = true
-        
+
         // Upon successful login, send the user to the homepage were req.user
         // will be available.
         // 
