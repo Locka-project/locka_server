@@ -43,26 +43,27 @@ function FrontUserCtrl(){
         firstname: req.allParams().firstname
       }).exec(function afterwards(err, updated) {
         if (err) {
-          LogService.create({type: "Error", description: "Error : " + err + " trying to update user with id " + req.allParams().id});
+          var log = "Error : " + err + " trying to update user.";
+          console.log(log);
           return res;
         }
-        LogService.create({type: "Update", description: "User " + updated.username + " correctly updated."});
+        var log = "User correctly updated."
+        console.log(log);
         res.redirect('/user');
       });
     },
-
     changePassword: function (req, res) {
       if(req.allParams().password != req.allParams().confirm){
         return res.redirect('/user');
       }
       findPassport(req.user, res, function(err, passport){
         if(err){
-          LogService.create({type: "Error", description: "Error : " + err + " trying to change password of user with id " + req.allParams().id});
+          res = "Error : " + err + " trying to find user.";
+          console.log(res);
           return res;
         }
         passport.password = req.allParams().password;
         passport.save();
-        LogService.create({type: "Update", description: "User " + updated.username + " password correctly updated."});
       });
       res.redirect('/user');
     },
@@ -74,14 +75,16 @@ function FrontUserCtrl(){
     sendNewPassword: function(req, res){
       User.find({email:req.allParams().email}).exec(function findCB(err, found){
         if(err){
-          LogService.create({type: "Error", description: "Error : " + err + " trying to find user with id " + req.allParams().id});
+          res = "Error : " + err + " trying to find user.";
+          console.log(res);
           return res;
         }
 
         var newPassword = generatePassword();
         findPassport(found[0], res, function(err, passport){
           if(err){
-            LogService.create({type: "Error", description: "Error : " + err + " trying to update user " + found[0].username});
+            res = "Error : " + err + " trying to find user.";
+            console.log(res);
             return res;
           }
           passport.password = newPassword;
@@ -164,23 +167,27 @@ function FrontUserCtrl(){
     },
 
     getDevicesByUser: function (req, res) {
-      User.find({id: req.allParams().id}).populate('deviceList').exec(function (err, devices) {
+      User.find({id: req.user.id}).populate('deviceList').exec(function (err, devices) {
         if (err) {
           var log = "Error : " + err + " trying to list all users.";
           console.log(log);
           return res;
         }
-        var log = "Users correctly deleted.";
+        var log = "Device correctly listed.";
         console.log(log);
+        Device.subscribe(req.socket, devices);
+        console.log('User with socket id '+req.socket.id+' is now subscribed to all of the model instances in \'users\'.');
         return res.json(devices);
       })
     },
     
-    subscribe: function(req,res){
-			if(req.req.isSocket){
-				var deviceList = getDevicesByUser(req.user.id);
-				
-				sails.log(deviceList);
+    subscribe: function(req, res){
+			if(req.isSocket){
+				if(req.user){
+					this.getDevicesByUser(req, res);
+					var socketId = sails.sockets.id(req.socket);
+					sails.log(socketId);
+				}
 			}
 		},
   }

@@ -98,8 +98,7 @@ module.exports.routes = {
 	'GET /api/device/getUsersByDevice': 'DeviceController.getUsersByDevice',
 	
 	/* ----------- Socket IO --------- */
-	'GET /rooms/all': 'DeviceController.getAllRooms',
-	'POST /rooms/join/:id': 'DeviceController.createRooms',
+	'GET /device/subscribe': 'FrontUserController.subscribe',
 
   /***************************************************************************
   *                                                                          *
