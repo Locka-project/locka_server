@@ -6,24 +6,25 @@
 */
 
 function FrontUserCtrl(){
-function generatePassword(req, res){
-		var newPassword = "";
-		var generator = "azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN0123456789"
-		for (var i = 0; i < 8; i++)
-				newPassword += generator.charAt(Math.floor(Math.random() * generator.length));
-		return newPassword;
-}
+	
+	function generatePassword(req, res){
+			var newPassword = "";
+			var generator = "azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN0123456789"
+			for (var i = 0; i < 8; i++)
+					newPassword += generator.charAt(Math.floor(Math.random() * generator.length));
+			return newPassword;
+	}
 
-function findPassport(req,res, callback){
-  Passport.find({user:req.id, protocol:'local'}).exec(function findCB(err, passport){
-    if(err){
-      callback(err);
-    }
-    callback(err, passport[0]);
-  });
-}
+	function findPassport(req,res, callback){
+	  Passport.find({user:req.id, protocol:'local'}).exec(function findCB(err, passport){
+	    if(err){
+	      callback(err);
+	    }
+	    callback(err, passport[0]);
+	  });
+	}
 
-return {
+	return {
 		//controller actions
 		myAccount: function (req, res) {
       findPassport(req.user, res, function(err, passport){
@@ -96,60 +97,60 @@ return {
 		},
 
 		sendNewPassword: function(req, res){
-				User.find({email:req.allParams().email}).exec(function findCB(err, found){
-						if(err){
-								res = "Error : " + err + " trying to find user.";
-								console.log(res);
-								return res;
-						}
+			User.find({email:req.allParams().email}).exec(function findCB(err, found){
+					if(err){
+							res = "Error : " + err + " trying to find user.";
+							console.log(res);
+							return res;
+					}
 
-						var newPassword = generatePassword();
-            findPassport(found[0], res, function(err, passport){
-              if(err){
-                res = "Error : " + err + " trying to find user.";
-                console.log(res);
-                return res;
-              }
-              passport.password = newPassword;
-              passport.save();
-            });
-
-            var response = EmailService.forgetPassword(found[0], newPassword);
-            if(response != true){
-              res = "Error : " + err + " trying to send mail.";
+					var newPassword = generatePassword();
+          findPassport(found[0], res, function(err, passport){
+            if(err){
+              res = "Error : " + err + " trying to find user.";
               console.log(res);
               return res;
             }
+            passport.password = newPassword;
+            passport.save();
+          });
 
-						return res.redirect('/login');
-				});
+          var response = EmailService.forgetPassword(found[0], newPassword);
+          if(response != true){
+            res = "Error : " + err + " trying to send mail.";
+            console.log(res);
+            return res;
+          }
+
+					return res.redirect('/login');
+			});
 		},
 
 		getAllUsers: function (req, res) {
-				User.find({}).exec(function findCB(err, found) {
-						if (err) {
-								var log = "Error : " + err + " trying to list all users.";
-								console.log(log);
-								return res;
-						}
-						var log = "Users correctly listed.";
-						console.log(log);
-						return res.json(found);
-				});
+			User.find({}).exec(function findCB(err, found) {
+					if (err) {
+							var log = "Error : " + err + " trying to list all users.";
+							console.log(log);
+							return res;
+					}
+					var log = "Users correctly listed.";
+					console.log(log);
+					return res.json(found);
+			});
 		},
 
 		getDevicesByUser: function (req, res) {
-				User.find({id: req.allParams().id}).populate('deviceList').exec(function (err, devices) {
-						if (err) {
-								var log = "Error : " + err + " trying to list all users.";
-								console.log(log);
-								return res;
-						}
-						var log = "Users correctly deleted.";
-						console.log(log);
-						return res.json(devices);
-				})
+			User.find({id: req.allParams().id}).populate('deviceList').exec(function (err, devices) {
+					if (err) {
+							var log = "Error : " + err + " trying to list all users.";
+							console.log(log);
+							return res;
+					}
+					var log = "Users correctly deleted.";
+					console.log(log);
+					return res.json(devices);
+			})
 		},
-}
+	}
 }
 module.exports = FrontUserCtrl();

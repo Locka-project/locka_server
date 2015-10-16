@@ -142,6 +142,27 @@ function DeviceCtrl(){
 				console.log(users);
 				return res.json(users);
 			});
+		},
+		getAllRooms: function(req,res){
+			
+		},
+		createRooms: function(req,res){
+			if(req.req.isSocket){
+				if(req.param('id')){
+					sails.sockets.join(req.socket, req.param('id'));
+					res.json({
+						message: 'Subscribed to a fun room called '+req.param('id')+'!'
+					})
+				} else {
+					res.json({
+						message: 'id parameter is not defined'
+					});
+				}
+			} else {
+				res.json({
+						message: 'you don\'t have a valid socket'
+					});
+			}
 		}
 	}
 }
