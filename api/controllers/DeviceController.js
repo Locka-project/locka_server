@@ -48,11 +48,11 @@ function DeviceCtrl(){
 					return res;
 				}
 				LogService.create({type: "Delete", description: "Device " + req.allParams().id + " correctly deleted by user " + req.user.id});
-				return res;
+				return res.json;
 			})
 		},
 		update:function(req,res){
-			Device.update({id:req.allParams().id},{name:req.allParams().name, state:req.allParams().state}).exec(function afterwards(err, updated){
+			Device.update({id:req.allParams().id},{name:req.allParams().name}).exec(function afterwards(err, updated){
 				if(err) {
 					LogService.create({type: "Error", description: "Error : " + err + " trying to update device."});
 					return res;
@@ -121,7 +121,6 @@ function DeviceCtrl(){
 					LogService.create({type: "Error", description: "Error : " + err + " trying to list device users."});
 					return res;
 				}
-				//LogService.create({type: "Success", description: "Device users correctly listed."});
 				console.log(users);
 				return res.json(users);
 			});
