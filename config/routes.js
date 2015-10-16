@@ -31,24 +31,37 @@ module.exports.routes = {
   * `assets` directory)                                                      *
   *                                                                          *
   ***************************************************************************/
-
-	'get /' : 'DashboardController.getDashboard',
-  'get /login': 'AuthController.login',
+	
+	/* Root routing */
+	'get /': 'DashboardController.getDashboard',
+	
+	/* Auth routing */
+	'get /login': 'AuthController.login',
   'get /logout': 'AuthController.logout',
   'get /register': 'AuthController.register',
 
   'post /auth/local': 'AuthController.callback',
   'post /auth/local/:action': 'AuthController.callback',
-
   'get /auth/:provider': 'AuthController.provider',
   'get /auth/:provider/callback': 'AuthController.callback',
 
-  'get /user': 'UserController.index',
-  'get /user/update': 'UserController.update',
+	/* User routing */
+  'get /user': 'UserController.myAccount',
+  'post /user/update': 'UserController.update',
   'get /user/delete': 'UserController.delete',
   'get /user/getAllUsers': 'UserController.getAllUsers',
   'get /user/getDevicesByUser': 'UserController.getDevicesByUser',
 
+	/* Device routing */
+  'get /device': 'DeviceController.index',
+  'get /device/create': 'DeviceController.create',
+  'get /device/open': 'DeviceController.open',
+  'get /device/close': 'DeviceController.close',
+  'get /device/checkState': 'DeviceController.checkState',
+  'get /device/update': 'DeviceController.update',
+  'get /device/delete': 'DeviceController.delete',
+  'get /device/getAllDevices': 'DeviceController.getAllDevices',
+  'get /device/getUsersByDevice': 'DeviceController.getUsersByDevice',
 
   /***************************************************************************
   *                                                                          *
