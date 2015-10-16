@@ -38,6 +38,8 @@ var AuthController = {
     Object.keys(strategies).forEach(function (key) {
       if (key === 'local') {
         return;
+      } else if (key === 'bearer'){
+	      return;
       }
 
       providers[key] = {
@@ -170,7 +172,13 @@ var AuthController = {
         
         // Upon successful login, send the user to the homepage were req.user
         // will be available.
-        res.redirect('/');
+        // 
+        // Check if param is api
+        if (req.param('api') == "true"){
+	        res.send(user);
+        } else {
+	        res.redirect('/');
+        }
       });
     });
   },
