@@ -29,7 +29,7 @@ var User = {
       required: true,
     },
     deviceList:{
-      collection: "devices",
+      collection: "device",
       via: 'userList'
     }
   }
