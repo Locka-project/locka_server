@@ -8,6 +8,7 @@
 module.exports = {
 
   attributes: {
+    //type {Error,Warning,Create,Update,Delete,Open,Close}
     type:{
       type: 'string',
       required: true,
