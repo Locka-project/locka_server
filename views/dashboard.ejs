@@ -13,10 +13,11 @@
 	  <div id="dashboard" class="container">
 	  	<div class="col s12">
 	  		<% if (user.fullName() != null) { %>
-	  			<h3>Bienvenue <%- user.fullName()%></h3>
+	  			<h3 class="left">Bienvenue <%- user.fullName()%></h3>
 	  		<% } else { %>
-		  		<h3>Bienvenue</h3>
+		  		<h3 class="left">Bienvenue</h3>
 		  	<% } %>
+				<p class="right"><a class="btn-floating btn-medium waves-effect waves-light" href="/device/creatingPage"><i class="material-icons">add</i></a></p>
 		  	<table>
 	        <thead>
 	          <tr>
@@ -27,7 +28,7 @@
 	              <th data-field="state">Connected</th>
 	          </tr>
 	        </thead>
-	
+
 	        <tbody>
 	        <% for(var i=0; i<device.length; i++) { %>
 			        <tr>
@@ -41,7 +42,7 @@
 			        			<% } else { %>
 										<i class="small material-icons">lock_outline</i>
 										<% } %>
-										<i class="small material-icons">info_outline</i>
+										<i onclick="openEditDevice(<%= device[i].id %>)" class="small material-icons">info_outline</i>
 									</td>
 									<td>
 										<div style="width:15px; height:15px; background:#f44336; border-radius:7.5px;"></div>
@@ -53,5 +54,25 @@
 	  	</div>
 	  </div>
 	</div>
+
+	<!-- Modal Structure -->
+<div id="modal1" class="modal">
+	<div class="modal-content">
+		<h4>Information</h4>
+		<p id="descriptionDevice"></p>
+		<p id="test"></p>
+	</div>
+	<div class="modal-footer">
+		<a class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+	</div>
+</div>
+
+<script type="text/javascript">
+	function openEditDevice(id){
+		$('#descriptionDevice').text(id);
+		$('#modal1').openModal();
+	}
+</script>
+
 </main>
 <% include footer %>

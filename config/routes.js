@@ -58,6 +58,7 @@ module.exports.routes = {
 
 	/* Device routing */
   'GET /device': 'FrontDeviceController.index',
+	'GET /device/creatingPage': 'FrontDeviceController.creatingPage',
   'POST /device/create': 'FrontDeviceController.create',
   'GET /device/open': 'FrontDeviceController.open',
   'GET /device/close': 'FrontDeviceController.close',
