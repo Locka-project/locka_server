@@ -41,6 +41,9 @@ module.exports.policies = {
 	/* --------- API Request ---------- */
 	UserController : {
 	  '*': ['passport','bearerAuth']
+	},
+	DeviceController : {
+	  '*': ['passport','bearerAuth']
 	}
 	
   /***************************************************************************
