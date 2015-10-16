@@ -83,6 +83,7 @@ function DeviceCtrl(){
 							LogService.create({type: "Error", description: "Error : " + errUpdate + " trying to close device."});
 							return res;
 						}
+						Device.publishUpdate(closed[0].id,{ name:closed[0].name });
 						LogService.create({type: "Close", description: "Device " + req.allParams().id + " correctly closed by user " + req.user.id});
 						console.log(closed);
 						return res.json(closed);
@@ -104,6 +105,7 @@ function DeviceCtrl(){
 							LogService.create({type: "Error", description: "Error : " + errUpdate + " trying to open device."});
 							return res;
 						}
+						Device.publishUpdate(openned[0].id,{ name:openned[0].name });
 						LogService.create({type: "Open", description: "Device " + req.allParams().id + " correctly opened by user " + req.user.id});
 						console.log(openned);
 						return res.json(openned);
@@ -124,27 +126,6 @@ function DeviceCtrl(){
 				return res.json(users);
 			});
 		},
-		getAllRooms: function(req,res){
-			
-		},
-		createRooms: function(req,res){
-			if(req.req.isSocket){
-				if(req.param('id')){
-					sails.sockets.join(req.socket, req.param('id'));
-					res.json({
-						message: 'Subscribed to a fun room called '+req.param('id')+'!'
-					})
-				} else {
-					res.json({
-						message: 'id parameter is not defined'
-					});
-				}
-			} else {
-				res.json({
-						message: 'you don\'t have a valid socket'
-					});
-			}
-		}
 	}
 }
 
