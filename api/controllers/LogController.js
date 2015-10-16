@@ -13,7 +13,7 @@ function LogCtrl(){
                 if(err) return;
                 var log = "Log correctly created."
                 console.log(log);
-                return created;
+                return res.json(created);
             });
         }
     }

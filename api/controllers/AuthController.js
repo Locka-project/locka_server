@@ -168,12 +168,10 @@ var AuthController = {
           res.redirect('/login');
       }
     }
-
     passport.callback(req, res, function (err, user, challenges, statuses) {
       if (err || !user) {
         return tryAgain(challenges);
       }
-
       req.login(user, function (err) {
         if (err) {
           return tryAgain(err);
@@ -184,7 +182,7 @@ var AuthController = {
 
         // Upon successful login, send the user to the homepage were req.user
         // will be available.
-        // 
+        //
         // Check if param is api
         if (req.param('api') == "true"){
 	      	Passport

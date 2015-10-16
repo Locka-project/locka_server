@@ -42,7 +42,7 @@ function UserCtrl(){
                 }
                 var log = "User password correctly updated."
                 console.log(log);
-                return updated;
+                return res.json(updated);
             });
         },
         delete: function (req, res) {
@@ -117,7 +117,7 @@ function UserCtrl(){
                 }
                 var log = "Users correctly deleted.";
                 console.log(log);
-                return devices;
+                return res.json(devices);
             })
         },
     }

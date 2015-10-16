@@ -1,4 +1,4 @@
-  <p><% if (errors) {%>
+ <% if (errors) {%>
     <% errors.forEach(function (error) { %>
       <% if (error =='Error.Passport.Email.Missing'){%>
         <p> Please be sure to fill the Email input </p>
@@ -31,4 +31,4 @@
         <p> The username or the password is wrong </p>
       <%} %>
     <% }) %>
-  <% } %>
+<% } %>

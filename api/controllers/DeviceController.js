@@ -16,7 +16,7 @@ function DeviceCtrl(){
 					return res;
 				}
 				console.log(device);
-				return device;
+				return res.json(device);
 			});
 		},
 		create:function(req,res){
@@ -28,7 +28,7 @@ function DeviceCtrl(){
 				}
 				var log = "Device correctly created."
 				console.log(log);
-				return created;
+				return res.json(created);
 			});
 		},
 		getAllDevices:function(req,res){
@@ -41,7 +41,7 @@ function DeviceCtrl(){
 				var log = "Devices correctly listed."
 				console.log(log);
 				console.log(found);
-				return found;
+				return res.json(found);
 			});
 		},
 		delete:function(req,res){
@@ -66,7 +66,7 @@ function DeviceCtrl(){
 				var log = "Device correctly updated."
 				console.log(log);
 				console.log(updated);
-				return updated;
+				return res.json(updated);
 			});
 		},
 		checkState:function(req,res){
@@ -78,7 +78,7 @@ function DeviceCtrl(){
 				}
 				var log = "Lock " + found[0].name + " is " + found[0].state + "."
 				console.log(log)
-				return res;
+				return res.json(log);
 			});
 		},
 		close:function(req,res){
@@ -97,7 +97,7 @@ function DeviceCtrl(){
 						}
 						res
 						console.log(closed);
-						return closed;
+						return res.json(closed);
 					});
 				} else {
 					var log = "Lock " + found[0].name + " already " + found[0].state + ".";
@@ -121,7 +121,7 @@ function DeviceCtrl(){
 							return res;
 						}
 						console.log(openned);
-						return openned;
+						return res.json(openned);
 					});
 				} else {
 					var log = "Lock " + found[0].name + " already " + found[0].state + ".";
@@ -131,7 +131,7 @@ function DeviceCtrl(){
 			});
 		},
 		getUsersByDevice: function(req, res){
-			Device.find({id:req.allParams().id}).populate('userList').exec(function founByDeviceCB(err, devices){
+			Device.find({id:req.allParams().id}).populate('userList').exec(function foundByDeviceCB(err, users){
 				if(err) {
 					var log = "Error : " + err + " trying to list device users.";
 					console.log(log);
@@ -139,8 +139,8 @@ function DeviceCtrl(){
 				}
 				var log = "Device users correctly listed."
 				console.log(log);
-				console.log(devices);
-				return devices;
+				console.log(users);
+				return res.json(users);
 			});
 		}
 	}
