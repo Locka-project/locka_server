@@ -187,7 +187,13 @@ var AuthController = {
         // 
         // Check if param is api
         if (req.param('api') == "true"){
-	        res.send(user);
+	      	Passport
+			      .findOne({ protocol: 'local', user: req.user.id })
+			      .exec(function(err, passport) {
+			        return res.json({
+			          token: passport.accessToken
+			        });
+			    	});
         } else {
 	        res.redirect('/');
         }

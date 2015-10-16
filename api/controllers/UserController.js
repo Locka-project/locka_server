@@ -103,7 +103,7 @@ function UserCtrl(){
                 }
                 var log = "Users correctly listed.";
                 console.log(log);
-                return found;
+                return res.json(found);
             });
         },
 
