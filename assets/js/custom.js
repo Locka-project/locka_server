@@ -3,7 +3,7 @@ var socket = io.sails.connect();
 socket.on('connect', function(){
 	console.log("Connected...");
 	
-	io.socket.on("device", function(event){console.log(event);})
+	io.socket.on("device", function(event){console.log(event);});
 	
 	io.socket.get('/device/subscribe', function (resData) {
  		console.log(resData[0]['deviceList']);
