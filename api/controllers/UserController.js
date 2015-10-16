@@ -14,9 +14,9 @@ module.exports = {
     },
 
     update: function(req, res){
-        User.update({id:req.allParams().id}, {email:req.allParams().email, username:req.allParams().username, password:req.allParams().password}).exec(function afterwards(err, updated){
+        User.update({id:req.allParams().id}, {email:req.allParams().email, username:req.allParams().username, lastname:req.allParams().lastname, firstname:req.allParams().firstname}).exec(function afterwards(err, updated){
             if(err)return;
-            return updated;
+            res.redirect('/user');
         });
     },
 
