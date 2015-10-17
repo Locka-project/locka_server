@@ -138,12 +138,12 @@ function UserCtrl(){
 					
 					if(err) return res.json(err)
 					Device.subscribe(req, _.pluck(user.deviceList, 'id'));
-					res.json({msg: "sucess"});
+					return res.json({msg: "sucess"});
 				});
 			}
-			res.json({msg: "user is not defined"});
+			return res.json({msg: "user is not defined"});
 		}
-		res.json({msg: "is not a Socket"});
+		return res.json({msg: "is not a Socket"});
 		}
   }
 }
