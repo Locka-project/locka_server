@@ -145,7 +145,6 @@ function FrontUserCtrl(){
           LogService.create({type: "Error", description: "Error : " + err + " trying to send mail."});
           return res;
         }
-
         return res.redirect('/login');
       });
     },
@@ -166,21 +165,9 @@ function FrontUserCtrl(){
           LogService.create({type: "Error", description: "Error : " + err + " trying to list all users."});
           return res;
         }
-        Device.subscribe(req.socket, devices);
-        LogService.create({type: "Subscription", description: "User with socket id " + req.socket.id + " is now subscribed to all of the model instances in 'users'."});
         return res.json(devices);
       })
     },
-    
-    subscribe: function(req, res){
-			if(req.isSocket){
-				if(req.user){
-					this.getDevicesByUser(req, res);
-					var socketId = sails.sockets.id(req.socket);
-					sails.log(socketId);
-				}
-			}
-		},
   }
 }
 module.exports = FrontUserCtrl();
