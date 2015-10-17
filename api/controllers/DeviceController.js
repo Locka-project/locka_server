@@ -12,13 +12,12 @@ function DeviceCtrl(){
 		_config: { actions: false, rest: false, shortcuts: false },
 		
 		index:function(req,res){
-			Device.find({id:req.allParams().id}).exec(function indexCB(err, device){
-				if(err) {
-					LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + err + " trying to display device."});
+			User.findOne({id: req.user.id}).populate('deviceList').exec(function (err, user) {
+				if (err) {
+					LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + err + " trying to list user" + req.user.id + "devices."});
 					return res;
 				}
-				console.log(device);
-				return res.json(device);
+				return res.json(user.deviceList);
 			});
 		},
 		create:function(req,res){
@@ -51,7 +50,7 @@ function DeviceCtrl(){
 				}
 				LogService.create({type: "Delete", description: "Device " + req.allParams().id + " correctly deleted by user " + req.user.id});
 				Device.publishDestroy(device[0].id,device[0]);
-				return res.json(device);
+				return res.json({success:'true'});
 			})
 		},
 		update:function(req,res){

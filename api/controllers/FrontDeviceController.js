@@ -26,12 +26,12 @@
 			Device.create({name:req.allParams().name, state:"closed"}).exec(function createCB(err, created){
 				if(err) {
 					LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + err + " trying to create device."});
-					return res;
+					return res.redirect('/');
 				}
 				created.userList.add(req.user);
 				created.save();
-				LogService.create({user_id: req.user.id, device_id: req.allParams().id, type: "Create", description: "Device correctly created." });
-				res.redirect('/');
+				LogService.create({user_id: req.user.id, device_id: created.id, type: "Create", description: "Device correctly created." });
+				return res.redirect('/');
 			});
 		},
 		getAllDevices:function(req,res){
@@ -48,10 +48,9 @@
 			Device.destroy({id:req.allParams().id}).exec(function destroyCB(err, device){
 				if(err) {
 					LogService.create({user_id: req.user.id, device_id: req.allParams().id, type: "Error", description: "Error : " + err + " trying to delete device."});
-					return res;
+					return res.json({msg : 'Error'})
 				}
 				LogService.create({user_id: req.user.id, device_id: req.allParams().id, type: "Delete", description: "Device correctly deleted."});
-				return res;
 				Device.publishDestroy(device[0].id,device[0]);
 				return res.json({msg : 'Successful'})
 			})
@@ -60,7 +59,7 @@
 			Device.update({id:req.allParams().id},{name:req.allParams().name}).exec(function afterwards(err, updated){
 				if(err) {
 					LogService.create({user_id: req.user.id, device_id: req.allParams().id, type: "Error", description: "Error : " + err + " trying to update device."});
-					return res;
+					return res.redirect('/');
 				}
 				LogService.create({user_id: req.user.id, device_id: req.allParams().id, type: "Update", description: "Device correctly updated."});
 				console.log(updated);

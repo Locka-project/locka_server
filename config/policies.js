@@ -53,7 +53,6 @@ module.exports.policies = {
 	  'subscribe': ['passport','authSocket'],
 	}
 
-
   /***************************************************************************
   *                                                                          *
   * Here's an example of mapping some policies to run before a controller    *
