@@ -85,7 +85,6 @@ module.exports.routes = {
   'POST /api/sendNewPassword': 'UserController.sendNewPassword',
 	'GET /api/user/getDevicesByUser/': 'UserController.getDevicesByUser',
 	'GET /api/user/forgetPassword/': 'UserController.forgetPassword',
-	'GET /api/user/subscribe': 'UserController.getMyLock',
 
 	/* Device routing */
 	'GET /api/device': 'DeviceController.index',
@@ -98,8 +97,10 @@ module.exports.routes = {
 	'GET /api/device/getAllDevices': 'DeviceController.getAllDevices',
 	'GET /api/device/getUsersByDevice': 'DeviceController.getUsersByDevice',
 	
-	/* ----------- Socket IO Front --------- */
+	/* ----------- Socket IO --------- */
 	'GET /socket/devices/subscribe': 'FrontDashboardController.getMyLock',
+	'GET /api/user/subscribe': 'UserController.getMyLock',
+	'GET /api/devices/subscribe/:id': 'DeviceController.subscribe',
 
   /***************************************************************************
   *                                                                          *

@@ -129,6 +129,11 @@ function DeviceCtrl(){
 				return res.json(users.deviseList);
 			});
 		},
+		subscribe: function(req, res){
+			if(!req.isSocket) return res.json({msg: "is not a Socket"});
+			if(!req.user) return res.json({msg: "user is not defined"});
+			return res.json({msg: "success...",id: req.params.id, token: req.param('access_token')});
+		}
 	}
 }
 

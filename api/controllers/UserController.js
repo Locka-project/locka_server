@@ -138,7 +138,7 @@ function UserCtrl(){
 			User.findOne({id:req.user.id}).populate('deviceList').exec(function findOneCB(err, user){
 				if(err) return res.json(err)
 				Device.subscribe(req, _.pluck(user.deviceList, 'id'));
-				return res.json({msg: "sucess"});
+				return res.json({msg: "success"});
 			});
 		}
   }
