@@ -9,6 +9,8 @@
 function DeviceCtrl(){
 
 	return{
+		_config: { actions: false, rest: false, shortcuts: false },
+		
 		index:function(req,res){
 			Device.find({id:req.allParams().id}).exec(function indexCB(err, device){
 				if(err) {
@@ -42,13 +44,14 @@ function DeviceCtrl(){
 			});
 		},
 		delete:function(req,res){
-			Device.destroy({id:req.allParams().id}).exec(function destroyCB(err){
+			Device.destroy({id:req.allParams().id}).exec(function destroyCB(err, device){
 				if(err) {
 					LogService.create({type: "Error", description: "Error : " + err + " trying to delete device."});
 					return res;
 				}
 				LogService.create({type: "Delete", description: "Device " + req.allParams().id + " correctly deleted by user " + req.user.id});
-				return res.json;
+				Device.publishDestroy(device[0].id,device[0]);
+				return res.json(device);
 			})
 		},
 		update:function(req,res){
@@ -59,7 +62,7 @@ function DeviceCtrl(){
 				}
 				LogService.create({type: "Update", description: "Device " + req.allParams().id + " correctly updated by user " + req.user.id});
 				console.log(updated);
-				Device.publishUpdate(updated[0].id,{ name: updated[0].name, state: updated[0].state});
+				Device.publishUpdate(updated[0].id,updated[0]);
 				return res.json(updated);
 			});
 		},
@@ -84,9 +87,9 @@ function DeviceCtrl(){
 							LogService.create({type: "Error", description: "Error : " + errUpdate + " trying to close device."});
 							return res;
 						}
-						Device.publishUpdate(closed[0].id,{ name:closed[0].name });
 						LogService.create({type: "Close", description: "Device " + req.allParams().id + " correctly closed by user " + req.user.id});
 						console.log(closed);
+						Device.publishUpdate(closed[0].id,closed[0]);
 						return res.json(closed);
 					});
 				} else {
@@ -106,9 +109,9 @@ function DeviceCtrl(){
 							LogService.create({type: "Error", description: "Error : " + errUpdate + " trying to open device."});
 							return res;
 						}
-						Device.publishUpdate(openned[0].id,{ name:openned[0].name });
 						LogService.create({type: "Open", description: "Device " + req.allParams().id + " correctly opened by user " + req.user.id});
 						console.log(openned);
+						Device.publishUpdate(openned[0].id,openned[0]);
 						return res.json(openned);
 					});
 				} else {
@@ -117,13 +120,13 @@ function DeviceCtrl(){
 			});
 		},
 		getUsersByDevice: function(req, res){
-			Device.find({id:req.allParams().id}).populate('userList').exec(function foundByDeviceCB(err, users){
+			Device.findOne({id:req.allParams().id}).populate('userList').exec(function foundByDeviceCB(err, users){
 				if(err) {
 					LogService.create({type: "Error", description: "Error : " + err + " trying to list device users."});
 					return res;
 				}
 				console.log(users);
-				return res.json(users);
+				return res.json(users.deviseList);
 			});
 		},
 	}

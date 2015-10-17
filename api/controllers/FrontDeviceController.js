@@ -31,7 +31,7 @@ function FrontDeviceCtrl(){
 				created.userList.add(req.user);
 				created.save();
 				LogService.create({type: "Create", description: "Device " + created.id + " correctly created by user " + req.user.username});
-				res.redirect('/');
+				return res.redirect('/');
 			});
 		},
 		getAllDevices:function(req,res){
@@ -48,15 +48,16 @@ function FrontDeviceCtrl(){
 			});
 		},
 		delete:function(req,res){
-			Device.destroy({id:req.allParams().id}).exec(function destroyCB(err){
+			Device.destroy({id:req.allParams().id}).exec(function destroyCB(err, device){
 				if(err) {
 					var log = "Error : " + err + " trying to delete device.";
 					console.log(log);
-					return res;
+					return res.json({msg: err});
 				}
 				var log = "Device correctly deleted.";
 				console.log(log);
-				return res;
+				Device.publishDestroy(device[0].id,device[0]);
+				return res.json({msg : 'Successful'})
 			})
 		},
 		update:function(req,res){
@@ -67,6 +68,7 @@ function FrontDeviceCtrl(){
 				}
 				LogService.create({type: "Update", description: "Device with id " + req.allParams().id + " correctly updated by user " + req.user.username});
 				console.log(updated);
+				Device.publishUpdate(updated[0].id,updated[0]);
 				return res.redirect('/');
 			});
 		},
@@ -97,12 +99,13 @@ function FrontDeviceCtrl(){
 						}
 						res
 						console.log(closed);
+						Device.publishUpdate(closed[0].id,closed[0]);
 						return res.json(closed);
 					});
 				} else {
 					var log = "Lock " + found[0].name + " already " + found[0].state + ".";
 					console.log(log);
-					return res;
+					return res.json({msg : 'Already closed'});
 				}
 			});
 		},
@@ -120,11 +123,12 @@ function FrontDeviceCtrl(){
 						}
 						LogService.create({type: "Open", description: "Lock " + openned.name + " openned by user " + req.user.username});
 						console.log(openned);
+						Device.publishUpdate(openned[0].id,openned[0]);
 						return res.json(openned);
 					});
 				} else {
 					LogService.create({type: "Error", description: "Error : " + err + " trying to list devices."});
-					return res;
+					return res.json({msg : 'Already opened'});
 				}
 			});
 		},
