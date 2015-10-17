@@ -9,13 +9,13 @@ module.exports = {
 
   attributes: {
     //type {Error,Warning,Create,Update,Delete,Open,Close}
-    /*user_id:{
+    user_id:{
       type: 'number',
       required: true,
     },
     device_id:{
       type: 'number',
-    },*/
+    },
     type:{
       type: 'string',
       required: true,

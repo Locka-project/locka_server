@@ -116,7 +116,7 @@ function FrontDeviceCtrl(){
 					return res;
 				}
 				if(found[0].state == "closed"){
-					Device.update({id:req.allParams().id},{state:"open"}).exec(function openCB(errUpdate,openned){
+					Device.update({id:req.allParams().id},{state:"open"}).exec(function openCB(errUpdate,opened){
 						if(errUpdate) {
 							LogService.create({type: "Error", description: "Error : " + err + " trying to open device with id " + req.allParams().id});
 							return res;

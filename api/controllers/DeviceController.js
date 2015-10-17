@@ -14,7 +14,7 @@ function DeviceCtrl(){
 		index:function(req,res){
 			Device.find({id:req.allParams().id}).exec(function indexCB(err, device){
 				if(err) {
-					LogService.create({type: "Error", description: "Error : " + err + " trying to display device."});
+					LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + err + " trying to display device."});
 					return res;
 				}
 				console.log(device);
@@ -24,19 +24,19 @@ function DeviceCtrl(){
 		create:function(req,res){
 			Device.create({name:req.allParams().name, state:"closed"}).exec(function createCB(err, created){
 				if(err) {
-					LogService.create({type: "Error", description: "Error : " + err + " trying to create device."});
+					LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + err + " trying to create device."});
 					return res;
 				}
 				created.userList.add(req.user);
 				created.save();
-				LogService.create({type: "Create", description: "Device " + created.id + " correctly created by user " + req.user.username});
+				LogService.create({user_id: req.user.id, device_id: created.id, type: "Create", description: "Device correctly created."});
 				return res.json(created);
 			});
 		},
 		getAllDevices:function(req,res){
 			Device.find({}).exec(function findCB(err, found){
 				if(err) {
-					LogService.create({type: "Error", description: "Error : " + err + " trying to list devices."});
+					LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + err + " trying to list devices."});
 					return res;
 				}
 				console.log(found);
@@ -46,7 +46,7 @@ function DeviceCtrl(){
 		delete:function(req,res){
 			Device.destroy({id:req.allParams().id}).exec(function destroyCB(err, device){
 				if(err) {
-					LogService.create({type: "Error", description: "Error : " + err + " trying to delete device."});
+					LogService.create({user_id: req.user.id, device_id: req.allParams().id, type: "Error", description: "Error : " + err + " trying to delete device."});
 					return res;
 				}
 				LogService.create({type: "Delete", description: "Device " + req.allParams().id + " correctly deleted by user " + req.user.id});
@@ -57,10 +57,10 @@ function DeviceCtrl(){
 		update:function(req,res){
 			Device.update({id:req.allParams().id},{name:req.allParams().name}).exec(function afterwards(err, updated){
 				if(err) {
-					LogService.create({type: "Error", description: "Error : " + err + " trying to update device."});
+					LogService.create({user_id: req.user.id, device_id: req.allParams().id, type: "Error", description: "Error : " + err + " trying to update device."});
 					return res;
 				}
-				LogService.create({type: "Update", description: "Device " + req.allParams().id + " correctly updated by user " + req.user.id});
+				LogService.create({user_id: req.user.id, device_id: req.allParams().id, type: "Update", description: "Device correctly updated."});
 				console.log(updated);
 				Device.publishUpdate(updated[0].id,updated[0]);
 				return res.json(updated);
@@ -69,7 +69,7 @@ function DeviceCtrl(){
 		checkState:function(req,res){
 			Device.find({id:req.allParams().id}).exec(function stateCB(err, found){
 				if(err) {
-					LogService.create({type: "Error", description: "Error : " + err + " trying to check device state."});
+					LogService.create({user_id: req.user.id, device_id: req.allParams().id, type: "Error", description: "Error : " + err + " trying to check device state."});
 					return res;
 				}
 				return res.json("Lock " + found[0].name + " is " + found[0].state + ".");
@@ -78,16 +78,16 @@ function DeviceCtrl(){
 		close:function(req,res){
 			Device.find({id:req.allParams().id}).exec(function checkClosedCB(errCheck,found){
 				if(errCheck) {
-					LogService.create({type: "Error", description: "Error : " + errCheck + " trying to find device."});
+					LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + errCheck + " trying to find device."});
 					return res;
 				}
 				if(found[0].state == "open"){
 					Device.update({id:req.allParams().id},{state:"closed"}).exec(function closeCB(errUpdate,closed){
 						if(errUpdate) {
-							LogService.create({type: "Error", description: "Error : " + errUpdate + " trying to close device."});
+							LogService.create({user_id: req.user.id, device_id: req.allParams().id, type: "Error", description: "Error : " + errUpdate + " trying to close device."});
 							return res;
 						}
-						LogService.create({type: "Close", description: "Device " + req.allParams().id + " correctly closed by user " + req.user.id});
+						LogService.create({user_id: req.user.id, device_id: closed.id, type: "Close", description: "Device " + req.allParams().id + " correctly closed by user " + req.user.id});
 						console.log(closed);
 						Device.publishUpdate(closed[0].id,closed[0]);
 						return res.json(closed);
@@ -100,19 +100,19 @@ function DeviceCtrl(){
 		open:function(req,res){
 			Device.find({id:req.allParams().id}).exec(function checkOpenCB(errCheck,found){
 				if(errCheck) {
-					LogService.create({type: "Error", description: "Error : " + errCheck + " trying to find device."});
+					LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + errCheck + " trying to find device."});
 					return res;
 				}
 				if(found[0].state == "closed"){
-					Device.update({id:req.allParams().id},{state:"open"}).exec(function openCB(errUpdate,openned){
+					Device.update({id:req.allParams().id},{state:"open"}).exec(function openCB(errUpdate,opened){
 						if(errUpdate) {
-							LogService.create({type: "Error", description: "Error : " + errUpdate + " trying to open device."});
+							LogService.create({user_id: req.user.id, device_id: req.allParams().id, type: "Error", description: "Error : " + errUpdate + " trying to open device."});
 							return res;
 						}
-						LogService.create({type: "Open", description: "Device " + req.allParams().id + " correctly opened by user " + req.user.id});
-						console.log(openned);
-						Device.publishUpdate(openned[0].id,openned[0]);
-						return res.json(openned);
+						LogService.create({user_id: req.user.id, device_id: opened.id,  type: "Open", description: "Device correctly opened."});
+						Device.publishUpdate(opened[0].id,opened[0]);
+						console.log(opened);
+						return res.json(opened);
 					});
 				} else {
 					return res.json("Lock " + found[0].name + " already " + found[0].state + ".");
@@ -122,7 +122,7 @@ function DeviceCtrl(){
 		getUsersByDevice: function(req, res){
 			Device.findOne({id:req.allParams().id}).populate('userList').exec(function foundByDeviceCB(err, users){
 				if(err) {
-					LogService.create({type: "Error", description: "Error : " + err + " trying to list device users."});
+					LogService.create({user_id: req.user.id, device_id: req.allParams().id, type: "Error", description: "Error : " + err + " trying to list device users."});
 					return res;
 				}
 				console.log(users);
