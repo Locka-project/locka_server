@@ -12,7 +12,7 @@ function insertDataDashboard(data){
     '<td>'+this['id']+'</td>'+
     '<td>'+this['name']+'</td>'+
     '<td>'+this['state']+'</td>'+
-    '<td><i class="small material-icons">videocam</i>'+$lock+'<i onclick="openEditDevice('+this['id']+')" class="small material-icons">info_outline</i></td>'+
+    '<td><i class="small material-icons">videocam</i>'+$lock+'<i onclick="openEditDevice('+this['id']+',\''+this['name']+'\')" class="small material-icons">info_outline</i></td>'+
     '<td><div style="width:15px; height:15px; background:#f44336; border-radius:7.5px;"></div></td>'+
     '</tr>');
 
@@ -57,12 +57,14 @@ io.socket.on('connect', function(){
 	console.log("Connected...");
 
 	io.socket.get('/socket/devices/subscribe');
-
+	io.socket.get('/socket/users/logs');
+		
 	io.socket.on("device", function(data){
-
 		switch(data.verb) {
 	    case 'created':
-	        console.log('Switch error')
+	        $.get( "/user/getDevicesByUser", function(data) {
+						insertData(data[0].deviceList)
+					});
 	        break;
 	    case 'destroyed':
 	        $.get( "/user/getDevicesByUser", function(data) {

@@ -15,7 +15,6 @@
 					LogService.create({user: req.user, type: "Error", description: "Error : " + err + " trying to display device"});
 					return err;
 				}
-				console.log(device);
 				return res.json(device);
 			});
 		},
@@ -31,6 +30,7 @@
 				created.userList.add(req.user);
 				created.save();
 				LogService.create({user: req.user, device: created.id, type: "Create", description: "Device correctly created." });
+				Device.publishCreate(device);
 				return res.redirect('/');
 			});
 		},
@@ -40,7 +40,6 @@
 					LogService.create({user: req.user, type: "Error", description: "Error : " + err + " trying to list devices."});
 					return err;
 				}
-				console.log(found);
 				return res.json(found);
 			});
 		},
@@ -62,7 +61,6 @@
 					return res.redirect('/');
 				}
 				LogService.create({user: req.user, device: updated, type: "Update", description: "Device correctly updated."});
-				console.log(updated);
 				Device.publishUpdate(updated[0].id,updated[0]);
 				return res.redirect('/');
 			});
@@ -90,7 +88,6 @@
 							return res;
 						}
 						LogService.create({user: req.user, device: closed[0], type: "Close", description: "Lock closed."});
-						console.log(closed);
 						Device.publishUpdate(closed[0].id,closed[0]);
 						return res.json(closed);
 					});
@@ -113,7 +110,6 @@
 						}
 						LogService.create({user: req.user, device: opened[0], type: "Open", description: "Lock opened."});
 						Device.publishUpdate(opened[0].id,opened[0]);
-						console.log(opened);
 						return res.json(opened);
 					});
 				} else {

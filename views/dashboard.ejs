@@ -51,7 +51,7 @@
 		</div>
 	</div>
 
-	<!-- Modal Object Info -->
+<!-- Modal device info -->
 <div id="modal1" class="modal">
 	<div class="modal-content">
 		<h4>Information</h4>
@@ -59,7 +59,7 @@
 		 <form class="col s12" action="/device/update" method="POST">
 			 <div class="row">
 				 <div class="input-field col s12">
-					 <input placeholder="Placeholder" id="deviceName" name="name" type="text" class="validate">
+					 <input placeholder="Device Name" id="deviceNameEdit" name="name" type="text" class="validate">
 					 <label for="deviceName">Device Name</label>
 				 </div>
 			 </div>
@@ -82,16 +82,20 @@
 	</div>
 </div>
 
-<!-- Modal adding object -->
+<!-- Modal adding device -->
 <div id="modal2" class="modal">
 	<div class="modal-content">
 		<h4>Ajouter un objet</h4>
 		<div class="row">
-		 <form class="col s12" action="/device/create" method="POST">
+		 <form id="createdEdit" class="col s12" action="/device/create" method="POST">
 			 <div class="row">
 				 <div class="input-field col s12">
-					 <input placeholder="Placeholder" id="deviceName" name="name" type="text" class="validate">
+					 <input id="deviceName" name="name" type="text" class="validate">
 					 <label for="deviceName">Device Name</label>
+				 </div>
+				 <div class="input-field col s12">
+					 <input id="identifier" name="identifier" type="text" class="validate">
+					 <label for="identifier">Identifier</label>
 				 </div>
 			 </div>
 			 <div class="modal-footer">
@@ -115,11 +119,12 @@
 	function openEditDevice(deviceId, deviceName) {
 		$('#deviceId').val(deviceId);
 		$('#deleteButton').attr('meta', deviceId);
-		$('#deviceName').val(deviceName);
+		$('#deviceNameEdit').val(deviceName);
 		$('#modal1').openModal();
 	}
 
 	function openCreateDevice() {
+		$('#createdEdit').trigger('reset');
 		$('#modal2').openModal();
 	}
 

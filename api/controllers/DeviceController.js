@@ -21,16 +21,19 @@ function DeviceCtrl(){
 			});
 		},
 		create:function(req,res){
-			Device.create({name:req.allParams().name, state:"closed", connected:"false"}).exec(function createCB(err, created){
-				if(err) {
-					LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + err + " trying to create device."});
-					return err;
-				}
-				created.userList.add(req.user);
-				created.save();
-				LogService.create({user_id: req.user.id, device_id: created.id, type: "Create", description: "Device correctly created."});
-				return res.json(created);
-			});
+			if(!req.isSocket){
+				Device.create({name:req.allParams().name, state:"closed", connected:"false"}).exec(function createCB(err, created){
+					if(err) {
+						LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + err + " trying to create device."});
+						return err;
+					}
+					created.userList.add(req.user);
+					created.save();
+					LogService.create({user_id: req.user.id, device_id: created.id, type: "Create", description: "Device correctly created."});
+					Device.publishCreate(created);
+					return res.json(created);
+				});
+			}
 		},
 		getAllDevices:function(req,res){
 			Device.find({}).exec(function findCB(err, found){

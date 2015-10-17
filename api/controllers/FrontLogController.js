@@ -60,8 +60,6 @@ function FrontLogCtrl(){
         }
         if(!req.isSocket) {
           return res.json(logList);
-        } else {
-
         }
       });
     }

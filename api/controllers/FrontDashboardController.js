@@ -33,6 +33,7 @@ var Dashboard = {
 		User.findOne({id:req.user.id}).populate('deviceList').exec(function foundByUserCB(err, user){
 			if(err) return res.json(err);
 			Device.subscribe(req, _.pluck(user.deviceList, 'id'));
+			Device.watch(req);
 			return res.json({msg: "success"});
 		});
 	}
