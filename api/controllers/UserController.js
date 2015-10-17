@@ -30,17 +30,17 @@ function UserCtrl(){
         firstname: req.allParams().firstname
       }).exec(function afterwards(err, updated) {
         if (err) {
-          return res;
+          return res.json(err);
         }
         User.publishUpdate(updated[0].id,{ name:updated[0].username });
-        res.json({msg: "Successful..."});
+        res.json({msg: "success"});
       });
     },
 
     changePassword: function (req, res) {
       User.update({id: req.allParams().id}, {password: req.allParams().password}).exec(function pwdUpdateCB(err, updated) {
         if (err) {
-          return res;
+          return res.json(err);
         }
         return res.json(updated);
       });
@@ -49,16 +49,16 @@ function UserCtrl(){
     delete: function (req, res) {
       User.find({id: req.allParams().id}).exec(function foundCB(err, found) {
         if (err) {
-          return res;
+          return res.json(err);
         }
         if (found[0].id == null) {
-          return res;
+          return res.json({msg : 'id not found'});
         }
         User.destroy({id: req.allParams().id}).exec(function deleteCB(err) {
           if (err) {
-            return res;
+            return res.json(err);
           }
-          return res;
+          return res.json({msg: 'success'});
         });
       });
     },
@@ -70,17 +70,17 @@ function UserCtrl(){
     sendNewPassword: function(req, res){
       User.find({email:req.allParams().email}).exec(function findCB(err, found){
         if(err){
-          return res;
+          return res.json(err);
         }
         var newPassword = generatePassword();
 
         User.update({id:found[0].id}, {password:newPassword}).exec(function pwdUpdateCB(err,updated){
           if(err){
-            return res;
+            return res.json(err);
           }
           var response = EmailService.forgetPassword(updated[0], newPassword);
           if(!response){
-            return res;
+            return res.json({msg: 'email not sent'});
           }
           /*EmailService.forgetPassword(updated[0], newPassword).then(function emailCB(err, response){
            if(!response){
@@ -100,7 +100,7 @@ function UserCtrl(){
     getAllUsers: function (req, res) {
       User.find({}).exec(function findCB(err, found) {
         if (err) {
-          return res;
+          return res.json(err);
         }
         return res.json(found);
       });

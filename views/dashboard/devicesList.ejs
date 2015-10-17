@@ -1,0 +1,21 @@
+<div class="col s12">
+	<% if (user.firstname != null && user.lastname != null) { %>
+		<h3 class="left">Bienvenue <%- user.fullName()%></h3>
+	<% } else { %>
+		<h3 class="left">Bienvenue</h3>
+	<% } %>
+	<p class="right"><a class="btn-floating btn-medium waves-effect waves-light"><i class="material-icons" onclick="openCreateDevice()">add</i></a></p>
+	<table class="dashboard">
+    <thead>
+      <tr>
+          <th data-field="id">#</th>
+          <th data-field="name">Device Name</th>
+          <th data-field="state">State</th>
+          <th data-field="state">Actions</th>
+          <th data-field="state">Connected</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+	</table>
+</div>

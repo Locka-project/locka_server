@@ -12,8 +12,7 @@ function FrontLogCtrl(){
       if(!req.isSocket){
         Log.find({id : req.params.id}).exec(function findLog(err, logList){
           if(err) {
-            var log = "Error : " + err + " trying to list log by device.";
-            return res;
+            return res.json(err);
           }
           return res.json(logList);
         });
@@ -54,9 +53,7 @@ function FrontLogCtrl(){
     getLogsByUser: function(req,res) {
       Log.find({user: req.user}).exec(function finLogCB(err, logList) {
         if(err) {
-          var log = "Error : " + err + " trying to list log by user.";
-          console.log(log);
-          return err;
+          return res.json(err);
         }
         if(!req.isSocket) {
           return res.json(logList);

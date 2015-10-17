@@ -1,0 +1,30 @@
+<!-- Modal device info -->
+<div id="modal1" class="modal">
+	<div class="modal-content">
+		<h4>Information</h4>
+		<div class="row">
+		 <form class="col s12" action="/device/update" method="POST">
+			 <div class="row">
+				 <div class="input-field col s12">
+					 <input placeholder="Device Name" id="deviceNameEdit" name="name" type="text" class="validate">
+					 <label for="deviceName">Device Name</label>
+				 </div>
+			 </div>
+			 <div class="modal-footer">
+				<input type="hidden" name="id" id="deviceId">
+				<div class="col s12">
+					<div class="col s4">
+						<button style="width:100%" type="button" onclick="deleteDevice($(this).attr('meta'))" id="deleteButton" class="waves-effect waves-light red btn">Delete</button>
+					</div>
+					<div class="col s4">
+						<button style="width:100%" type="submit"class="waves-effect waves-light btn">Save</button>
+					</div>
+					<div class="col s4">
+						<button style="width:100%" type="button" onclick="closeModal()" class="waves-effect waves-light btn">Close</button>
+					</div>
+				</div>
+		 	 </div>
+		 </form>
+	 </div>
+	</div>
+</div>

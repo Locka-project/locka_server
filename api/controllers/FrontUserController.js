@@ -43,7 +43,7 @@ function FrontUserCtrl(){
         firstname: req.allParams().firstname
       }).exec(function afterwards(err, updated) {
         if (err) {
-          return err;
+          return res.json(err);
         }
         return res.redirect('/user');
       });
@@ -54,7 +54,7 @@ function FrontUserCtrl(){
       }
       findPassport(req.user, res, function(err, passport){
         if(err){
-          return err;
+          return res.json(err);
         }
         passport.password = req.allParams().password;
         passport.save();
@@ -69,14 +69,14 @@ function FrontUserCtrl(){
     delete: function (req, res) {
       User.find({id: req.allParams().id}).exec(function foundCB(err, found) {
         if (err) {
-          return err;
+          return res.json(err);
         }
         if (found[0].id == null) {
           return err;
         }
         User.destroy({id: req.allParams().id}).exec(function deleteCB(err) {
           if (err) {
-            return err;
+            return res.json(err);
           }
           return res.redirect('/');
         });
@@ -86,13 +86,13 @@ function FrontUserCtrl(){
     sendNewPassword: function(req, res){
       User.find({email:req.allParams().email}).exec(function findCB(err, found){
         if(err){
-          return err;
+          return res.json(err);
         }
 
         var newPassword = generatePassword();
         findPassport(found[0], res, function(err, passport){
           if(err){
-            return err;
+            return res.json(err);
           }
           passport.password = newPassword;
           passport.save();
@@ -100,7 +100,7 @@ function FrontUserCtrl(){
 
         var response = EmailService.forgetPassword(found[0], newPassword);
         if(response != true){
-          return err;
+          return res.json(err);
         }
         return res.redirect('/login');
       });
@@ -109,7 +109,7 @@ function FrontUserCtrl(){
     getAllUsers: function (req, res) {
       User.find({}).exec(function findCB(err, found) {
         if (err) {
-          return err;
+          return res.json(err);
         }
         return res.json(found);
       });
@@ -119,7 +119,7 @@ function FrontUserCtrl(){
       User.find({id: req.user.id}).populate('deviceList').exec(function (err, devices) {
 
         if (err) {
-          return err;
+          return res.json(err);
         }
         return res.json(devices);
       });
@@ -128,7 +128,7 @@ function FrontUserCtrl(){
     getUserById: function (req, res) {
       User.find({id: req.params.id}).exec(function (err, user) {
         if (err) {
-          return err;
+          return res.json(err);
         }
         return res.json(user);
       });

@@ -60,11 +60,9 @@ module.exports.routes = {
 
 	/* Device Front routing */
   'GET /device': 'FrontDeviceController.index',
-	'GET /device/creatingPage': 'FrontDeviceController.creatingPage',
   'POST /device/create': 'FrontDeviceController.create',
   'GET /device/open': 'FrontDeviceController.open',
   'GET /device/close': 'FrontDeviceController.close',
-  'GET /device/checkState': 'FrontDeviceController.checkState',
   'POST /device/update': 'FrontDeviceController.update',
   'POST /device/delete': 'FrontDeviceController.delete',
   'GET /device/getAllDevices': 'FrontDeviceController.getAllDevices',
@@ -97,7 +95,6 @@ module.exports.routes = {
 	'POST /api/devices/create': 'DeviceController.create',
 	'PUT /api/devices/:id/open': 'DeviceController.open',
 	'PUT /api/devices/:id/close': 'DeviceController.close',
-	'GET /api/devices/:id/checkState': 'DeviceController.checkState',
 	'PUT /api/devices/:id/update': 'DeviceController.update',
 	'DELETE /api/devices/:id/delete': 'DeviceController.delete',
 	'GET /api/devices/getAllDevices': 'DeviceController.getAllDevices',
