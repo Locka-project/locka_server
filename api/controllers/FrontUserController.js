@@ -15,13 +15,13 @@ function FrontUserCtrl(){
     return newPassword;
   }
 
-  function findPassport(req,res, callback){
+  function findPassport(req, res, callback){
     Passport.find({user:req.id, protocol:'local'}).exec(function findCB(err, passport){
       if(err){
         callback(err);
       }
       callback(err, passport[0]);
-    });
+      });
   }
 
   return {
