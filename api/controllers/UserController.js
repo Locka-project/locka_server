@@ -6,6 +6,16 @@
  */
 
 module.exports = {
-	
+
+    create: function(){
+
+    },
+
+    getDivicesByUser: function(req, res){
+        User.findBy({id:req}).populate('deviceList').exec(function(err, users){
+
+        })
+    },
+
 };
 
