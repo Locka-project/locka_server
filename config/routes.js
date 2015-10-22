@@ -33,20 +33,31 @@ module.exports.routes = {
   ***************************************************************************/
 
   '/': {
-    view: 'homepage'
+    view: 'dashboard'
   },
+
+
+  'get /login': 'AuthController.login',
+  'get /logout': 'AuthController.logout',
+  'get /register': 'AuthController.register',
+
+  'post /auth/local': 'AuthController.callback',
+  'post /auth/local/:action': 'AuthController.callback',
+
+  'get /auth/:provider': 'AuthController.provider',
+  'get /auth/:provider/callback': 'AuthController.callback',
+
   'get /user': 'UserController.index',
-  'get /user/create': 'UserController.create',
   'get /user/update': 'UserController.update',
   'get /user/delete': 'UserController.delete',
   'get /user/getAllUsers': 'UserController.getAllUsers',
   'get /user/getDevicesByUser': 'UserController.getDevicesByUser',
   'get /device': 'DeviceController.index',
-  'get /device/create': 'UserController.create',
+  'get /device/create': 'DeviceController.create',
   'get /device/update': 'DeviceController.update',
   'get /device/delete': 'DeviceController.delete',
-  'get /device/getAllU  sers': 'DeviceController.getAllDevices',
-  'get /device/getDevicesByUser': 'DeviceController.getUsersByDevice',
+  'get /device/getAllDevices': 'DeviceController.getAllDevices',
+  'get /device/getUsersByDevice': 'DeviceController.getUsersByDevice',
 
   /***************************************************************************
   *                                                                          *
