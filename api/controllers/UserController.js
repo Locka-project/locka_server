@@ -8,7 +8,7 @@
 module.exports = {
 
     index: function(req, res){
-        User.find({id:req}).exec(function findCB(err, found){
+        User.find({id:req.allParams().id}).exec(function findCB(err, found){
             if(err)return;
             return found;
         });
@@ -22,7 +22,7 @@ module.exports = {
     },
 
     update: function(req, res){
-        User.update({id:req.allParams().id, email:req.allParams().emails, username:req.allParams().username, password:req.allParams().password}).exec(function afterwards(err, updated){
+        User.update({id:req.allParams().id}, {email:req.allParams().email, username:req.allParams().username, password:req.allParams().password}).exec(function afterwards(err, updated){
             if(err)return;
             return updated;
         });
@@ -43,9 +43,9 @@ module.exports = {
     },
 
     getDevicesByUser: function(req, res){
-        User.findBy({id:req}).populate('deviceList').exec(function(err, users){
+        User.find({id:req.allParams().id}).populate('deviceList').exec(function(err, devices){
             if(err)return;
-            return users;
+            return devices;
         })
     },
 
