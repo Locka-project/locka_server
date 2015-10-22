@@ -35,12 +35,24 @@ module.exports.routes = {
   '/': {
     view: 'homepage'
   },
+
+
+  'get /login': 'AuthController.login',
+  'get /logout': 'AuthController.logout',
+  'get /register': 'AuthController.register',
+
+  'post /auth/local': 'AuthController.callback',
+  'post /auth/local/:action': 'AuthController.callback',
+
+  'get /auth/:provider': 'AuthController.provider',
+  'get /auth/:provider/callback': 'AuthController.callback',
+
   'get /user': 'UserController.index',
-  'get /user/create': 'UserController.create',
   'get /user/update': 'UserController.update',
   'get /user/delete': 'UserController.delete',
   'get /user/getAllUsers': 'UserController.getAllUsers',
   'get /user/getDevicesByUser': 'UserController.getDevicesByUser',
+
 
   /***************************************************************************
   *                                                                          *

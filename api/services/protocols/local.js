@@ -46,6 +46,7 @@ exports.register = function (req, res, next) {
   User.create({
     username : username
   , email    : email
+  , password : password
   }, function (err, user) {
     if (err) {
       if (err.code === 'E_VALIDATION') {
@@ -69,6 +70,7 @@ exports.register = function (req, res, next) {
     , accessToken : token
     }, function (err, passport) {
       if (err) {
+        console.log(err);
         if (err.code === 'E_VALIDATION') {
           req.flash('error', 'Error.Passport.Password.Invalid');
         }

@@ -18,21 +18,21 @@ module.exports.passport = {
   local: {
     strategy: require('passport-local').Strategy
   },
-
+/**
   bearer: {
     strategy: require('passport-http-bearer').Strategy
   },
-
+*/
   twitter: {
     name: 'Twitter',
     protocol: 'oauth',
     strategy: require('passport-twitter').Strategy,
     options: {
-      consumerKey: 'your-consumer-key',
-      consumerSecret: 'your-consumer-secret'
+      consumerKey: 'onjAC4sVoaTFI520NFEg',
+      consumerSecret: 'hLbylkwFgPW9y1d3jTwb80wprQHz6IjcHQLAOntRwYY'
     }
   },
-
+/**
   github: {
     name: 'GitHub',
     protocol: 'oauth2',
@@ -50,7 +50,7 @@ module.exports.passport = {
     options: {
       clientID: 'your-client-id',
       clientSecret: 'your-client-secret',
-      scope: ['email'] /* email is necessary for login behavior */
+      scope: ['email']
     }
   },
 
@@ -74,4 +74,5 @@ module.exports.passport = {
       serviceURL: 'http://localhost:1337/auth/cas/callback'
     }
   }
+*/
 };
