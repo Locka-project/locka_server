@@ -14,13 +14,6 @@ module.exports = {
         });
     },
 
-    create: function(req, res){
-        User.create({email:req.allParams().emails, username:req.allParams().username, password:req.allParams().password }).exec(function createCB(err, created){
-            if(err)return;
-            return created;
-        });
-    },
-
     update: function(req, res){
         User.update({id:req.allParams().id}, {email:req.allParams().email, username:req.allParams().username, password:req.allParams().password}).exec(function afterwards(err, updated){
             if(err)return;
