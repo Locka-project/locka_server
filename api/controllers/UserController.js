@@ -22,16 +22,17 @@ module.exports = {
     },
 
     update: function(req, res){
-        User.update({email:req.allParams().emails, username:req.allParams().username, password:req.allParams().password}).exec(function afterwards(err, updated){
+        User.update({id:req.allParams().id, email:req.allParams().emails, username:req.allParams().username, password:req.allParams().password}).exec(function afterwards(err, updated){
             if(err)return;
             return updated;
         });
     },
 
     delete: function(req, res){
-        User.destroy({id: req}).exec(function deleteCB(err){
+        User.destroy({id: req.allParams().id}).exec(function deleteCB(err){
             if(err)return;
         });
+        return;
     },
 
     getAllUsers: function(req, res){
