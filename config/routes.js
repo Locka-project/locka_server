@@ -33,7 +33,7 @@ module.exports.routes = {
   ***************************************************************************/
 
   '/': {
-    view: 'homepage'
+    view: 'dashboard'
   },
 
 
@@ -52,7 +52,12 @@ module.exports.routes = {
   'get /user/delete': 'UserController.delete',
   'get /user/getAllUsers': 'UserController.getAllUsers',
   'get /user/getDevicesByUser': 'UserController.getDevicesByUser',
-
+  'get /device': 'DeviceController.index',
+  'get /device/create': 'DeviceController.create',
+  'get /device/update': 'DeviceController.update',
+  'get /device/delete': 'DeviceController.delete',
+  'get /device/getAllDevices': 'DeviceController.getAllDevices',
+  'get /device/getUsersByDevice': 'DeviceController.getUsersByDevice',
 
   /***************************************************************************
   *                                                                          *
