@@ -15,7 +15,7 @@ module.exports = {
     },
     state:{
       type: 'string',
-      required: false,
+      required: true,
     },
     userList:{
       collection: "user",

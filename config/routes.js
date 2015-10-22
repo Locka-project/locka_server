@@ -54,6 +54,8 @@ module.exports.routes = {
   'get /user/getDevicesByUser': 'UserController.getDevicesByUser',
   'get /device': 'DeviceController.index',
   'get /device/create': 'DeviceController.create',
+  'get /device/open': 'DeviceController.open',
+  'get /device/close': 'DeviceController.close',
   'get /device/update': 'DeviceController.update',
   'get /device/delete': 'DeviceController.delete',
   'get /device/getAllDevices': 'DeviceController.getAllDevices',
