@@ -34,7 +34,13 @@ module.exports.routes = {
 
   '/': {
     view: 'homepage'
-  }
+  },
+  'get /user': 'UserController.index',
+  'get /user/create': 'UserController.create',
+  'get /user/update': 'UserController.update',
+  'get /user/delete': 'UserController.delete',
+  'get /user/getAllUsers': 'UserController.getAllUsers',
+  'get /user/getDevicesByUser': 'UserController.getDevicesByUser',
 
   /***************************************************************************
   *                                                                          *
