@@ -45,12 +45,20 @@ module.exports.routes = {
   'get /auth/:provider': 'AuthController.provider',
   'get /auth/:provider/callback': 'AuthController.callback',
 
-  'get /user': 'UserController.index',
-  'get /user/update': 'UserController.update',
+  'get /user': 'UserController.myAccount',
+  'post /user/update': 'UserController.update',
   'get /user/delete': 'UserController.delete',
   'get /user/getAllUsers': 'UserController.getAllUsers',
   'get /user/getDevicesByUser': 'UserController.getDevicesByUser',
 
+  'get /device': 'DeviceController.index',
+  'get /device/create': 'DeviceController.create',
+  'get /device/open': 'DeviceController.open',
+  'get /device/close': 'DeviceController.close',
+  'get /device/update': 'DeviceController.update',
+  'get /device/delete': 'DeviceController.delete',
+  'get /device/getAllDevices': 'DeviceController.getAllDevices',
+  'get /device/getUsersByDevice': 'DeviceController.getUsersByDevice',
 
 
   /***************************************************************************
