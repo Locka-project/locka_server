@@ -7,11 +7,11 @@
 
 module.exports = {
 
-    index: function(req, res){
-        User.find({id:req.allParams().id}).exec(function findCB(err, found){
-            if(err)return;
-            return found;
-        });
+    myAccount: function(req, res){
+        console.log(req.user)
+        /*return res.view('user/myAccount', {
+            user: res.send(req.user)
+        });*/
     },
 
     update: function(req, res){
