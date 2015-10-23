@@ -31,20 +31,21 @@ module.exports.routes = {
   * `assets` directory)                                                      *
   *                                                                          *
   ***************************************************************************/
-
-  '/': {
-    view: 'dashboard'
-  },
-  'get /login': 'AuthController.login',
+	
+	/* Root routing */
+	'get /': 'DashboardController.getDashboard',
+	
+	/* Auth routing */
+	'get /login': 'AuthController.login',
   'get /logout': 'AuthController.logout',
   'get /register': 'AuthController.register',
 
   'post /auth/local': 'AuthController.callback',
   'post /auth/local/:action': 'AuthController.callback',
-
   'get /auth/:provider': 'AuthController.provider',
   'get /auth/:provider/callback': 'AuthController.callback',
 
+	/* User routing */
   'get /user': 'UserController.myAccount',
   'post /user/update': 'UserController.update',
   'get /user/delete': 'UserController.delete',
@@ -52,6 +53,7 @@ module.exports.routes = {
   'get /user/getAllUsers': 'UserController.getAllUsers',
   'get /user/getDevicesByUser': 'UserController.getDevicesByUser',
 
+	/* Device routing */
   'get /device': 'DeviceController.index',
   'get /device/create': 'DeviceController.create',
   'get /device/open': 'DeviceController.open',
@@ -61,7 +63,6 @@ module.exports.routes = {
   'get /device/delete': 'DeviceController.delete',
   'get /device/getAllDevices': 'DeviceController.getAllDevices',
   'get /device/getUsersByDevice': 'DeviceController.getUsersByDevice',
-
 
   /***************************************************************************
   *                                                                          *
