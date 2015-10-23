@@ -36,6 +36,8 @@ module.exports = {
 				console.log(res);
 				return res;
 			}
+			res = "Devices correctly listed."
+			console.log(res);
   			console.log(found);
   			return found;
  	 	});
@@ -47,8 +49,10 @@ module.exports = {
 				console.log(res);
 				return res;
 			}
-    		return;
-    	});
+			res = "Device correctly deleted.";
+			console.log(res);
+			return res;
+    	})
     },
     update:function(req,res){
     	Device.update({id:req.allParams().id},{name:req.allParams().name, state:req.allParams().state}).exec(function afterwards(err, updated){
@@ -57,6 +61,8 @@ module.exports = {
 				console.log(res);
 				return res;
 			}
+			res = "Device correctly updated."
+			console.log(res);
     		console.log(updated);
     		return updated;
 		});
@@ -128,7 +134,9 @@ module.exports = {
 				res = "Error : " + err + " trying to list device users.";
 				console.log(res);
 				return res;
-			};
+			}
+			res = "Device users correctly listed."
+			console.log(res);
         	console.log(devices);
 			return devices;
         });
