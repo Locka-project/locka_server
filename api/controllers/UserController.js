@@ -64,8 +64,26 @@ module.exports = {
 
     forgetPassword: function(req, res){
         User.find({email:req.allParams().email}).exec(function findCB(err, found){
-            if(err)return;
+            if(err){
+                res = "Error : " + err + " trying to find user.";
+                console.log(res);
+                return res;
+            }
+            var newPassword = "";
+            var generator = "azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN0123456789"
+            for (var i = 0; i < 8; i++)
+                newPassword += generator.charAt(Math.floor(Math.random() * generator.length));
+            User.update({id:found[0].id}, {password:newPassword}).exec(function pwdUpdateCB(err,updated){
+                if(err){
+                    res = "Error : " + err + " trying to update user.";
+                    console.log(res);
+                    return res;
+                }
+            });
             EmailService.forgetPassword({email: 'test@test.com', name: 'test'});
+            res = "New password generated for user of id " + found[0].id + " : " + newPassword/*.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0)*/;
+            console.log(res);
+            return res;
         });
     },
 
@@ -76,7 +94,7 @@ module.exports = {
                 console.log(res);
                 return res;
             }
-            res = "Users correctly deleted.";
+            res = "Users correctly listed.";
             console.log(res);
             return found;
         });
