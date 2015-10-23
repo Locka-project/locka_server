@@ -63,9 +63,13 @@ module.exports = {
     },
 
     forgetPassword: function(req, res){
+        return res.view('user/forgetPassword');
+    },
+    sendNewPassword: function(req, res){
         User.find({email:req.allParams().email}).exec(function findCB(err, found){
             if(err)return;
-            EmailService.forgetPassword({email: 'test@test.com', name: 'test'});
+            var newPassword;
+            var sendEmail = EmailService.forgetPassword({user: found, newPassword: newPassword});
         });
     },
 

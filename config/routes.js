@@ -52,7 +52,8 @@ module.exports.routes = {
   'get /user/changePassword': 'UserController.changePassword',
   'get /user/getAllUsers': 'UserController.getAllUsers',
   'get /user/getDevicesByUser': 'UserController.getDevicesByUser',
-  'post /user/forgetPassword': 'UserController.forgetPassword',
+  'get /user/forgetPassword': 'UserController.forgetPassword',
+  'post /user/sendNewPassword': 'UserController.sendNewPassword',
 
 	/* Device routing */
   'get /device': 'DeviceController.index',

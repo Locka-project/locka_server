@@ -1,17 +1,21 @@
 module.exports = {
 
-    forgetPassword: function(options){
+    forgetPassword: function(user, newPassword){
         sails.hooks.email.send(
             "../../views/email/forgetPassword",
             {
-                recipientName: "Joe",
-                senderName: "Sue"
+                newPassword: newPassword
+            }
+            ,
+            {
+                recipientName: user.fullName(),
+                senderName: "Locka Team",
             },
             {
-                to: "joe@example.com",
-                subject: "Hi there"
+                to: user.email,
+                subject: "new password"
             },
-            function(err) {console.log(err || "It worked!");}
+            function(err){console.log(err || "It worked!");}
         )
     },
 };
