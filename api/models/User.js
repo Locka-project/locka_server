@@ -28,6 +28,14 @@ var User = {
       type: 'string',
       required: true,
     },
+    lastname:{
+      type: 'string',
+      required: false,
+    },
+    firstname:{
+      type: 'string',
+      required: false,
+    },
     deviceList:{
       collection: "device",
       via: 'userList'

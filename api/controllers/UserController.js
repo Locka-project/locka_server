@@ -14,7 +14,7 @@ module.exports = {
     },
 
     update: function(req, res){
-        User.update({id:req.allParams().id}, {email:req.allParams().email, username:req.allParams().username}).exec(function afterwards(err, updated){
+        User.update({id:req.allParams().id}, {email:req.allParams().email, username:req.allParams().username, lastname:req.allParams().lastname, firstname:req.allParams().firstname}).exec(function afterwards(err, updated){
             if(err)return;
             res.redirect('/user');
         });
@@ -25,6 +25,10 @@ module.exports = {
             if(err)return;
         });
         return;
+    },
+
+    getFullName: function(req, res){
+        return req.user.firstname+' '+req.user.lastname;
     },
 
     getAllUsers: function(req, res){

@@ -9,6 +9,12 @@
       <div class="input-field col s12">
         <input type="text" name="email"  placeholder="Email" class="validate" value="<%- user.email %>">
       </div>
+      <div class="input-field col s12">
+        <input type="text" name="firstname"  placeholder="Firstname" class="validate" value="<%- user.firstname %>">
+      </div>
+      <div class="input-field col s12">
+        <input type="text" name="lastname"  placeholder="Lastname" class="validate" value="<%- user.lastname %>">
+      </div>
     </div>
     <input type="text" name="id" value="<%- user.id %>" hidden>
     <button id="signinButton" class="waves-effect waves-light btn-large" role="button" type="submit">Update</button>
