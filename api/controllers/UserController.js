@@ -22,7 +22,7 @@ module.exports = {
             }
             res = "User correctly updated."
             console.log(res);
-            res.redirct('/user');
+            res.redirect('/user');
         });
     },
     changePassword: function(req,res){
