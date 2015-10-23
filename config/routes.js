@@ -55,6 +55,7 @@ module.exports.routes = {
   'get /device/create': 'DeviceController.create',
   'get /device/open': 'DeviceController.open',
   'get /device/close': 'DeviceController.close',
+  'get /device/checkState': 'DeviceController.checkState',
   'get /device/update': 'DeviceController.update',
   'get /device/delete': 'DeviceController.delete',
   'get /device/getAllDevices': 'DeviceController.getAllDevices',

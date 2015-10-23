@@ -40,6 +40,14 @@ module.exports = {
     		return updated;
 		});
     },
+	checkState:function(req,res){
+		Device.find({id:req.allParams().id}).exec(function stateCB(err, found){
+			if(err) return;
+			var response = "Lock " + found[0].name + " is " + found[0].state + "."
+			console.log(response)
+			return response;
+		});
+	},
     close:function(req,res){
     	Device.find({id:req.allParams().id}).exec(function checkClosedCB(errCheck,found){
     		if(errCheck) return;
@@ -50,8 +58,9 @@ module.exports = {
     				return closed;
     			});
     		} else {
-    			console.log("Lock" + found[0].name + "already " + found[0].state + ".");
-    			return;
+				var response = "Locdddddddddk " + found[0].name + " already " + found[0].state + ".";
+    			console.log(response);
+    			return response;
     		}	
     	});
     },
@@ -65,8 +74,9 @@ module.exports = {
     				return openned;
     			});
     		} else {
-    			console.log("Lock" + found[0].name + "already " + found[0].state + ".");
-    			return;
+				var response = "Lock " + found[0].name + " already " + found[0].state + ".";
+				console.log(response);
+				return response;
     		}	
     	});
     },
