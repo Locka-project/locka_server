@@ -14,8 +14,7 @@ module.exports = {
     },
 
     update: function(req, res){
-<<<<<<< HEAD
-        User.update({id:req.allParams().id}, {email:req.allParams().email, username:req.allParams().username, password:req.allParams().password}).exec(function afterwards(err, updated){
+        User.update({id:req.allParams().id}, {email:req.allParams().email, username:req.allParams().username, lastname:req.allParams().lastname, firstname:req.allParams().firstname}).exec(function afterwards(err, updated){
             if (err) {
                 res = "Error : " + err + " trying to update user.";
                 console.log(res);
@@ -23,12 +22,7 @@ module.exports = {
             }
             res = "User correctly updated."
             console.log(res);
-            return updated;
-=======
-        User.update({id:req.allParams().id}, {email:req.allParams().email, username:req.allParams().username, lastname:req.allParams().lastname, firstname:req.allParams().firstname}).exec(function afterwards(err, updated){
-            if(err)return;
-            res.redirect('/user');
->>>>>>> c9079d1e2a5167bdd81e5705bdce2a055d4f3eea
+            res.redirct('/user');
         });
     },
     changePassword: function(req,res){
