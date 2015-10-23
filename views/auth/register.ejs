@@ -5,9 +5,11 @@
       <a id="socialButton" class="waves-effect waves-light btn-large" href="/auth/<%= providers[key].slug %>" role="button"><%= providers[key].name %><i class="material-icons right">cloud</i></a>
     <% }) %>
   <% } %>
-  <p> ----------------- or ----------------- </p>
+</br>
+  <div class="progress">
+        <div class="determinate" style="width: 100%"></div>
+  </div>
   <% include errors %>
-
     <form role="form" action="/auth/local/register" method="post">
       <div class="input-field col s12">
         <input id="username" type="text" name="username">

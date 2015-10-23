@@ -1,4 +1,3 @@
-
 <div id= "global-size">
   <p> You're not connected yet</p>
   <% if (Object.keys(providers).length) {%>
@@ -6,8 +5,16 @@
       <a id="socialButton" class="waves-effect waves-light btn-large" href="/auth/<%= providers[key].slug %>" role="button"><%= providers[key].name %><i class="material-icons right">cloud</i></a>
     <% }) %>
   <% } %>
-  <p> ----------------- or ----------------- </p>
-  <% include errors %>
+</br>
+  <div class="progress">
+        <div class="determinate" style="width: 100%"></div>
+    </div>
+    <% if (errors) {%>
+    <% errors.forEach(function (error) { %>
+      <%= __(error) %>
+    <% }) %>
+  <% } %>
+
 </p>
   <form  id="form-login" role="form" action="/auth/local" method="post">
     <div>
@@ -27,6 +34,4 @@
   <a  id="forgotPassButton" href="#">I forgot my password</a>
   <p>You can also Register...</p>
   <a  id="registerButton" class="waves-effect waves-light btn-large" href="register">Register<i class="material-icons right">send</i></a>
-
-
 </div>

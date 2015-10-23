@@ -26,7 +26,7 @@ var User = {
     },
     password:{
       type: 'string',
-      required: true,
+      required: false,
     },
     lastname:{
       type: 'string',
