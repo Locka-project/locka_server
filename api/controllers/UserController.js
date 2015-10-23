@@ -27,6 +27,13 @@ module.exports = {
         return;
     },
 
+    forgetPassword: function(req, res){
+        User.find({email:req.allParams().email}).exec(function findCB(err, found){
+            if(err)return;
+            EmailService.forgetPassword({email: 'test@test.com', name: 'test'});
+        });
+    },
+
     getAllUsers: function(req, res){
         User.find({}).exec(function findCB(err, found){
             if(err)return;

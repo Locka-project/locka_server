@@ -51,6 +51,7 @@ module.exports.routes = {
   'get /user/delete': 'UserController.delete',
   'get /user/getAllUsers': 'UserController.getAllUsers',
   'get /user/getDevicesByUser': 'UserController.getDevicesByUser',
+  'post /user/forgetPassword': 'UserController.forgetPassword',
 
 	/* Device routing */
   'get /device': 'DeviceController.index',
