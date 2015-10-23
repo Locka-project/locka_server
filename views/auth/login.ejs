@@ -1,8 +1,4 @@
-<% if (errors) {%>
-  <% errors.forEach(function (error) { %>
-    <%= __(error) %>
-  <% }) %>
-<% } %>
+
 <div id= "global-size">
   <p> You're not connected yet</p>
   <% if (Object.keys(providers).length) {%>
@@ -11,19 +7,26 @@
     <% }) %>
   <% } %>
   <p> ----------------- or ----------------- </p>
+  <% include errors %>
+</p>
   <form  id="form-login" role="form" action="/auth/local" method="post">
     <div>
       <div class="input-field col s12">
-        <input type="text" name="identifier"  placeholder="Username or Email" type="text" class="validate">
-        <label>Username or Email</label>
+        <input id="identifier" type="text" name="identifier" class="validate">
+        <label for="identifier">Username or Email</label>
       </div>
       <div class="input-field col s12">
-        <input type="password" name="password" placeholder="Password" type="tel" class="validate">
-        <label>Password</label>
+        <input id="password" type="password" name="password" class="validate">
+        <label for="password">Password</label>
       </div>
     </div>
     <button id="signinButton" class="waves-effect waves-light btn-large" role="button" type="submit">Sign in</button>
   </form>
+</br>
+</br>
+  <a  id="forgotPassButton" href="#">I forgot my password</a>
   <p>You can also Register...</p>
   <a  id="registerButton" class="waves-effect waves-light btn-large" href="register">Register<i class="material-icons right">send</i></a>
+
+
 </div>
