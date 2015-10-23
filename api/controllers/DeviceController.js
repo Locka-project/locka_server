@@ -43,9 +43,9 @@ module.exports = {
 	checkState:function(req,res){
 		Device.find({id:req.allParams().id}).exec(function stateCB(err, found){
 			if(err) return;
-			var response = "Lock " + found[0].name + " is " + found[0].state + "."
-			console.log(response)
-			return response;
+			res = "Lock " + found[0].name + " is " + found[0].state + "."
+			console.log(res)
+			return res;
 		});
 	},
     close:function(req,res){
@@ -58,9 +58,9 @@ module.exports = {
     				return closed;
     			});
     		} else {
-				var response = "Locdddddddddk " + found[0].name + " already " + found[0].state + ".";
-    			console.log(response);
-    			return response;
+				res = "Lock " + found[0].name + " already " + found[0].state + ".";
+    			console.log(res);
+    			return res;
     		}	
     	});
     },
@@ -74,9 +74,9 @@ module.exports = {
     				return openned;
     			});
     		} else {
-				var response = "Lock " + found[0].name + " already " + found[0].state + ".";
-				console.log(response);
-				return response;
+				res = "Lock " + found[0].name + " already " + found[0].state + ".";
+				console.log(res);
+				return res;
     		}	
     	});
     },
