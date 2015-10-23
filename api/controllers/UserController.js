@@ -27,10 +27,6 @@ module.exports = {
         return;
     },
 
-    getFullName: function(req, res){
-        return req.user.firstname+' '+req.user.lastname;
-    },
-
     getAllUsers: function(req, res){
         User.find({}).exec(function findCB(err, found){
             if(err)return;

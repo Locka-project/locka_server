@@ -39,6 +39,9 @@ var User = {
     deviceList:{
       collection: "device",
       via: 'userList'
+    },
+    fullName : function(){
+      return this.firstname + " " + this.lastname
     }
   }
 };
