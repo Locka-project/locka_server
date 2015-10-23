@@ -1,8 +1,6 @@
-<form role="form" action="/user/update" method="post">
-  <input type="text" name="username" placeholder="Username">
-  <input type="text" name="email" placeholder="Email">
-  <button type="submit">Sign up</button>
-</form>
 
-{% user.username %}
-{% user.email %}
+  <form role="form" action="/user/update" method="post">
+    <input type="text" name="username" placeholder="Username" value="<%- user.username %>">
+    <input type="text" name="email" placeholder="Email" value="<%- user.email %>">
+    <button type="submit">Sign up</button>
+  </form>

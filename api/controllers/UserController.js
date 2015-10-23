@@ -8,10 +8,9 @@
 module.exports = {
 
     myAccount: function(req, res){
-        console.log(req.user)
-        /*return res.view('user/myAccount', {
-            user: res.send(req.user)
-        });*/
+        return res.view('user/myAccount', {
+            user: req.user
+        });
     },
 
     update: function(req, res){
