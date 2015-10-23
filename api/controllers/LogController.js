@@ -11,8 +11,8 @@ function LogCtrl(){
         create:function(req,res){
             Log.create({type:req.allParams().type, description:req.allParams().description}).exec(function createCB(err, created){
                 if(err) return;
-                res = "Log correctly created."
-                console.log(res);
+                var log = "Log correctly created."
+                console.log(log);
                 return created;
             });
         }
