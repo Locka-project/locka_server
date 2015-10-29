@@ -4,13 +4,29 @@
  * @description :: Server-side logic for managing dashboards
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
-
-module.exports = {
-	
+  
+var Dashboard = {
+		
 	getDashboard:function(req,res){
-		return res.view('dashboard', {
-				user: req.user
-		});
+		
+ 		function getDevices(callback){
+	 		Device.find({}).exec(function findCB(err, found){
+				if(err) {
+					return err;
+				}
+				callback(found);
+			});
+		};	
+		
+		getDevices(function(devices){
+			
+			return res.view('dashboard', {
+				user: req.user,
+				device: devices
+			});
+		});		
 	}
 };
+
+module.exports = Dashboard;
 

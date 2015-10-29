@@ -194,7 +194,8 @@ var AuthController = {
 					.findOne({ protocol: 'local', user: req.user.id })
 					.exec(function(err, passport) {
 					  return res.json({
-					    token: passport.accessToken
+					    token: passport.accessToken,
+					    user: req.user
 					  });
 					});
         } else {

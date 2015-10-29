@@ -76,19 +76,20 @@ module.exports.routes = {
 	'GET /api/auth/:provider/callback': 'AuthController.callback',
 
 	/* User routing */
-	'GET /api/user/:id': 'UserController.myAccount',
-	'PUT /api/user/update/:id': 'UserController.update',
-	'DELETE /api/user/delete/:id': 'UserController.delete',
-	'PUT /api/user/changePassword/:id': 'UserController.changePassword',
+	'GET /api/user/': 'UserController.myAccount',
+	'PUT /api/user/update/': 'UserController.update',
+	'DELETE /api/user/delete/': 'UserController.delete',
+	'PUT /api/user/changePassword/': 'UserController.changePassword',
 	'GET /api/user/getAllUsers': 'UserController.getAllUsers',
-	'GET /api/user/getDevicesByUser/:id': 'UserController.getDevicesByUser',
-    'POST /api/sendNewPassword': 'UserController.sendNewPassword',
+  'POST /api/sendNewPassword': 'UserController.sendNewPassword',
+	'GET /api/user/getDevicesByUser/': 'UserController.getDevicesByUser',
+	'GET /api/user/forgetPassword/': 'UserController.forgetPassword',
 
 	/* Device routing */
 	'GET /api/device': 'DeviceController.index',
 	'POST /api/device/create': 'DeviceController.create',
-	'POST /api/device/open': 'DeviceController.open',
-	'POST /api/device/close': 'DeviceController.close',
+	'PUT /api/device/open': 'DeviceController.open',
+	'PUT /api/device/close': 'DeviceController.close',
 	'GET /api/device/checkState': 'DeviceController.checkState',
 	'PUT /api/device/update': 'DeviceController.update',
 	'DELETE /api/device/delete': 'DeviceController.delete',
