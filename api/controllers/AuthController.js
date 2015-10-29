@@ -183,17 +183,16 @@ var AuthController = {
         // Upon successful login, send the user to the homepage were req.user
         // will be available.
         //
-        // Check if param is api
-        if (req.param('api') == "true"){
-	      	Passport
-			      .findOne({ protocol: 'local', user: req.user.id })
-			      .exec(function(err, passport) {
-			        return res.json({
-			          token: passport.accessToken
-			        });
-			    	});
+        if(req.param('api')=="true"){
+					Passport
+					.findOne({ protocol: 'local', user: req.user.id })
+					.exec(function(err, passport) {
+					  return res.json({
+					    token: passport.accessToken
+					  });
+					}); 
         } else {
-	        res.redirect('/');
+	        	res.redirect('/');
         }
       });
     });
