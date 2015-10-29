@@ -33,10 +33,12 @@ module.exports.policies = {
 	},
 	/* --------- FRONT Request ---------- */
 	FrontUserController : {
-	  '*': ['passport','sessionAuth']
+	  '*': ['passport','sessionAuth'],
+		'forgetPassword' : ['passport'],
+		'sendNewPassword' : ['passport']
 	},
 	FrontDashboardController : {
-		'*' : ['passport', 'sessionAuth']
+	'*' : ['passport', 'sessionAuth']
 	},
 	/* --------- API Request ---------- */
 	UserController : {

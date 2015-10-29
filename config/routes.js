@@ -53,7 +53,8 @@ module.exports.routes = {
   'POST /user/changePassword': 'FrontUserController.changePassword',
   'GET /user/getAllUsers': 'FrontUserController.getAllUsers',
   'GET /user/getDevicesByUser': 'FrontUserController.getDevicesByUser',
-  'POST /user/forgetPassword': 'FrontUserController.forgetPassword',
+  'GET /forgetPassword': 'FrontUserController.forgetPassword',
+  'POST /sendNewPassword': 'FrontUserController.sendNewPassword',
 
 	/* Device routing */
   'GET /device': 'FrontDeviceController.index',
@@ -80,6 +81,7 @@ module.exports.routes = {
 	'DELETE /api/user/delete/': 'UserController.delete',
 	'PUT /api/user/changePassword/': 'UserController.changePassword',
 	'GET /api/user/getAllUsers': 'UserController.getAllUsers',
+  'POST /api/sendNewPassword': 'UserController.sendNewPassword',
 	'GET /api/user/getDevicesByUser/': 'UserController.getDevicesByUser',
 	'GET /api/user/forgetPassword/': 'UserController.forgetPassword',
 

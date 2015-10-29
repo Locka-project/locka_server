@@ -24,10 +24,6 @@ var User = {
       collection: 'Passport',
       via: 'user'
     },
-    password:{
-      type: 'string',
-      required: false,
-    },
     lastname:{
       type: 'string',
       required: false,

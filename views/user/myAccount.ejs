@@ -20,6 +20,19 @@
     <input type="text" name="id" value="<%- user.id %>" hidden>
     <button id="signinButton" class="waves-effect waves-light btn-large" role="button" type="submit">Update</button>
   </form>
+  <p>Change password</p>
+  <form  id="form-login" role="form" action="/user/changePassword" method="post">
+    <div>
+      <div class="input-field col s12">
+        <input type="text" name="password"  placeholder="Password" class="validate">
+      </div>
+      <div class="input-field col s12">
+        <input type="text" name="confirm"  placeholder="Confirm" class="validate">
+      </div>
+    </div>
+    <input type="text" name="id" value="<%- passport.id %>" hidden>
+    <button id="signinButton" class="waves-effect waves-light btn-large" role="button" type="submit">Update</button>
+  </form>
 </div>
 </main>
 <% include ../footer %>

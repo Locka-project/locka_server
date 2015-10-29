@@ -6,6 +6,13 @@
  */
 
 function UserCtrl(){
+    function generatePassword(req, res){
+        var newPassword = "";
+        var generator = "azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN0123456789"
+        for (var i = 0; i < 8; i++)
+            newPassword += generator.charAt(Math.floor(Math.random() * generator.length));
+        return newPassword;
+    }
 
     return {
         //controller actions
@@ -33,6 +40,7 @@ function UserCtrl(){
 								return res.json(log);
             });
         },
+
         changePassword: function (req, res) {
             User.update({id: req.allParams().id}, {password: req.allParams().password}).exec(function pwdUpdateCB(err, updated) {
                 if (err) {
@@ -45,6 +53,7 @@ function UserCtrl(){
                 return res.json(updated);
             });
         },
+
         delete: function (req, res) {
             User.find({id: req.allParams().id}).exec(function foundCB(err, found) {
                 if (err) {
@@ -71,27 +80,44 @@ function UserCtrl(){
         },
 
         forgetPassword: function (req, res) {
-            User.find({email: req.allParams().email}).exec(function findCB(err, found) {
-                if (err) {
-                    var log = "Error : " + err + " trying to find user.";
-                    console.log(log);
+            console.log('coucou');
+            return res.view('user/forgetPassword');
+        },
+
+        sendNewPassword: function(req, res){
+            User.find({email:req.allParams().email}).exec(function findCB(err, found){
+                if(err){
+                    res = "Error : " + err + " trying to find user.";
+                    console.log(res);
                     return res;
                 }
-                var newPassword = "";
-                var generator = "azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN0123456789"
-                for (var i = 0; i < 8; i++)
-                    newPassword += generator.charAt(Math.floor(Math.random() * generator.length));
-                User.update({id: found[0].id}, {password: newPassword}).exec(function pwdUpdateCB(err, updated) {
-                    if (err) {
-                        var log = "Error : " + err + " trying to update user.";
-                        console.log(log);
+                var newPassword = generatePassword();
+
+                User.update({id:found[0].id}, {password:newPassword}).exec(function pwdUpdateCB(err,updated){
+                    if(err){
+                        res = "Error : " + err + " trying to update user.";
+                        console.log(res);
                         return res;
                     }
+                    var response = EmailService.forgetPassword(updated[0], newPassword);
+                    if(!response){
+                        res = "Error : " + err + " trying to send mail.";
+                        console.log(res);
+                        return res;
+                    }
+                    console.log(response);
+                    /*EmailService.forgetPassword(updated[0], newPassword).then(function emailCB(err, response){
+                     if(!response){
+                     res = "Error : " + err + " trying to send mail.";
+                     console.log(res);
+                     return res;
+                     }
+                     });*/
                 });
-                EmailService.forgetPassword({email: 'test@test.com', name: 'test'});
-                var log = "New password generated for user of id " + found[0].id + " : " + newPassword/*.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0)*/;
-                console.log(log);
-                return res;
+                /* Password à hasher */
+                /*res = "New password generated for user of id " + found[0].id + " : " + newPassword/!*.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0)*!/;
+                 console.log(res);*/
+                return res.redirect('/login');
             });
         },
 
@@ -122,4 +148,5 @@ function UserCtrl(){
         },
     }
 }
+
 module.exports = UserCtrl();
