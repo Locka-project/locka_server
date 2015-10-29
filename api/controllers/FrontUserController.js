@@ -14,12 +14,24 @@ function generatePassword(req, res){
 		return newPassword;
 }
 
+function findPassport(req,res, callback){
+  Passport.find({user:req.id, protocol:'local'}).exec(function findCB(err, passport){
+    if(err){
+      callback(err);
+    }
+    callback(err, passport[0]);
+  });
+}
+
 return {
 		//controller actions
 		myAccount: function (req, res) {
-				return res.view('user/myAccount', {
-						user: req.user
-				});
+      findPassport(req.user, res, function(err, passport){
+        return res.view('user/myAccount', {
+          user: req.user,
+          passport: passport,
+        });
+      });
 		},
 
 		update: function (req, res) {
@@ -40,16 +52,19 @@ return {
 				});
 		},
 		changePassword: function (req, res) {
-				User.update({id: req.allParams().id}, {password: req.allParams().password}).exec(function pwdUpdateCB(err, updated) {
-						if (err) {
-								var log = "Error : " + err + " trying to change user password.";
-								console.log(log);
-								return res;
-						}
-						var log = "User password correctly updated."
-						console.log(log);
-						return res.json(updated);
-				});
+				if(req.allParams().password != req.allParams().confirm){
+          return res.redirect('/user');
+        }
+        findPassport(req.user, res, function(err, passport){
+          if(err){
+            res = "Error : " + err + " trying to find user.";
+            console.log(res);
+            return res;
+          }
+          passport.password = req.allParams().password;
+          passport.save();
+        });
+        res.redirect('/user');
 		},
 		delete: function (req, res) {
 				User.find({id: req.allParams().id}).exec(function foundCB(err, found) {
@@ -89,14 +104,14 @@ return {
 						}
 
 						var newPassword = generatePassword();
-            Passport.find({user:found[0].id, protocol:'local'}).exec(function findCB(err, passport){
+            findPassport(found[0], res, function(err, passport){
               if(err){
                 res = "Error : " + err + " trying to find user.";
                 console.log(res);
                 return res;
               }
-              passport[0].password = newPassword;
-              passport[0].save();
+              passport.password = newPassword;
+              passport.save();
             });
 
             var response = EmailService.forgetPassword(found[0], newPassword);
