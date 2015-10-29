@@ -4,6 +4,7 @@
  * @description :: Server-side logic for managing Devices
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
+ /*TODO: give/remove authorization to an user*/
 
 function DeviceCtrl(){
 
@@ -20,7 +21,7 @@ function DeviceCtrl(){
 			});
 		},
 		create:function(req,res){
-			Device.create({name:req.allParams().name, state:"closed"}).exec(function createCB(err, created){
+			Device.create({name:req.allParams().name, state:"closed", userList:{collection:req.user}}).exec(function createCB(err, created){
 				if(err) {
 					var log = "Error : " + err + " trying to create device.";
 					console.log(log);
@@ -147,5 +148,3 @@ function DeviceCtrl(){
 }
 
 module.exports = DeviceCtrl();
-
-
