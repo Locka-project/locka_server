@@ -1,8 +1,8 @@
 module.exports.email = {
-    service: 'Hotmail',
+    service: 'hotmail',
     auth: {
-        user: 'alexis.dupuy@ynov.com',
-        pass: 'BdAna58c'
+        user: 'ptirex@hotmail.fr',
+        pass: 'QZSaqs3Xis'
     },
     from: 'no-reply@locka.com',
     testMode: false,

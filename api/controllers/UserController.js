@@ -14,7 +14,6 @@ function UserCtrl(){
         return newPassword;
     }
 
-
     return {
         //controller actions
         myAccount: function (req, res) {
