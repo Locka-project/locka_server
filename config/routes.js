@@ -32,38 +32,67 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
+	/* --------- FRONT Request  ----------------*/
 	/* Root routing */
-	'get /': 'DashboardController.getDashboard',
+	'GET /': 'DashboardController.getDashboard',
 
 	/* Auth routing */
-	'get /login': 'AuthController.login',
-  'get /logout': 'AuthController.logout',
-  'get /register': 'AuthController.register',
+	'GET /login': 'AuthController.login',
+  'GET /logout': 'AuthController.logout',
+  'GET /register': 'AuthController.register',
 
-  'post /auth/local': 'AuthController.callback',
-  'post /auth/local/:action': 'AuthController.callback',
-  'get /auth/:provider': 'AuthController.provider',
-  'get /auth/:provider/callback': 'AuthController.callback',
+  'POST /auth/local': 'AuthControllerFront.callback',
+  'POST /auth/local/:action': 'AuthControllerFront.callback',
+  'GET /auth/:provider': 'AuthControllerFront.provider',
+  'GET /auth/:provider/callback': 'AuthControllerFront.callback',
 
 	/* User routing */
-  'get /user': 'UserController.myAccount',
-  'post /user/update': 'UserController.update',
-  'get /user/delete': 'UserController.delete',
-  'get /user/changePassword': 'UserController.changePassword',
-  'get /user/getAllUsers': 'UserController.getAllUsers',
-  'get /user/getDevicesByUser': 'UserController.getDevicesByUser',
-  'post /user/forgetPassword': 'UserController.forgetPassword',
+  'GET /user': 'UserControllerFront.myAccount',
+  'POST /user/update': 'UserControllerFront.update',
+  'POST /user/delete': 'UserControllerFront.delete',
+  'POST /user/changePassword': 'UserControllerFront.changePassword',
+  'GET /user/getAllUsers': 'UserControllerFront.getAllUsers',
+  'GET /user/getDevicesByUser': 'UserControllerFront.getDevicesByUser',
+  'POST /user/forgetPassword': 'UserControllerFront.forgetPassword',
 
 	/* Device routing */
-  'get /device': 'DeviceController.index',
-  'get /device/create': 'DeviceController.create',
-  'get /device/open': 'DeviceController.open',
-  'get /device/close': 'DeviceController.close',
-  'get /device/checkState': 'DeviceController.checkState',
-  'get /device/update': 'DeviceController.update',
-  'get /device/delete': 'DeviceController.delete',
-  'get /device/getAllDevices': 'DeviceController.getAllDevices',
-  'get /device/getUsersByDevice': 'DeviceController.getUsersByDevice',
+  'GET /device': 'DeviceControllerFront.index',
+  'POST /device/create': 'DeviceControllerFront.create',
+  'GET /device/open': 'DeviceControllerFront.open',
+  'GET /device/close': 'DeviceControllerFront.close',
+  'GET /device/checkState': 'DeviceControllerFront.checkState',
+  'POST /device/update': 'DeviceControllerFront.update',
+  'POST /device/delete': 'DeviceControllerFront.delete',
+  'GET /device/getAllDevices': 'DeviceControllerFront.getAllDevices',
+  'GET /device/getUsersByDevice': 'DeviceControllerFront.getUsersByDevice',
+
+	/* --------- API Request  ----------------*/
+
+	/* Auth routing */
+	'POST /api/auth/local': 'AuthController.callback',
+	'POST /api/auth/local/:action': 'AuthController.callback',
+	'GET /api/auth/:provider': 'AuthController.provider',
+	'GET /api/auth/:provider/callback': 'AuthController.callback',
+
+	/* User routing */
+	'GET /api/user': 'UserController.myAccount',
+	'PUT /api/user/update': 'UserController.update',
+	'DELETE /api/user/delete': 'UserController.delete',
+	'PUT /api/user/changePassword': 'UserController.changePassword',
+	'GET /api/user/getAllUsers': 'UserController.getAllUsers',
+	'GET /api/user/getDevicesByUser': 'UserController.getDevicesByUser',
+	'GET /api/user/forgetPassword': 'UserController.forgetPassword',
+
+	/* Device routing */
+	'GET /api/device': 'DeviceController.index',
+	'POST /api/device/create': 'DeviceController.create',
+	'POST /api/device/open': 'DeviceController.open',
+	'POST /api/device/close': 'DeviceController.close',
+	'GET /api/device/checkState': 'DeviceController.checkState',
+	'PUT /api/device/update': 'DeviceController.update',
+	'DELETE /api/device/delete': 'DeviceController.delete',
+	'GET /api/device/getAllDevices': 'DeviceController.getAllDevices',
+	'GET /api/device/getUsersByDevice': 'DeviceController.getUsersByDevice',
 
   /***************************************************************************
   *                                                                          *
