@@ -3,7 +3,7 @@ module.exports = {
     forgetPassword: function(user, newPassword){
         var result = true;
         console.log(sails.hooks.email.email);
-        /*sails.hooks.email.send(
+        sails.hooks.email.send(
             "../../views/email/forgetPassword",
             {
                 newPassword: newPassword,
@@ -20,7 +20,7 @@ module.exports = {
                     result = err;
                 }
             }
-        )*/
+        )
         return result;
     },
 };

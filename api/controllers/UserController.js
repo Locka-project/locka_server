@@ -5,8 +5,7 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-module.exports = (function(){
-
+function UserCtrl(){
     function generatePassword(req, res){
         var newPassword = "";
         var generator = "azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN0123456789"
@@ -15,66 +14,77 @@ module.exports = (function(){
         return newPassword;
     }
 
-    return {
 
-        myAccount: function(req, res){
+    return {
+        //controller actions
+        myAccount: function (req, res) {
             return res.view('user/myAccount', {
                 user: req.user
             });
         },
 
-        update: function(req, res){
-            User.update({id:req.allParams().id}, {email:req.allParams().email, username:req.allParams().username, lastname:req.allParams().lastname, firstname:req.allParams().firstname}).exec(function afterwards(err, updated){
+        update: function (req, res) {
+            User.update({id: req.allParams().id}, {
+                email: req.allParams().email,
+                username: req.allParams().username,
+                lastname: req.allParams().lastname,
+                firstname: req.allParams().firstname
+            }).exec(function afterwards(err, updated) {
                 if (err) {
-                    res = "Error : " + err + " trying to update user.";
-                    console.log(res);
+                    var log = "Error : " + err + " trying to update user.";
+                    console.log(log);
                     return res;
                 }
-                res = "User correctly updated."
-                console.log(res);
-                res.redirect('/user');
+                var log = "User correctly updated."
+                console.log(log);
+//                 res.redirect('/user');
+								return res.json(log);
             });
         },
-        changePassword: function(req,res){
+
+        changePassword: function (req, res) {
             User.update({id: req.allParams().id}, {password: req.allParams().password}).exec(function pwdUpdateCB(err, updated) {
                 if (err) {
-                    res = "Error : " + err + " trying to change user password.";
-                    console.log(res);
+                    var log = "Error : " + err + " trying to change user password.";
+                    console.log(log);
                     return res;
                 }
-                res = "User password correctly updated."
-                console.log(res);
-                return updated;
+                var log = "User password correctly updated."
+                console.log(log);
+                return res.json(updated);
             });
         },
-        delete: function(req, res){
-            User.find({id: req.allParams().id}).exec(function foundCB(err,found){
-                if(err){
-                    res = "Error : " + err + " trying to find user with id " + req.allParams().id;
-                    console.log(res);
+
+        delete: function (req, res) {
+            User.find({id: req.allParams().id}).exec(function foundCB(err, found) {
+                if (err) {
+                    var log = "Error : " + err + " trying to find user with id " + req.allParams().id;
+                    console.log(log);
                     return res;
                 }
-                if(found[0].id == null){
-                    res = "No user with id " + req.allParams().id + ".";
-                    console.log(res);
+                if (found[0].id == null) {
+                    var log = "No user with id " + req.allParams().id + ".";
+                    console.log(log);
                     return res;
                 }
-                User.destroy({id: req.allParams().id}).exec(function deleteCB(err){
-                    if(err){
-                        res = "Error : " + err + " trying to delete user " + found[0].name;
-                        console.log(res);
+                User.destroy({id: req.allParams().id}).exec(function deleteCB(err) {
+                    if (err) {
+                        var log = "Error : " + err + " trying to delete user " + found[0].name;
+                        console.log(log);
                         return res;
                     }
-                    res = "User " + found[0].name + " correctly deleted.";
-                    console.log(res);
+                    var log = "User " + found[0].name + " correctly deleted.";
+                    console.log(log);
                     return res;
                 });
             });
         },
 
-        forgetPassword: function(req, res){
+        forgetPassword: function (req, res) {
+            console.log('coucou');
             return res.view('user/forgetPassword');
         },
+
         sendNewPassword: function(req, res){
             User.find({email:req.allParams().email}).exec(function findCB(err, found){
                 if(err){
@@ -86,10 +96,10 @@ module.exports = (function(){
 
                 User.update({id:found[0].id}, {password:newPassword}).exec(function pwdUpdateCB(err,updated){
                     if(err){
-                         res = "Error : " + err + " trying to update user.";
-                         console.log(res);
-                         return res;
-                     }
+                        res = "Error : " + err + " trying to update user.";
+                        console.log(res);
+                        return res;
+                    }
                     var response = EmailService.forgetPassword(updated[0], newPassword);
                     if(!response){
                         res = "Error : " + err + " trying to send mail.";
@@ -98,46 +108,46 @@ module.exports = (function(){
                     }
                     console.log(response);
                     /*EmailService.forgetPassword(updated[0], newPassword).then(function emailCB(err, response){
-                        if(!response){
-                            res = "Error : " + err + " trying to send mail.";
-                            console.log(res);
-                            return res;
-                        }
-                    });*/
-                 });
-                 /* Password à hasher */
-                 /*res = "New password generated for user of id " + found[0].id + " : " + newPassword/!*.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0)*!/;
+                     if(!response){
+                     res = "Error : " + err + " trying to send mail.";
+                     console.log(res);
+                     return res;
+                     }
+                     });*/
+                });
+                /* Password à hasher */
+                /*res = "New password generated for user of id " + found[0].id + " : " + newPassword/!*.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0)*!/;
                  console.log(res);*/
-                 return res.redirect('/login');
+                return res.redirect('/login');
             });
         },
 
-        getAllUsers: function(req, res){
-            User.find({}).exec(function findCB(err, found){
-                if(err){
-                    res = "Error : " + err + " trying to list all users.";
-                    console.log(res);
+        getAllUsers: function (req, res) {
+            User.find({}).exec(function findCB(err, found) {
+                if (err) {
+                    var log = "Error : " + err + " trying to list all users.";
+                    console.log(log);
                     return res;
                 }
-                res = "Users correctly listed.";
-                console.log(res);
-                return found;
+                var log = "Users correctly listed.";
+                console.log(log);
+                return res.json(found);
             });
         },
 
-        getDevicesByUser: function(req, res){
-            User.find({id:req.allParams().id}).populate('deviceList').exec(function(err, devices){
-                if(err){
-                    res = "Error : " + err + " trying to list all users.";
-                    console.log(res);
+        getDevicesByUser: function (req, res) {
+            User.find({id: req.allParams().id}).populate('deviceList').exec(function (err, devices) {
+                if (err) {
+                    var log = "Error : " + err + " trying to list all users.";
+                    console.log(log);
                     return res;
                 }
-                res = "Users correctly deleted.";
-                console.log(res);
-                return devices;
+                var log = "Users correctly deleted.";
+                console.log(log);
+                return res.json(devices);
             })
         },
-
     }
-})();
+}
 
+module.exports = UserCtrl();

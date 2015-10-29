@@ -13,7 +13,9 @@
  */
 
 module.exports = function (req, res, next) {
-
-  return passport.authenticate('bearer', { session: false })(req, res, next);
-  
+			    	
+  sails.log(req.headers);
+	
+	return passport.authenticate('bearer', { session: false })(req, res, next);
+	
 };

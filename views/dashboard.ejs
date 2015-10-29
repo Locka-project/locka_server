@@ -1,11 +1,17 @@
 <!-- Dashboard -->
 <% include header %>
-<div class="row">
-  <div id="sideMenu" class="col s12 m4 l3"> <!-- Note that "m4 l3" was added -->
-
-  </div>
-  <div id="contents" class="col s12 m8 l9"> <!-- Note that "m8 l9" was added -->
-  
-  </div>
+<div>
+	<div id="tabDashboard" class="row">
+	  <div class="col s12">
+	    <ul class="tabs">
+	    	<li class="tab col s2"><a class="active" href="#test1">DashBoard</a></li>
+	      <li class="tab col s2"><a href="#test2">Video/audio</a></li>
+	      <li class="tab col s2"><a href="#test3">Logs</a></li>
+	      <li class="tab col s2"><a href="#test4">Stats</a></li>
+	      <li class="tab col s2"><a href="#test5">Locks</a></li>
+	    </ul>
+	  </div>
+	  <div id="test1" class="col s12"><h3>Bienvenue <%- user.fullName()%></h3></div>
+	</div>
 </div>
 <% include footer %>

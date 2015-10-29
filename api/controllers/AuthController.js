@@ -39,6 +39,8 @@ var AuthController = {
     Object.keys(strategies).forEach(function (key) {
       if (key === 'local') {
         return;
+      } else if (key === 'bearer'){
+	      return;
       }
 
       providers[key] = {
@@ -166,12 +168,10 @@ var AuthController = {
           res.redirect('/login');
       }
     }
-
     passport.callback(req, res, function (err, user, challenges, statuses) {
       if (err || !user) {
         return tryAgain(challenges);
       }
-
       req.login(user, function (err) {
         if (err) {
           return tryAgain(err);
@@ -182,7 +182,19 @@ var AuthController = {
 
         // Upon successful login, send the user to the homepage were req.user
         // will be available.
-        res.redirect('/');
+        //
+        // Check if param is api
+        if (req.param('api') == "true"){
+	      	Passport
+			      .findOne({ protocol: 'local', user: req.user.id })
+			      .exec(function(err, passport) {
+			        return res.json({
+			          token: passport.accessToken
+			        });
+			    	});
+        } else {
+	        res.redirect('/');
+        }
       });
     });
   },
