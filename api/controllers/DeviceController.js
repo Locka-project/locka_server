@@ -119,7 +119,6 @@ function DeviceCtrl(){
 					LogService.create({type: "Error", description: "Error : " + err + " trying to list device users."});
 					return res;
 				}
-				//LogService.create({type: "Success", description: "Device users correctly listed."});
 				console.log(users);
 				return res.json(users);
 			});
