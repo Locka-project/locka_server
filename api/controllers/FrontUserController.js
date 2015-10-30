@@ -167,23 +167,27 @@ function FrontUserCtrl(){
     },
 
     getDevicesByUser: function (req, res) {
-      User.find({id: req.allParams().id}).populate('deviceList').exec(function (err, devices) {
+      User.find({id: req.user.id}).populate('deviceList').exec(function (err, devices) {
         if (err) {
           var log = "Error : " + err + " trying to list all users.";
           console.log(log);
           return res;
         }
-        var log = "Users correctly deleted.";
+        var log = "Device correctly listed.";
         console.log(log);
+        Device.subscribe(req.socket, devices);
+        console.log('User with socket id '+req.socket.id+' is now subscribed to all of the model instances in \'users\'.');
         return res.json(devices);
       })
     },
     
-    subscribe: function(req,res){
-			if(req.req.isSocket){
-				var deviceList = getDevicesByUser(req.user.id);
-				
-				sails.log(deviceList);
+    subscribe: function(req, res){
+			if(req.isSocket){
+				if(req.user){
+					this.getDevicesByUser(req, res);
+					var socketId = sails.sockets.id(req.socket);
+					sails.log(socketId);
+				}
 			}
 		},
   }

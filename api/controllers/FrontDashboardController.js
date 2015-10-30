@@ -8,23 +8,10 @@
 var Dashboard = {
 		
 	getDashboard:function(req,res){
-		
- 		function getDevices(callback){
-	 		Device.find({}).exec(function findCB(err, found){
-				if(err) {
-					return err;
-				}
-				callback(found);
-			});
-		};
-			
-		getDevices(function(devices){
-						
-			return res.view('dashboard', {
-				user: req.user,
-				device: devices
-			});
-		});		
+		return res.view('dashboard', {
+			user: req.user,
+			device: req.user.deviceList
+		});
 	}
 };
 

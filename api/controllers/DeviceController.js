@@ -20,7 +20,7 @@ function DeviceCtrl(){
 			});
 		},
 		create:function(req,res){
-			Device.create({name:req.allParams().name, state:"closed", userList:{collection:req.user}}).exec(function createCB(err, created){
+			Device.create({name:req.allParams().name, state:"closed"}).exec(function createCB(err, created){
 				if(err) {
 					LogService.create({type: "Error", description: "Error : " + err + " trying to create device."});
 					return res;
@@ -48,11 +48,11 @@ function DeviceCtrl(){
 					return res;
 				}
 				LogService.create({type: "Delete", description: "Device " + req.allParams().id + " correctly deleted by user " + req.user.id});
-				return res;
+				return res.json;
 			})
 		},
 		update:function(req,res){
-			Device.update({id:req.allParams().id},{name:req.allParams().name, state:req.allParams().state}).exec(function afterwards(err, updated){
+			Device.update({id:req.allParams().id},{name:req.allParams().name}).exec(function afterwards(err, updated){
 				if(err) {
 					LogService.create({type: "Error", description: "Error : " + err + " trying to update device."});
 					return res;
@@ -83,6 +83,7 @@ function DeviceCtrl(){
 							LogService.create({type: "Error", description: "Error : " + errUpdate + " trying to close device."});
 							return res;
 						}
+						Device.publishUpdate(closed[0].id,{ name:closed[0].name });
 						LogService.create({type: "Close", description: "Device " + req.allParams().id + " correctly closed by user " + req.user.id});
 						console.log(closed);
 						return res.json(closed);
@@ -104,6 +105,7 @@ function DeviceCtrl(){
 							LogService.create({type: "Error", description: "Error : " + errUpdate + " trying to open device."});
 							return res;
 						}
+						Device.publishUpdate(openned[0].id,{ name:openned[0].name });
 						LogService.create({type: "Open", description: "Device " + req.allParams().id + " correctly opened by user " + req.user.id});
 						console.log(openned);
 						return res.json(openned);
@@ -119,32 +121,10 @@ function DeviceCtrl(){
 					LogService.create({type: "Error", description: "Error : " + err + " trying to list device users."});
 					return res;
 				}
-				//LogService.create({type: "Success", description: "Device users correctly listed."});
 				console.log(users);
 				return res.json(users);
 			});
 		},
-		getAllRooms: function(req,res){
-			
-		},
-		createRooms: function(req,res){
-			if(req.req.isSocket){
-				if(req.param('id')){
-					sails.sockets.join(req.socket, req.param('id'));
-					res.json({
-						message: 'Subscribed to a fun room called '+req.param('id')+'!'
-					})
-				} else {
-					res.json({
-						message: 'id parameter is not defined'
-					});
-				}
-			} else {
-				res.json({
-						message: 'you don\'t have a valid socket'
-					});
-			}
-		}
 	}
 }
 
