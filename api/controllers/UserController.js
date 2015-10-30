@@ -35,7 +35,7 @@ function UserCtrl(){
                 }
                 LogService.create({type: "Update", description: "User " + updated.username + " correctly updated."});
 //                 res.redirect('/user');
-								return res.json(log);
+                return res.json(log);
             });
         },
 
