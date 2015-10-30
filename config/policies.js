@@ -28,7 +28,7 @@ module.exports.policies = {
 
   // '*': true,
 	'*' : ['passport', 'sessionAuth'],
-	auth: { 
+	auth: {
 	  '*' : ['passport']
 	},
 	/* --------- FRONT Request ---------- */
@@ -40,6 +40,9 @@ module.exports.policies = {
 	FrontDashboardController : {
 	'*' : ['passport', 'sessionAuth']
 	},
+	FrontDeviceController : {
+		'*': ['passport','sessionAuth']
+	},
 	/* --------- API Request ---------- */
 	UserController : {
 	  '*': ['passport','bearerAuth']
@@ -47,7 +50,8 @@ module.exports.policies = {
 	DeviceController : {
 	  '*': ['passport','bearerAuth']
 	}
-	
+
+
   /***************************************************************************
   *                                                                          *
   * Here's an example of mapping some policies to run before a controller    *
