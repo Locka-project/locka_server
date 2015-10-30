@@ -69,7 +69,7 @@ function FrontDeviceCtrl(){
 			})
 		},
 		update:function(req,res){
-			Device.update({id:req.allParams().id},{name:req.allParams().name, state:req.allParams().state}).exec(function afterwards(err, updated){
+			Device.update({id:req.allParams().id},{name:req.allParams().name}).exec(function afterwards(err, updated){
 				if(err) {
 					var log = "Error : " + err + " trying to update device.";
 					console.log(log);
@@ -78,7 +78,7 @@ function FrontDeviceCtrl(){
 				var log = "Device correctly updated."
 				console.log(log);
 				console.log(updated);
-				return res.json(updated);
+				return res.redirect('/');
 			});
 		},
 		checkState:function(req,res){
