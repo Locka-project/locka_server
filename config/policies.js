@@ -35,14 +35,14 @@ module.exports.policies = {
 	FrontUserController : {
 	  '*': ['passport','sessionAuth'],
 		'forgetPassword' : ['passport'],
-		'sendNewPassword' : ['passport']
+		'sendNewPassword' : ['passport'],
+		'subscribe': ['passport'],
 	},
 	FrontDashboardController : {
 	'*' : ['passport', 'sessionAuth'],
-	'subscribe' : ['passport'],
 	},
 	FrontDeviceController : {
-		'*': ['passport','sessionAuth']
+		'*': ['passport','sessionAuth'],
 	},
 	/* --------- API Request ---------- */
 	UserController : {
@@ -50,8 +50,6 @@ module.exports.policies = {
 	},
 	DeviceController : {
 	  '*': ['passport','bearerAuth'],
-	  'getAllRooms': ['passport'],
-	  'createRooms': ['passport']
 	}
 
 
