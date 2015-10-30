@@ -43,27 +43,26 @@ function FrontUserCtrl(){
         firstname: req.allParams().firstname
       }).exec(function afterwards(err, updated) {
         if (err) {
-          var log = "Error : " + err + " trying to update user.";
-          console.log(log);
+          LogService.create({type: "Error", description: "Error : " + err + " trying to update user with id " + req.allParams().id});
           return res;
         }
-        var log = "User correctly updated."
-        console.log(log);
+        LogService.create({type: "Update", description: "User " + updated.username + " correctly updated."});
         res.redirect('/user');
       });
     },
+
     changePassword: function (req, res) {
       if(req.allParams().password != req.allParams().confirm){
         return res.redirect('/user');
       }
       findPassport(req.user, res, function(err, passport){
         if(err){
-          res = "Error : " + err + " trying to find user.";
-          console.log(res);
+          LogService.create({type: "Error", description: "Error : " + err + " trying to change password of user with id " + req.allParams().id});
           return res;
         }
         passport.password = req.allParams().password;
         passport.save();
+        LogService.create({type: "Update", description: "User " + updated.username + " password correctly updated."});
       });
       res.redirect('/user');
     },
@@ -75,16 +74,14 @@ function FrontUserCtrl(){
     sendNewPassword: function(req, res){
       User.find({email:req.allParams().email}).exec(function findCB(err, found){
         if(err){
-          res = "Error : " + err + " trying to find user.";
-          console.log(res);
+          LogService.create({type: "Error", description: "Error : " + err + " trying to find user with id " + req.allParams().id});
           return res;
         }
 
         var newPassword = generatePassword();
         findPassport(found[0], res, function(err, passport){
           if(err){
-            res = "Error : " + err + " trying to find user.";
-            console.log(res);
+            LogService.create({type: "Error", description: "Error : " + err + " trying to update user " + found[0].username});
             return res;
           }
           passport.password = newPassword;
