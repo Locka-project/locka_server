@@ -95,7 +95,11 @@ module.exports.routes = {
 	'PUT /api/device/update': 'DeviceController.update',
 	'DELETE /api/device/delete': 'DeviceController.delete',
 	'GET /api/device/getAllDevices': 'DeviceController.getAllDevices',
-	'GET /api/device/getUsersByDevice': 'DeviceController.getUsersByDevice'
+	'GET /api/device/getUsersByDevice': 'DeviceController.getUsersByDevice',
+	
+	/* ----------- Socket IO --------- */
+	'GET /rooms/all': 'DeviceController.getAllRooms',
+	'POST /rooms/join/:id': 'DeviceController.createRooms',
 
   /***************************************************************************
   *                                                                          *

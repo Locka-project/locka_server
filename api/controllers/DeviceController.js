@@ -27,7 +27,7 @@ function DeviceCtrl(){
 				}
 				created.userList.add(req.user);
 				created.save();
-				LogService.create({type: "Create", description: "Device " + created.id + " correctly created by user "});
+				LogService.create({type: "Create", description: "Device " + created.id + " correctly created by user " + req.user.username});
 				return res.json(created);
 			});
 		},
@@ -57,7 +57,7 @@ function DeviceCtrl(){
 					LogService.create({type: "Error", description: "Error : " + err + " trying to update device."});
 					return res;
 				}
-                LogService.create({type: "Update", description: "Device " + req.allParams().id + " correctly updated by user " + req.user.id});
+				LogService.create({type: "Update", description: "Device " + req.allParams().id + " correctly updated by user " + req.user.id});
 				console.log(updated);
 				return res.json(updated);
 			});
@@ -83,7 +83,7 @@ function DeviceCtrl(){
 							LogService.create({type: "Error", description: "Error : " + errUpdate + " trying to close device."});
 							return res;
 						}
-                        LogService.create({type: "Close", description: "Device " + req.allParams().id + " correctly closed by user " + req.user.id});
+						LogService.create({type: "Close", description: "Device " + req.allParams().id + " correctly closed by user " + req.user.id});
 						console.log(closed);
 						return res.json(closed);
 					});
@@ -104,12 +104,12 @@ function DeviceCtrl(){
 							LogService.create({type: "Error", description: "Error : " + errUpdate + " trying to open device."});
 							return res;
 						}
-                        LogService.create({type: "Open", description: "Device " + req.allParams().id + " correctly opened by user " + req.user.id});
+						LogService.create({type: "Open", description: "Device " + req.allParams().id + " correctly opened by user " + req.user.id});
 						console.log(openned);
 						return res.json(openned);
 					});
 				} else {
-                    return res.json("Lock " + found[0].name + " already " + found[0].state + ".");
+					return res.json("Lock " + found[0].name + " already " + found[0].state + ".");
 				}
 			});
 		},
@@ -123,6 +123,27 @@ function DeviceCtrl(){
 				console.log(users);
 				return res.json(users);
 			});
+		},
+		getAllRooms: function(req,res){
+			
+		},
+		createRooms: function(req,res){
+			if(req.req.isSocket){
+				if(req.param('id')){
+					sails.sockets.join(req.socket, req.param('id'));
+					res.json({
+						message: 'Subscribed to a fun room called '+req.param('id')+'!'
+					})
+				} else {
+					res.json({
+						message: 'id parameter is not defined'
+					});
+				}
+			} else {
+				res.json({
+						message: 'you don\'t have a valid socket'
+					});
+			}
 		}
 	}
 }

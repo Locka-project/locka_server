@@ -38,7 +38,8 @@ module.exports.policies = {
 		'sendNewPassword' : ['passport']
 	},
 	FrontDashboardController : {
-	'*' : ['passport', 'sessionAuth']
+	'*' : ['passport', 'sessionAuth'],
+	'subscribe' : ['passport'],
 	},
 	FrontDeviceController : {
 		'*': ['passport','sessionAuth']
@@ -48,7 +49,9 @@ module.exports.policies = {
 	  '*': ['passport','bearerAuth']
 	},
 	DeviceController : {
-	  '*': ['passport','bearerAuth']
+	  '*': ['passport','bearerAuth'],
+	  'getAllRooms': ['passport'],
+	  'createRooms': ['passport']
 	}
 
 

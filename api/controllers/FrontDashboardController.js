@@ -16,10 +16,10 @@ var Dashboard = {
 				}
 				callback(found);
 			});
-		};	
-		
-		getDevices(function(devices){
+		};
 			
+		getDevices(function(devices){
+						
 			return res.view('dashboard', {
 				user: req.user,
 				device: devices
