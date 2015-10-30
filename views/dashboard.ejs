@@ -41,7 +41,7 @@
 			        			<% } else { %>
 										<i class="small material-icons">lock_outline</i>
 										<% } %>
-										<i onclick="openEditDevice(<%= device[i].id %>)" class="small material-icons">info_outline</i>
+										<i onclick="openEditDevice(<%= device[i] %>)" class="small material-icons">info_outline</i>
 									</td>
 									<td>
 										<div style="width:15px; height:15px; background:#f44336; border-radius:7.5px;"></div>
@@ -67,8 +67,9 @@
 </div>
 
 <script type="text/javascript">
-	function openEditDevice(id){
-		$('#descriptionDevice').text(id);
+	function openEditDevice(device){
+		console.log(JSON.stringify(device.name));
+		$('#descriptionDevice').text();
 		$('#modal1').openModal();
 	}
 </script>
