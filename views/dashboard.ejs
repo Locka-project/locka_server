@@ -69,8 +69,12 @@
 
 <script type="text/javascript">
 	function openEditDevice(device){
-		console.log(JSON.stringify(device.name));
-		$('#descriptionDevice').text();
+		var jsonreply = "'"+device+"'";
+		var obj = $.parseJSON(jsonreply);
+		console.log(obj);
+		//console.log(JSON.stringify(device));
+		//console.log(parseJSON(device));
+		$('#descriptionDevice').text(device.text);
 		$('#modal1').openModal();
 	}
 </script>
