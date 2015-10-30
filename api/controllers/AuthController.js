@@ -138,6 +138,7 @@ var AuthController = {
    * @param {Object} res
    */
   callback: function (req, res) {
+
     function tryAgain (err) {
 
       // Only certain error messages are returned via req.flash('error', someError)
@@ -155,6 +156,11 @@ var AuthController = {
       // If an error was thrown, redirect the user to the
       // login, register or disconnect action initiator view.
       // These views should take care of rendering the error messages.
+      if(req.param('api')=="true") {
+        return res.json(401, {
+          error: 'Auth failed'
+        });
+      }
       var action = req.param('action');
 
       switch (action) {
@@ -168,12 +174,10 @@ var AuthController = {
           res.redirect('/login');
       }
     }
-
     passport.callback(req, res, function (err, user, challenges, statuses) {
       if (err || !user) {
         return tryAgain(challenges);
       }
-
       req.login(user, function (err) {
         if (err) {
           return tryAgain(err);
@@ -184,18 +188,18 @@ var AuthController = {
 
         // Upon successful login, send the user to the homepage were req.user
         // will be available.
-        // 
-        // Check if param is api
-        if (req.param('api') == "true"){
-	      	Passport
-			      .findOne({ protocol: 'local', user: req.user.id })
-			      .exec(function(err, passport) {
-			        return res.json({
-			          token: passport.accessToken
-			        });
-			    	});
+        //
+        if(req.param('api')=="true") {
+					Passport
+					.findOne({ protocol: 'local', user: req.user.id })
+					.exec(function(err, passport) {
+					  return res.json({
+					    token: passport.accessToken,
+					    user: req.user
+					  });
+					});
         } else {
-	        res.redirect('/');
+	        	res.redirect('/');
         }
       });
     });
