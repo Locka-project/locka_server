@@ -1,4 +1,19 @@
 {
 	"Welcome": "Bienvenue",
-	"A brand new app.": "Une toute nouvelle application."
+	"A brand new app.": "Une toute nouvelle application.",
+		"Error.Passport.Password.Invalid": "Le mot de passe indiqué est invalide!",
+  	"Error.Passport.Password.Wrong": "Whoa, le mot de passe indiqué n'est pas correct!",
+  	"Error.Passport.Password.NotSet": "Oh non, tu n'as pas encore indiqué de mot de passe!",
+  	"Error.Passport.Username.NotFound": "Uhm, c'est quoi ton nom déjà?",
+  	"Error.Passport.User.Exists": "Ce nom d'utilisateur existe déjà.",
+  	"Error.Passport.Email.NotFound": "Cet email semble incorrect.",
+  	"Error.Passport.Email.Missing": "Tu dois indiqué un email pour la verification.",
+  	"Error.Passport.Email.Exists": "Cet email exist déjà. Essaie donc de te connecter.",
+  	"Error.Passport.Username.Missing": "Tu dois indiqué un nom d'utilisateur.",
+  	"Error.Passport.Password.Missing": "Oh non, tu n'as pas encore indiqué de mot de passe!",
+  	"Error.Passport.Generic": "Une erreur s'est produite durant l'authentification.",
+  	"Error.ResetPassword" : "Une erreur s'est produite, veuillez redémarrer la procédure.",
+  	"Error.ResetPassword.Token" : "Ce lien n'est plus valide, veuillez redémarrer la procédure.",
+		"Success.ResetPassword" : "Ton mot de passe a été changé avec succès.",
+  	"Email.Sent" : "Un email a été envoyé pour confirmer votre changement de mot de passe."
 }

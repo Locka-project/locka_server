@@ -6,6 +6,7 @@
  */
 
 function FrontUserCtrl(){
+
   function generatePassword(req, res){
     var newPassword = "";
     var generator = "azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN0123456789"
@@ -113,17 +114,66 @@ function FrontUserCtrl(){
           passport.password = newPassword;
           passport.save();
         });
+        res.redirect('/user');
+		},
+		delete: function (req, res) {
+				User.find({id: req.allParams().id}).exec(function foundCB(err, found) {
+						if (err) {
+								var log = "Error : " + err + " trying to find user with id " + req.allParams().id;
+								console.log(log);
+								return res;
+						}
+						if (found[0].id == null) {
+								var log = "No user with id " + req.allParams().id + ".";
+								console.log(log);
+								return res;
+						}
+						User.destroy({id: req.allParams().id}).exec(function deleteCB(err) {
+								if (err) {
+										var log = "Error : " + err + " trying to delete user " + found[0].name;
+										console.log(log);
+										return res;
+						}
+								var log = "User " + found[0].name + " correctly deleted.";
+								console.log(log);
+								return res;
+						});
+				});
+		},
 
-        var response = EmailService.forgetPassword(found[0], newPassword);
-        if(response != true){
-          res = "Error : " + err + " trying to send mail.";
-          console.log(res);
-          return res;
-        }
+		forgetPassword: function (req, res) {
+				return res.view('user/forgetPassword');
+		},
 
-        return res.redirect('/login');
-      });
-    },
+		sendNewPassword: function(req, res){
+			User.find({email:req.allParams().email}).exec(function findCB(err, found){
+					if(err){
+							res = "Error : " + err + " trying to find user.";
+							console.log(res);
+							return res;
+					}
+
+					var newPassword = generatePassword();
+          findPassport(found[0], res, function(err, passport){
+            if(err){
+              res = "Error : " + err + " trying to find user.";
+              console.log(res);
+              return res;
+            }
+            passport.password = newPassword;
+            passport.save();
+          });
+
+          var response = EmailService.forgetPassword(found[0], newPassword);
+          if(response != true){
+            res = "Error : " + err + " trying to send mail.";
+            console.log(res);
+            return res;
+          }
+
+					return res.redirect('/login');
+			});
+		},
 
     getAllUsers: function (req, res) {
       User.find({}).exec(function findCB(err, found) {

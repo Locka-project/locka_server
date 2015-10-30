@@ -4,6 +4,7 @@
  * @description :: Server-side logic for managing Devices
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
+ /*TODO: give/remove authorization to an user*/
 
 function DeviceCtrl(){
 
@@ -19,7 +20,7 @@ function DeviceCtrl(){
 			});
 		},
 		create:function(req,res){
-			Device.create({name:req.allParams().name, state:"closed"}).exec(function createCB(err, created){
+			Device.create({name:req.allParams().name, state:"closed", userList:{collection:req.user}}).exec(function createCB(err, created){
 				if(err) {
 					LogService.create({type: "Error", description: "Error : " + err + " trying to create device."});
 					return res;
@@ -122,10 +123,29 @@ function DeviceCtrl(){
 				console.log(users);
 				return res.json(users);
 			});
+		},
+		getAllRooms: function(req,res){
+			
+		},
+		createRooms: function(req,res){
+			if(req.req.isSocket){
+				if(req.param('id')){
+					sails.sockets.join(req.socket, req.param('id'));
+					res.json({
+						message: 'Subscribed to a fun room called '+req.param('id')+'!'
+					})
+				} else {
+					res.json({
+						message: 'id parameter is not defined'
+					});
+				}
+			} else {
+				res.json({
+						message: 'you don\'t have a valid socket'
+					});
+			}
 		}
 	}
 }
 
 module.exports = DeviceCtrl();
-
-
