@@ -30,12 +30,10 @@ function UserCtrl(){
                 firstname: req.allParams().firstname
             }).exec(function afterwards(err, updated) {
                 if (err) {
-                    var log = "Error : " + err + " trying to update user.";
-                    console.log(log);
+                    LogService.create({type: "Error", description: "Error : " + err + " trying to update user with id " + req.allParams().id});
                     return res;
                 }
-                var log = "User correctly updated."
-                console.log(log);
+                LogService.create({type: "Update", description: "User " + updated.username + " correctly updated."});
 //                 res.redirect('/user');
 								return res.json(log);
             });
@@ -44,12 +42,11 @@ function UserCtrl(){
         changePassword: function (req, res) {
             User.update({id: req.allParams().id}, {password: req.allParams().password}).exec(function pwdUpdateCB(err, updated) {
                 if (err) {
-                    var log = "Error : " + err + " trying to change user password.";
+                    LogService.create({type: "Error", description: "Error : " + err + " trying to change password of user with id " + req.allParams().id});
                     console.log(log);
                     return res;
                 }
-                var log = "User password correctly updated."
-                console.log(log);
+                LogService.create({type: "Update", description: "User " + updated.username + " password correctly updated."});
                 return res.json(updated);
             });
         },
@@ -57,52 +54,45 @@ function UserCtrl(){
         delete: function (req, res) {
             User.find({id: req.allParams().id}).exec(function foundCB(err, found) {
                 if (err) {
-                    var log = "Error : " + err + " trying to find user with id " + req.allParams().id;
-                    console.log(log);
+                    LogService.create({type: "Error", description: "Error : " + err + " trying to find user with id " + req.allParams().id});
                     return res;
                 }
                 if (found[0].id == null) {
-                    var log = "No user with id " + req.allParams().id + ".";
-                    console.log(log);
+                    LogService.create({type: "Error", description: "No user with id " + req.allParams().id + "."});
                     return res;
                 }
                 User.destroy({id: req.allParams().id}).exec(function deleteCB(err) {
                     if (err) {
-                        var log = "Error : " + err + " trying to delete user " + found[0].name;
-                        console.log(log);
+                        LogService.create({type: "Error", description: "Error : " + err + " trying to delete user " + found[0].username});
                         return res;
                     }
-                    var log = "User " + found[0].name + " correctly deleted.";
-                    console.log(log);
+                    LogService.create({type: "Delete", description: "User " + found[0].username + " correctly deleted."});
                     return res;
                 });
             });
         },
 
         forgetPassword: function (req, res) {
-            console.log('coucou');
             return res.view('user/forgetPassword');
         },
 
         sendNewPassword: function(req, res){
             User.find({email:req.allParams().email}).exec(function findCB(err, found){
                 if(err){
-                    res = "Error : " + err + " trying to find user.";
-                    console.log(res);
+                    LogService.create({type: "Error", description: "Error : " + err + " trying to find user with id " + req.allParams().id});
                     return res;
                 }
                 var newPassword = generatePassword();
 
                 User.update({id:found[0].id}, {password:newPassword}).exec(function pwdUpdateCB(err,updated){
                     if(err){
-                        res = "Error : " + err + " trying to update user.";
-                        console.log(res);
+                        LogService.create({type: "Error", description: "Error : " + err + " trying to update user " + found[0].username});
                         return res;
                     }
+                    LogService.create({type: "Update", description: "User " + updated.username + " correctly updated with a random password."});
                     var response = EmailService.forgetPassword(updated[0], newPassword);
                     if(!response){
-                        res = "Error : " + err + " trying to send mail.";
-                        console.log(res);
+                        LogService.create({type: "Error", description: "Error : " + err + " trying to send mail."});
                         return res;
                     }
                     console.log(response);
@@ -124,12 +114,9 @@ function UserCtrl(){
         getAllUsers: function (req, res) {
             User.find({}).exec(function findCB(err, found) {
                 if (err) {
-                    var log = "Error : " + err + " trying to list all users.";
-                    console.log(log);
+                    LogService.create({type: "Error", description: "Error : " + err + " trying to list all users."});
                     return res;
                 }
-                var log = "Users correctly listed.";
-                console.log(log);
                 return res.json(found);
             });
         },
@@ -137,12 +124,9 @@ function UserCtrl(){
         getDevicesByUser: function (req, res) {
             User.find({id: req.allParams().id}).populate('deviceList').exec(function (err, devices) {
                 if (err) {
-                    var log = "Error : " + err + " trying to list all users.";
-                    console.log(log);
+                    LogService.create({type: "Error", description: "Error : " + err + " trying to list user" + req.user.id + "devices."});
                     return res;
                 }
-                var log = "Users correctly deleted.";
-                console.log(log);
                 return res.json(devices);
             })
         },
