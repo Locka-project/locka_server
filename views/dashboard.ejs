@@ -69,8 +69,17 @@
 			 </div>
 			 <div class="modal-footer">
 				<input type="hidden" name="id" id="deviceId">
-		 		<button type="submit"class="waves-effect waves-light btn">Save</button>
-				<button type="submit"class="waves-effect waves-light btn">Delete</button>
+				<div class="col s12">
+					<div class="col s4">
+						<button style="width:100%" type="button" onclick="deleteDevice($(this).attr('meta'))" id="deleteButton" class="waves-effect waves-light red btn">Delete</button>
+					</div>
+					<div class="col s4">
+					<button style="width:100%" type="submit"class="waves-effect waves-light btn">Save</button>
+					</div>
+					<div class="col s4">
+						<button style="width:100%" type="button" onclick="closeModal()" class="waves-effect waves-light btn">Close</button>
+					</div>
+				</div>
 		 	 </div>
 		 </form>
 	 </div>
@@ -78,11 +87,28 @@
 </div>
 
 <script type="text/javascript">
-	function openEditDevice(deviceId, deviceName){
+
+	function openEditDevice(deviceId, deviceName) {
 		$('#deviceId').val(deviceId);
+		$('#deleteButton').attr('meta', deviceId);
 		$('#deviceName').val(deviceName);
 		$('#modal1').openModal();
 	}
+
+	function deleteDevice(e) {
+		$.ajax({
+			url: 'device/delete',
+			type: 'POST',
+			data: {
+				 'id' : e
+			 }
+    }).done(this.closeModal());
+  }
+	
+	function closeModal() {
+		$('#modal1').closeModal();
+	}
+
 </script>
 
 </main>
