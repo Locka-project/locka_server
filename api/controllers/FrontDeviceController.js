@@ -30,16 +30,9 @@ function FrontDeviceCtrl(){
 					console.log(log);
 					return res;
 				}
-				var log = "Device correctly created."
-				var lastId = created.id;
-				console.log(lastId);
-				Device.findOne({id:lastId}).exec(function findCB(err, found) {
-					if (err) return err;
-					console.log(found);
-					console.log(req.user);
-					found.userList.add(req.user);
-				});
-				console.log(log);
+				created.userList.add(req.user);
+				created.save();
+				LogService.create({type: "Create", description: "Device " + created.id + " correctly created by user " + req.user.username});
 				res.redirect('/');
 			});
 		},

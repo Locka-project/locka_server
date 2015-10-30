@@ -11,7 +11,7 @@
 	  </div>
 	  <div id="dashboard" class="container">
 	  	<div class="col s12">
-	  		<% if (user.firstname != null || user.lastname) { %>
+	  		<% if (user.firstname != null && user.lastname != null) { %>
 	  			<h3 class="left">Bienvenue <%- user.fullName()%></h3>
 	  		<% } else { %>
 		  		<h3 class="left">Bienvenue</h3>
@@ -38,7 +38,6 @@
 <div id="modal1" class="modal">
 	<div class="modal-content">
 		<h4>Information</h4>
-<<<<<<< HEAD
 		<div class="row">
 		 <form class="col s12" action="/device/update" method="POST">
 			 <div class="row">
@@ -54,7 +53,7 @@
 						<button style="width:100%" type="button" onclick="deleteDevice($(this).attr('meta'))" id="deleteButton" class="waves-effect waves-light red btn">Delete</button>
 					</div>
 					<div class="col s4">
-					<button style="width:100%" type="submit"class="waves-effect waves-light btn">Save</button>
+						<button style="width:100%" type="submit"class="waves-effect waves-light btn">Save</button>
 					</div>
 					<div class="col s4">
 						<button style="width:100%" type="button" onclick="closeModal()" class="waves-effect waves-light btn">Close</button>
@@ -63,13 +62,6 @@
 		 	 </div>
 		 </form>
 	 </div>
-=======
-		<p id="descriptionDevice"></p>
-		<p id="test"></p>
-	</div>
-	<div class="modal-footer">
-		<a class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
->>>>>>> 6d24527a8743bdc09d5a80a412af8b99b3ebb53a
 	</div>
 </div>
 
