@@ -15,5 +15,6 @@
   	"Error.ResetPassword" : "Une erreur s'est produite, veuillez redémarrer la procédure.",
   	"Error.ResetPassword.Token" : "Ce lien n'est plus valide, veuillez redémarrer la procédure.",
 		"Success.ResetPassword" : "Ton mot de passe a été changé avec succès.",
-  	"Email.Sent" : "Un email a été envoyé pour confirmer votre changement de mot de passe."
+  	"Email.Sent" : "Un email a été envoyé pour confirmer votre changement de mot de passe.",
+		"My Account" : "Mon compte"
 }
