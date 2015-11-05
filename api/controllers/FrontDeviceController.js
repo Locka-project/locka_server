@@ -12,8 +12,7 @@ function FrontDeviceCtrl(){
 		index:function(req,res){
 			Device.find({id:req.allParams().id}).exec(function indexCB(err, device){
 				if(err) {
-					var log = "Error : " + err + " trying to create device.";
-					console.log(log);
+					LogService.create({type: "Error", description: "Error : " + err + " trying to display device with id " + req.allParams().id});
 					return res;
 				}
 				console.log(device);
@@ -26,8 +25,7 @@ function FrontDeviceCtrl(){
 		create:function(req,res){
 			Device.create({name:req.allParams().name, state:"closed"}).exec(function createCB(err, created){
 				if(err) {
-					var log = "Error : " + err + " trying to create device.";
-					console.log(log);
+					LogService.create({type: "Error", description: "Error : " + err + " trying to create device " + req.allParams().name});
 					return res;
 				}
 				created.userList.add(req.user);
@@ -64,12 +62,10 @@ function FrontDeviceCtrl(){
 		update:function(req,res){
 			Device.update({id:req.allParams().id},{name:req.allParams().name}).exec(function afterwards(err, updated){
 				if(err) {
-					var log = "Error : " + err + " trying to update device.";
-					console.log(log);
+					LogService.create({type: "Error", description: "Error : " + err + " trying to update device with id " + req.allParams().id});
 					return res;
 				}
-				var log = "Device correctly updated."
-				console.log(log);
+				LogService.create({type: "Update", description: "Device with id " + req.allParams().id + " correctly updated by user " + req.user.username});
 				console.log(updated);
 				return res.redirect('/');
 			});
@@ -77,8 +73,7 @@ function FrontDeviceCtrl(){
 		checkState:function(req,res){
 			Device.find({id:req.allParams().id}).exec(function stateCB(err, found){
 				if(err) {
-					var log = "Error : " + err + " trying to check device state.";
-					console.log(log);
+					LogService.create({type: "Error", description: "Error : " + err + " trying to check device with id " + req.allParams().id + "state"});
 					return res;
 				}
 				var log = "Lock " + found[0].name + " is " + found[0].state + "."
@@ -114,23 +109,21 @@ function FrontDeviceCtrl(){
 		open:function(req,res){
 			Device.find({id:req.allParams().id}).exec(function checkOpenCB(errCheck,found){
 				if(errCheck) {
-					var log = "Error : " + err + " trying to find device.";
-					console.log(log);
+					LogService.create({type: "Error", description: "Error : " + err + " trying to list devices."});
 					return res;
 				}
 				if(found[0].state == "closed"){
-					Device.update({id:req.allParams().id},{state:"open"}).exec(function openCB(errUpdate,openned){
+					Device.update({id:req.allParams().id},{state:"open"}).exec(function openCB(errUpdate,opened){
 						if(errUpdate) {
-							var log = "Error : " + err + " trying to open device.";
-							console.log(log);
+							LogService.create({type: "Error", description: "Error : " + err + " trying to open device with id " + req.allParams().id});
 							return res;
 						}
-						console.log(openned);
-						return res.json(openned);
+						LogService.create({type: "Open", description: "Lock " + opened.name + " opened by user " + req.user.username});
+						console.log(opened);
+						return res.json(opened);
 					});
 				} else {
-					var log = "Lock " + found[0].name + " already " + found[0].state + ".";
-					console.log(log);
+					LogService.create({type: "Error", description: "Error : " + err + " trying to list devices."});
 					return res;
 				}
 			});
