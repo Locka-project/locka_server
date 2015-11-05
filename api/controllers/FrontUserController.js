@@ -97,22 +97,22 @@ function FrontUserCtrl(){
     delete: function (req, res) {
       User.find({id: req.allParams().id}).exec(function foundCB(err, found) {
         if (err) {
-          LogService.create({type: "Error", description: "Error : " + err + " trying to find user with id " + req.allParams().id});
+          LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + err + " trying to find user with id " + req.allParams().id});
           console.log(log);
           return res;
         }
         if (found[0].id == null) {
-          LogService.create({type: "Error", description: "No user with id " + req.allParams().id + "."});
+          LogService.create({user_id: req.user.id, type: "Error", description: "No user with id " + req.allParams().id + "."});
           console.log(log);
           return res;
         }
         User.destroy({id: req.allParams().id}).exec(function deleteCB(err) {
           if (err) {
-            LogService.create({type: "Error", description: "Error : " + err + " trying to delete user " + found[0].name});
+            LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + err + " trying to delete user " + found[0].name});
             console.log(log);
             return res;
           }
-          LogService.create({type: "Delete", description: "User " + found[0].name + " correctly deleted."});
+          LogService.create({user_id: req.user.id, type: "Delete", description: "User " + found[0].name + " correctly deleted."});
           console.log(log);
           return res;
         });
@@ -126,14 +126,14 @@ function FrontUserCtrl(){
     sendNewPassword: function(req, res){
       User.find({email:req.allParams().email}).exec(function findCB(err, found){
         if(err){
-          LogService.create({type: "Error", description: "Error : " + err + " trying to find user."});
+          LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + err + " trying to find user."});
           return res;
         }
 
         var newPassword = generatePassword();
         findPassport(found[0], res, function(err, passport){
           if(err){
-            LogService.create({type: "Error", description: "Error : " + err + " trying to find user."});
+            LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + err + " trying to find user."});
             return res;
           }
           passport.password = newPassword;
@@ -142,7 +142,7 @@ function FrontUserCtrl(){
 
         var response = EmailService.forgetPassword(found[0], newPassword);
         if(response != true){
-          LogService.create({type: "Error", description: "Error : " + err + " trying to send mail."});
+          LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + err + " trying to send mail."});
           return res;
         }
         return res.redirect('/login');
@@ -152,7 +152,7 @@ function FrontUserCtrl(){
     getAllUsers: function (req, res) {
       User.find({}).exec(function findCB(err, found) {
         if (err) {
-          LogService.create({type: "Error", description: "Error : " + err + " trying to list all users."});
+          LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + err + " trying to list all users."});
           return res;
         }
         return res.json(found);
@@ -162,7 +162,7 @@ function FrontUserCtrl(){
     getDevicesByUser: function (req, res) {
       User.find({id: req.user.id}).populate('deviceList').exec(function (err, devices) {
         if (err) {
-          LogService.create({type: "Error", description: "Error : " + err + " trying to list all users."});
+          LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + err + " trying to list all users."});
           return res;
         }
         return res.json(devices);
