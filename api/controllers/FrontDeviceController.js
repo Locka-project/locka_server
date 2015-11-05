@@ -45,13 +45,15 @@
 			});
 		},
 		delete:function(req,res){
-			Device.destroy({id:req.allParams().id}).exec(function destroyCB(err){
+			Device.destroy({id:req.allParams().id}).exec(function destroyCB(err, device){
 				if(err) {
 					LogService.create({user_id: req.user.id, device_id: req.allParams().id, type: "Error", description: "Error : " + err + " trying to delete device."});
 					return res;
 				}
 				LogService.create({user_id: req.user.id, device_id: req.allParams().id, type: "Delete", description: "Device correctly deleted."});
 				return res;
+				Device.publishDestroy(device[0].id,device[0]);
+				return res.json({msg : 'Successful'})
 			})
 		},
 		update:function(req,res){
@@ -62,6 +64,7 @@
 				}
 				LogService.create({user_id: req.user.id, device_id: req.allParams().id, type: "Update", description: "Device correctly updated."});
 				console.log(updated);
+				Device.publishUpdate(updated[0].id,updated[0]);
 				return res.redirect('/');
 			});
 		},
@@ -90,10 +93,11 @@
 						}
 						LogService.create({user_id: req.user.id, device_id: req.closed.id, type: "Close", description: "Lock closed."});
 						console.log(closed);
+						Device.publishUpdate(closed[0].id,closed[0]);
 						return res.json(closed);
 					});
 				} else {
-					return res;
+					return res.json({msg : 'Already closed'});
 				}
 			});
 		},
@@ -110,11 +114,12 @@
 							return res;
 						}
 						LogService.create({user_id: req.user.id, device_id: req.opened.id, type: "Open", description: "Lock opened."});
+						Device.publishUpdate(opened[0].id,opened[0]);
 						console.log(opened);
 						return res.json(opened);
 					});
 				} else {
-					return res;
+					return res.json({msg : 'Already opened'});
 				}
 			});
 		},
