@@ -20,11 +20,12 @@ var Dashboard = {
 					
 					if(err) return res.json(err)
 					Device.subscribe(req, _.pluck(user.deviceList, 'id'));
+					return res.json({msg : 'Successful'})
 				});
 			}
-			res.json({msg: "Nok User"});
+			return res.json({msg: "Nok User"});
 		}
-		res.json({msg: "Nok Socket"});
+		return res.json({msg: "Nok Socket"});
 	}
 };
 
