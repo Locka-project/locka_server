@@ -48,7 +48,7 @@ function DeviceCtrl(){
 					return res;
 				}
 				LogService.create({user_id: req.user.id, device_id: req.allParams().id, type: "Delete", description: "Device correctly deleted."});
-				return res.json;
+				return res.json({success:'true'});
 			})
 		},
 		update:function(req,res){
