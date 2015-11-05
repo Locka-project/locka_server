@@ -59,6 +59,7 @@ function DeviceCtrl(){
 				}
 				LogService.create({user_id: req.user.id, device_id: req.allParams().id, type: "Update", description: "Device correctly updated."});
 				console.log(updated);
+				Device.publishUpdate(updated[0].id,{ name: updated[0].name, state: updated[0].state});
 				return res.json(updated);
 			});
 		},

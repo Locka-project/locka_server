@@ -36,7 +36,6 @@ module.exports.policies = {
 	  '*': ['passport','sessionAuth'],
 		'forgetPassword' : ['passport'],
 		'sendNewPassword' : ['passport'],
-		'subscribe': ['passport'],
 	},
 	FrontDashboardController : {
 	'*' : ['passport', 'sessionAuth'],

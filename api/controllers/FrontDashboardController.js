@@ -9,9 +9,22 @@ var Dashboard = {
 
 	getDashboard:function(req,res){
 		return res.view('dashboard', {
-			user: req.user,
-			device: req.user.deviceList
+			user: req.user
 		});
+	},
+	
+	getMyLock: function(req, res){
+		if(req.isSocket){
+			if(req.user){
+				User.findOne({id:req.user.id}).populate('deviceList').exec(function foundByUserCB(err, user){
+					
+					if(err) return res.json(err)
+					Device.subscribe(req, _.pluck(user.deviceList, 'id'));
+				});
+			}
+			res.json({msg: "Nok User"});
+		}
+		res.json({msg: "Nok Socket"});
 	}
 };
 
