@@ -15,5 +15,6 @@
   	"Error.ResetPassword" : "An error as occurred, please restart the procedure.",
   	"Error.ResetPassword.Token" : "This link is no more valid, please restart the procedure.",
 		"Success.ResetPassword" : "Your password is changed successfully.",
-  	"Email.Sent" : "An email was sent to change your password."
+  	"Email.Sent" : "An email was sent to change your password.",
+		"Bienvenue" : "Welcome"
 }
