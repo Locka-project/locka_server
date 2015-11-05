@@ -121,10 +121,10 @@ function FrontDeviceCtrl(){
 							LogService.create({type: "Error", description: "Error : " + err + " trying to open device with id " + req.allParams().id});
 							return res;
 						}
-						LogService.create({type: "Open", description: "Lock " + openned.name + " openned by user " + req.user.username});
+						LogService.create({type: "Open", description: "Lock " + opened.name + " opened by user " + req.user.username});
 						console.log(openned);
-						Device.publishUpdate(openned[0].id,openned[0]);
-						return res.json(openned);
+						Device.publishUpdate(opened[0].id,opened[0]);
+						return res.json(opened);
 					});
 				} else {
 					LogService.create({type: "Error", description: "Error : " + err + " trying to list devices."});
