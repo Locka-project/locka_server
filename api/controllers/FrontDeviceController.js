@@ -113,14 +113,14 @@ function FrontDeviceCtrl(){
 					return res;
 				}
 				if(found[0].state == "closed"){
-					Device.update({id:req.allParams().id},{state:"open"}).exec(function openCB(errUpdate,openned){
+					Device.update({id:req.allParams().id},{state:"open"}).exec(function openCB(errUpdate,opened){
 						if(errUpdate) {
 							LogService.create({type: "Error", description: "Error : " + err + " trying to open device with id " + req.allParams().id});
 							return res;
 						}
-						LogService.create({type: "Open", description: "Lock " + openned.name + " openned by user " + req.user.username});
-						console.log(openned);
-						return res.json(openned);
+						LogService.create({type: "Open", description: "Lock " + opened.name + " opened by user " + req.user.username});
+						console.log(opened);
+						return res.json(opened);
 					});
 				} else {
 					LogService.create({type: "Error", description: "Error : " + err + " trying to list devices."});
