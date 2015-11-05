@@ -6,13 +6,13 @@
  */
  /*TODO: give/remove authorization to an user*/
 
-function FrontDeviceCtrl(){
+	function FrontDeviceCtrl(){
 
 	return{
 		index:function(req,res){
 			Device.find({id:req.allParams().id}).exec(function indexCB(err, device){
 				if(err) {
-					LogService.create({user_id: req.user.id, device_id: req.req.allParams().id, type: "Error", description: "Error : " + err + " trying to display device"});
+					LogService.create({user_id: req.user.id, device_id: req.allParams().id, type: "Error", description: "Error : " + err + " trying to display device"});
 					return res;
 				}
 				console.log(device);
@@ -30,7 +30,7 @@ function FrontDeviceCtrl(){
 				}
 				created.userList.add(req.user);
 				created.save();
-				LogService.create({user_id: req.user.id, device_id: req.req.allParams().id, type: "Create", description: "Device correctly created." });
+				LogService.create({user_id: req.user.id, device_id: req.allParams().id, type: "Create", description: "Device correctly created." });
 				res.redirect('/');
 			});
 		},
@@ -47,20 +47,20 @@ function FrontDeviceCtrl(){
 		delete:function(req,res){
 			Device.destroy({id:req.allParams().id}).exec(function destroyCB(err){
 				if(err) {
-					LogService.create({user_id: req.user.id, device_id: req.req.allParams().id, type: "Error", description: "Error : " + err + " trying to delete device."});
+					LogService.create({user_id: req.user.id, device_id: req.allParams().id, type: "Error", description: "Error : " + err + " trying to delete device."});
 					return res;
 				}
-				LogService.create({user_id: req.user.id, device_id: req.req.allParams().id, type: "Delete", description: "Device correctly deleted."});
+				LogService.create({user_id: req.user.id, device_id: req.allParams().id, type: "Delete", description: "Device correctly deleted."});
 				return res;
 			})
 		},
 		update:function(req,res){
 			Device.update({id:req.allParams().id},{name:req.allParams().name}).exec(function afterwards(err, updated){
 				if(err) {
-					LogService.create({user_id: req.user.id, device_id: req.req.allParams().id, type: "Error", description: "Error : " + err + " trying to update device."});
+					LogService.create({user_id: req.user.id, device_id: req.allParams().id, type: "Error", description: "Error : " + err + " trying to update device."});
 					return res;
 				}
-				LogService.create({user_id: req.user.id, device_id: req.req.allParams().id, type: "Update", description: "Device correctly updated."});
+				LogService.create({user_id: req.user.id, device_id: req.allParams().id, type: "Update", description: "Device correctly updated."});
 				console.log(updated);
 				return res.redirect('/');
 			});
@@ -85,7 +85,7 @@ function FrontDeviceCtrl(){
 				if(found[0].state == "open"){
 					Device.update({id:req.allParams().id},{state:"closed"}).exec(function closeCB(errUpdate,closed){
 						if(errUpdate) {
-							LogService.create({user_id: req.user.id, device_id: req.req.allParams().id, type: "Error", description: "Error : " + err + " trying to close device."});
+							LogService.create({user_id: req.user.id, device_id: req.allParams().id, type: "Error", description: "Error : " + err + " trying to close device."});
 							return res;
 						}
 						LogService.create({user_id: req.user.id, device_id: req.closed.id, type: "Close", description: "Lock closed."});
