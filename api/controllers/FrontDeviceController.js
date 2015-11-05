@@ -122,7 +122,6 @@ function FrontDeviceCtrl(){
 							return res;
 						}
 						LogService.create({type: "Open", description: "Lock " + opened.name + " opened by user " + req.user.username});
-						console.log(openned);
 						Device.publishUpdate(opened[0].id,opened[0]);
 						return res.json(opened);
 					});
