@@ -91,7 +91,7 @@
 							LogService.create({user_id: req.user.id, device_id: req.allParams().id, type: "Error", description: "Error : " + err + " trying to close device."});
 							return res;
 						}
-						LogService.create({user_id: req.user.id, device_id: req.closed.id, type: "Close", description: "Lock closed."});
+						LogService.create({user_id: req.user.id, device_id: req.allParams().id, type: "Close", description: "Lock closed."});
 						console.log(closed);
 						Device.publishUpdate(closed[0].id,closed[0]);
 						return res.json(closed);
@@ -113,7 +113,7 @@
 							LogService.create({user_id: req.user.id, device_id: req.allParams().id, type: "Error", description: "Error : " + err + " trying to open device."});
 							return res;
 						}
-						LogService.create({user_id: req.user.id, device_id: req.opened.id, type: "Open", description: "Lock opened."});
+						LogService.create({user_id: req.user.id, device_id: req.allParams().id, type: "Open", description: "Lock opened."});
 						Device.publishUpdate(opened[0].id,opened[0]);
 						console.log(opened);
 						return res.json(opened);

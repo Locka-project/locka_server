@@ -10,11 +10,11 @@ module.exports = {
   attributes: {
     //type {Error,Warning,Create,Update,Delete,Open,Close}
     user_id:{
-      type: 'number',
+      type: 'integer',
       required: true,
     },
     device_id:{
-      type: 'number',
+      type: 'integer',
     },
     type:{
       type: 'string',
