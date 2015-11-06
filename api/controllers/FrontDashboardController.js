@@ -12,20 +12,16 @@ var Dashboard = {
 			user: req.user
 		});
 	},
-	
+
 	getMyLock: function(req, res){
-		if(req.isSocket){
-			if(req.user){
-				User.findOne({id:req.user.id}).populate('deviceList').exec(function foundByUserCB(err, user){
-					
-					if(err) return res.json(err)
-					Device.subscribe(req, _.pluck(user.deviceList, 'id'));
-					return res.json({msg : 'Successful'})
-				});
-			}
-			return res.json({msg: "Nok User"});
-		}
-		return res.json({msg: "Nok Socket"});
+		if(!req.isSocket) return res.json({msg: "Nok User"});
+		if(!req.user) return res.json({msg: "Nok Socket"});
+
+		User.findOne({id:req.user.id}).populate('deviceList').exec(function foundByUserCB(err, user){
+			if(err) return res.json(err);
+			Device.subscribe(req, _.pluck(user.deviceList, 'id'));
+			return res.json({msg: "Successful"});
+		});
 	}
 };
 

@@ -17,6 +17,13 @@ module.exports = {
       type: 'string',
       required: true,
     },
+   /* connected:{
+      type: 'string',
+      required: true,
+    },
+    /*identifier: {
+      model: lock,
+    },*/
     userList:{
       collection: "user",
       via: 'deviceList'
