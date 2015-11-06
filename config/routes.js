@@ -46,7 +46,7 @@ module.exports.routes = {
   'GET /auth/:provider': 'AuthController.provider',
   'GET /auth/:provider/callback': 'AuthController.callback',
 
-	/* User routing */
+	/* User Front routing */
   'GET /user': 'FrontUserController.myAccount',
 	'GET /:lang/user': 'FrontUserController.myAccount',
   'POST /user/update': 'FrontUserController.update',
@@ -57,7 +57,7 @@ module.exports.routes = {
   'GET /forgetPassword': 'FrontUserController.forgetPassword',
   'POST /sendNewPassword': 'FrontUserController.sendNewPassword',
 
-	/* Device routing */
+	/* Device Front routing */
   'GET /device': 'FrontDeviceController.index',
 	'GET /device/creatingPage': 'FrontDeviceController.creatingPage',
   'POST /device/create': 'FrontDeviceController.create',
@@ -78,29 +78,30 @@ module.exports.routes = {
 	'GET /api/auth/:provider/callback': 'AuthController.callback',
 
 	/* User routing */
-	'GET /api/user/': 'UserController.myAccount',
-	'PUT /api/user/update/': 'UserController.update',
-	'DELETE /api/user/delete/': 'UserController.delete',
-	'PUT /api/user/changePassword/': 'UserController.changePassword',
-	'GET /api/user/getAllUsers': 'UserController.getAllUsers',
-  'POST /api/sendNewPassword': 'UserController.sendNewPassword',
-	'GET /api/user/getDevicesByUser/': 'UserController.getDevicesByUser',
-	'GET /api/user/forgetPassword/': 'UserController.forgetPassword',
-	'GET /api/user/subscribe': 'UserController.getMyLock',
+	'GET /api/users': 'UserController.myAccount',
+	'PUT /api/users/:id': 'UserController.update',
+	'DELETE /api/users/:id': 'UserController.delete',
+	'PUT /api/users/:id/changePassword': 'UserController.changePassword',
+	'GET /api/users/getAllUsers': 'UserController.getAllUsers',
+  'POST /api/users/:id/sendNewPassword': 'UserController.sendNewPassword',
+	'GET /api/users/:id/forgetPassword': 'UserController.forgetPassword',
+	'GET /api/users/:id/subscribe': 'UserController.getMyLock',
 
 	/* Device routing */
-	'GET /api/device': 'DeviceController.index',
-	'POST /api/device/create': 'DeviceController.create',
-	'PUT /api/device/open': 'DeviceController.open',
-	'PUT /api/device/close': 'DeviceController.close',
-	'GET /api/device/checkState': 'DeviceController.checkState',
-	'PUT /api/device/update': 'DeviceController.update',
-	'DELETE /api/device/delete': 'DeviceController.delete',
-	'GET /api/device/getAllDevices': 'DeviceController.getAllDevices',
-	'GET /api/device/getUsersByDevice': 'DeviceController.getUsersByDevice',
+	'GET /api/devices': 'DeviceController.index',
+	'POST /api/devices/create': 'DeviceController.create',
+	'PUT /api/devices/:id/open': 'DeviceController.open',
+	'PUT /api/devices/:id/close': 'DeviceController.close',
+	'GET /api/devices/:id/checkState': 'DeviceController.checkState',
+	'PUT /api/devices/:id/update': 'DeviceController.update',
+	'DELETE /api/devices/:id/delete': 'DeviceController.delete',
+	'GET /api/devices/getAllDevices': 'DeviceController.getAllDevices',
+	'GET /api/devices/getUsersByDevice': 'DeviceController.getUsersByDevice',
 
-	/* ----------- Socket IO Front --------- */
+	/* ----------- Socket IO --------- */
 	'GET /socket/devices/subscribe': 'FrontDashboardController.getMyLock',
+	'GET /api/user/subscribe': 'UserController.getMyLock',
+	'GET /api/devices/subscribe/:id': 'DeviceController.subscribe',
 
   /***************************************************************************
   *                                                                          *
