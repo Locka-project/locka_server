@@ -25,8 +25,12 @@ module.exports = {
       model: 'lock',
     },
     userList:{
-      collection: "user",
+      collection: 'user',
       via: 'deviceList'
+    },
+    logList:{
+      collection: 'log',
+      via: 'device',
     }
   }
 };
