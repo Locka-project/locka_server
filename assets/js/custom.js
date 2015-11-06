@@ -40,7 +40,7 @@ io.socket.on('connect', function(){
 	
 	io.socket.get('/socket/devices/subscribe');
 	
-	io.socket.on("device", function(data, jwres){
+	io.socket.on("device", function(data){
 			
 		switch(data.verb) {
 	    case 'created':
