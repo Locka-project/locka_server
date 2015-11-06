@@ -38,6 +38,10 @@ var User = {
     },
     fullName : function(){
       return this.firstname + " " + this.lastname
+    },
+    logList:{
+      collection: 'log',
+      via: 'user',
     }
   }
 };

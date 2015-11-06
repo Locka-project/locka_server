@@ -9,12 +9,12 @@ module.exports = {
 
   attributes: {
     //type {Error,Warning,Create,Update,Delete,Open,Close}
-    user_id:{
-      type: 'integer',
+    user:{
+      model: 'user',
       required: true,
     },
-    device_id:{
-      type: 'integer',
+    device:{
+      model: 'device',
     },
     type:{
       type: 'string',

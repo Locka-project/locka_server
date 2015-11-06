@@ -15,12 +15,12 @@ var Dashboard = {
       }
 			if(!passport[0]){
 				Passport.create({ protocol: 'local', user : req.user.id }, function (err, passport) {
-		      if (err) {
+					if (err) {
 						console.log(err);
 					}
-		    });
+				});
 			}
-      });
+		});
 		return res.view('dashboard', {
 			user: req.user
 		});
