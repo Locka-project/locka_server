@@ -17,13 +17,13 @@ module.exports = {
       type: 'string',
       required: true,
     },
-   /* connected:{
-      type: 'string',
+    connected:{
+      type: 'boolean',
       required: true,
     },
-    /*identifier: {
-      model: lock,
-    },*/
+    identifier: {
+      model: 'lock',
+    },
     userList:{
       collection: "user",
       via: 'deviceList'

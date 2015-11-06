@@ -28,13 +28,13 @@ var Dashboard = {
 	},
 
 	getMyLock: function(req, res){
-		if(!req.isSocket) return res.json({msg: "Nok User"});
-		if(!req.user) return res.json({msg: "Nok Socket"});
+		if(!req.isSocket) return res.json({msg: "is not a Socket"});
+		if(!req.user) return res.json({msg: "user is not defined"});
 
 		User.findOne({id:req.user.id}).populate('deviceList').exec(function foundByUserCB(err, user){
 			if(err) return res.json(err);
 			Device.subscribe(req, _.pluck(user.deviceList, 'id'));
-			return res.json({msg: "Successful"});
+			return res.json({msg: "success"});
 		});
 	}
 };
