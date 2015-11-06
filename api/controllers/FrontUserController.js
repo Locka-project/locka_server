@@ -43,12 +43,10 @@ function FrontUserCtrl(){
         firstname: req.allParams().firstname
       }).exec(function afterwards(err, updated) {
         if (err) {
-          var log = "Error : " + err + " trying to update user.";
-          console.log(log);
+          LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + err + " trying to update user."});
           return res;
         }
-        var log = "User correctly updated."
-        console.log(log);
+        LogService.create({user_id: req.user.id, type: "Update", description: "User correctly updated."});
         res.redirect('/user');
       });
     },
@@ -58,12 +56,12 @@ function FrontUserCtrl(){
       }
       findPassport(req.user, res, function(err, passport){
         if(err){
-          res = "Error : " + err + " trying to find user.";
-          console.log(res);
+          LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + err + " trying to find passport."});
           return res;
         }
         passport.password = req.allParams().password;
         passport.save();
+        LogService.create({user_id: req.user.id, type: "Update", description: "Passport successfully changed."});
       });
       res.redirect('/user');
     },
@@ -75,16 +73,14 @@ function FrontUserCtrl(){
     sendNewPassword: function(req, res){
       User.find({email:req.allParams().email}).exec(function findCB(err, found){
         if(err){
-          res = "Error : " + err + " trying to find user.";
-          console.log(res);
+          LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + err + " trying to find user."});
           return res;
         }
 
         var newPassword = generatePassword();
         findPassport(found[0], res, function(err, passport){
           if(err){
-            res = "Error : " + err + " trying to find user.";
-            console.log(res);
+            LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + err + " trying to find passport."});
             return res;
           }
           passport.password = newPassword;

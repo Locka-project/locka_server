@@ -120,7 +120,7 @@ function UserCtrl(){
         return res.json(found);
       });
     },
-    
+
     getMyLock: function(req, res){
 			if(!req.isSocket) return res.json({msg: "is not a Socket"});
 			if(!req.user) return res.json({msg: "user is not defined"});

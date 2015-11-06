@@ -48,6 +48,7 @@ module.exports.routes = {
 
 	/* User Front routing */
   'GET /user': 'FrontUserController.myAccount',
+	'GET /:lang/user': 'FrontUserController.myAccount',
   'POST /user/update': 'FrontUserController.update',
   'POST /user/delete': 'FrontUserController.delete',
   'POST /user/changePassword': 'FrontUserController.changePassword',
@@ -96,7 +97,7 @@ module.exports.routes = {
 	'DELETE /api/devices/:id/delete': 'DeviceController.delete',
 	'GET /api/devices/getAllDevices': 'DeviceController.getAllDevices',
 	'GET /api/devices/getUsersByDevice': 'DeviceController.getUsersByDevice',
-	
+
 	/* ----------- Socket IO Front --------- */
 	'GET /socket/devices/subscribe': 'FrontDashboardController.getMyLock',
 

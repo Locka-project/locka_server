@@ -27,7 +27,7 @@ module.exports.policies = {
   ***************************************************************************/
 
   // '*': true,
-	'*' : ['passport', 'sessionAuth'],
+	'*' : ['passport', 'sessionAuth', 'localize'],
 	auth: {
 	  '*' : ['passport']
 	},
@@ -51,7 +51,6 @@ module.exports.policies = {
 	DeviceController : {
 	  '*': ['passport','bearerAuth'],
 	}
-
 
   /***************************************************************************
   *                                                                          *
