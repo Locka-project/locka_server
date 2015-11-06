@@ -22,7 +22,7 @@ function DeviceCtrl(){
 			});
 		},
 		create:function(req,res){
-			Device.create({name:req.allParams().name, state:"closed"}).exec(function createCB(err, created){
+			Device.create({name:req.allParams().name, state:"closed", connected:"false"}).exec(function createCB(err, created){
 				if(err) {
 					LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + err + " trying to create device."});
 					return res;

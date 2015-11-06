@@ -8,12 +8,12 @@
 module.exports = {
 
   attributes: {
-    /*identifier: {
+    identifier: {
       type: 'string',
     },
     device: {
       model: 'device',
-    }*/
+    }
   }
 };
 

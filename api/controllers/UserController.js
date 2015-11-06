@@ -130,11 +130,10 @@ function UserCtrl(){
         return res.json(devices);
       })
     },
-
     getMyLock: function(req, res){
 			if(!req.isSocket) return res.json({msg: "is not a Socket"});
 			if(!req.user) return res.json({msg: "user is not defined"});
-						
+
 			User.findOne({id:req.user.id}).populate('deviceList').exec(function findOneCB(err, user){
 				if(err) return res.json(err)
 				Device.subscribe(req, _.pluck(user.deviceList, 'id'));
