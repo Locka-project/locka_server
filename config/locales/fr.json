@@ -16,5 +16,7 @@
   	"Error.ResetPassword.Token" : "Ce lien n'est plus valide, veuillez redémarrer la procédure.",
 		"Success.ResetPassword" : "Ton mot de passe a été changé avec succès.",
   	"Email.Sent" : "Un email a été envoyé pour confirmer votre changement de mot de passe.",
-		"My Account" : "Mon compte"
+		"My Account" : "Mon compte",
+		"Update profil" : "Mettre à jour le profile",
+		"You're not connected yet" : "Vous n'etes pas connecté pour l'instant"
 }
