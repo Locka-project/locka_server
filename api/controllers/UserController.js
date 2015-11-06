@@ -120,16 +120,6 @@ function UserCtrl(){
         return res.json(found);
       });
     },
-
-    getDevicesByUser: function (req, res) {
-      User.find({id: req.user.id}).populate('deviceList').exec(function (err, devices) {
-        if (err) {
-          LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + err + " trying to list user" + req.user.id + "devices."});
-          return res;
-        }
-        return res.json(devices);
-      })
-    },
     
     getMyLock: function(req, res){
 			if(!req.isSocket) return res.json({msg: "is not a Socket"});
