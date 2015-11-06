@@ -66,24 +66,6 @@ function FrontUserCtrl(){
       return res.view('user/forgetPassword');
     },
 
-    sendNewPassword: function(req, res){
-      User.find({email:req.allParams().email}).exec(function findCB(err, found){
-        if(err){
-          return err;
-        }
-
-        var newPassword = generatePassword();
-        findPassport(found[0], res, function(err, passport){
-          if(err){
-            return err;
-          }
-          passport.password = newPassword;
-          passport.save();
-        });
-        return res.redirect('/user');
-      });
-    },
-
     delete: function (req, res) {
       User.find({id: req.allParams().id}).exec(function foundCB(err, found) {
         if (err) {
@@ -104,7 +86,6 @@ function FrontUserCtrl(){
     sendNewPassword: function(req, res){
       User.find({email:req.allParams().email}).exec(function findCB(err, found){
         if(err){
-          LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + err + " trying to find user."});
           return err;
         }
 
