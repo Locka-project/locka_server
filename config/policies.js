@@ -27,7 +27,7 @@ module.exports.policies = {
   ***************************************************************************/
 
   // '*': true,
-	'*' : ['passport', 'sessionAuth'],
+	'*' : ['passport', 'sessionAuth', 'localize'],
 	auth: {
 	  '*' : ['passport']
 	},
@@ -43,14 +43,16 @@ module.exports.policies = {
 	FrontDeviceController : {
 		'*': ['passport','sessionAuth'],
 	},
+	FrontLogController : {
+		'*': ['passport','sessionAuth'],
+	},
 	/* --------- API Request ---------- */
 	UserController : {
 	  '*': ['passport','bearerAuth'],
-	  'getMyLock': ['passport','authSocket'],
+	  'getMyLock': ['passport','authSocket']
 	},
 	DeviceController : {
 	  '*': ['passport','bearerAuth'],
-	  'subscribe': ['passport','authSocket'],
 	}
 
   /***************************************************************************

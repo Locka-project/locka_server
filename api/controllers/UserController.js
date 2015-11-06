@@ -43,7 +43,6 @@ function UserCtrl(){
       User.update({id: req.allParams().id}, {password: req.allParams().password}).exec(function pwdUpdateCB(err, updated) {
         if (err) {
           LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + err + " trying to change password of user with id " + req.allParams().id});
-          console.log(log);
           return res;
         }
         LogService.create({user_id: req.user.id, type: "Update", description: "User " + updated.username + " password correctly updated."});
@@ -114,7 +113,7 @@ function UserCtrl(){
     getAllUsers: function (req, res) {
       User.find({}).exec(function findCB(err, found) {
         if (err) {
-          LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + err + " trying to list all users."});
+          LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + err + " trying to get all users."});
           return res;
         }
         return res.json(found);

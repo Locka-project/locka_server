@@ -94,7 +94,6 @@ function FrontUserCtrl(){
       User.find({id: req.allParams().id}).exec(function foundCB(err, found) {
         if (err) {
           LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + err + " trying to find user with id " + req.allParams().id});
-          console.log(log);
           return err;
         }
         if (found[0].id == null) {
@@ -141,7 +140,7 @@ function FrontUserCtrl(){
     getAllUsers: function (req, res) {
       User.find({}).exec(function findCB(err, found) {
         if (err) {
-          LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + err + " trying to list all users."});
+          LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + err + " trying to get all users."});
           return err;
         }
         return res.json(found);
@@ -150,12 +149,23 @@ function FrontUserCtrl(){
 
     getDevicesByUser: function (req, res) {
       User.find({id: req.user.id}).populate('deviceList').exec(function (err, devices) {
+
         if (err) {
-          LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + err + " trying to list all users."});
+          LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + err + " trying to get devices by user."});
           return err;
         }
         return res.json(devices);
-      })
+      });
+    },
+
+    getUserById: function (req, res) {
+      User.find({id: req.params.id}).exec(function (err, user) {
+        if (err) {
+          LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + err + " trying to get user by id."});
+          return err;
+        }
+        return res.json(user);
+      });
     },
   }
 }

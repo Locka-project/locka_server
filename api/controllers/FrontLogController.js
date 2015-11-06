@@ -9,17 +9,16 @@ function LogCtrl(){
 
     return{
       getLogByDevice: function(req, res){
-        Log.find({id : req.allParams().id}).exec(function findLog(err, logList){
-          if(err) {
-            var log = "Error : " + err + " trying to list log by device.";
-            console.log(log);
-            return res;
-          }
-          var log = "Log correctly listed."
-          console.log(log);
-          return res.json(logList);
+        if(!req.isSocket){
+          Log.find({id : req.params.id}).exec(function findLog(err, logList){
+            if(err) {
+              var log = "Error : " + err + " trying to list log by device.";
+              return res;
+            }
+            return res.json(logList);
         });
       }
-    }
+   }
+  }
 }
 module.exports = LogCtrl();

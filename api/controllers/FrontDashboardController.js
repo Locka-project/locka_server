@@ -13,7 +13,6 @@ var Dashboard = {
       if(err){
         console.log(err);
       }
-			console.log(passport[0]);
 			if(!passport[0]){
 				Passport.create({ protocol: 'local', user : req.user.id }, function (err, passport) {
 		      if (err) {

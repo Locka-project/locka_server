@@ -55,6 +55,7 @@ module.exports.routes = {
   'GET /user/getAllUsers': 'FrontUserController.getAllUsers',
   'GET /user/getDevicesByUser': 'FrontUserController.getDevicesByUser',
   'GET /forgetPassword': 'FrontUserController.forgetPassword',
+	'GET /user/:id': 'FrontUserController.getUserById',
   'POST /sendNewPassword': 'FrontUserController.sendNewPassword',
 
 	/* Device Front routing */
@@ -68,6 +69,10 @@ module.exports.routes = {
   'POST /device/delete': 'FrontDeviceController.delete',
   'GET /device/getAllDevices': 'FrontDeviceController.getAllDevices',
   'GET /device/getUsersByDevice': 'FrontDeviceController.getUsersByDevice',
+
+	/* Front log controller */
+	'GET /user/logs/device/:id': 'FrontLogController.getLogByDevice',
+
 
 	/* --------- API Request  ----------------*/
 

@@ -74,7 +74,6 @@
 					return res;
 				}
 				var log = "Lock " + found[0].name + " is " + found[0].state + "."
-				console.log(log)
 				return res.json(log);
 			});
 		},
@@ -126,12 +125,8 @@
 			Device.find({id:req.allParams().id}).populate('userList').exec(function foundByDeviceCB(err, users){
 				if(err) {
 					var log = "Error : " + err + " trying to list device users.";
-					console.log(log);
 					return res;
 				}
-				var log = "Device users correctly listed."
-				console.log(log);
-				console.log(users);
 				return res.json(users);
 			});
 		}

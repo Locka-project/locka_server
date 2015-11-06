@@ -17,7 +17,7 @@
 		  		<h3 class="left">Bienvenue</h3>
 		  	<% } %>
 				<p class="right"><a class="btn-floating btn-medium waves-effect waves-light"><i class="material-icons" onclick="openCreateDevice()">add</i></a></p>
-		  	<table>
+		  	<table class="dashboard">
 	        <thead>
 	          <tr>
 	              <th data-field="id">#</th>
@@ -32,6 +32,23 @@
 				</table>
 	  	</div>
 	  </div>
+		<div id="logs" class="container">
+		  <div class="col s12">
+		    <table class="logs">
+		      <thead>
+		        <tr>
+		            <th data-field="userId">User</th>
+		            <th data-field="deviceName">Device Name</th>
+		            <th data-field="state">State</th>
+		            <th data-field="description">Description</th>
+		            <th data-field="updated">Update date</th>
+		        </tr>
+		      </thead>
+		      <tbody>
+		      </tbody>
+		    </table>
+		  </div>
+		</div>
 	</div>
 
 	<!-- Modal Object Info -->
