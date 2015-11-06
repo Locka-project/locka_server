@@ -13,7 +13,7 @@
 			Device.find({id:req.allParams().id}).exec(function indexCB(err, device){
 				if(err) {
 					LogService.create({user_id: req.user.id, device_id: req.allParams().id, type: "Error", description: "Error : " + err + " trying to display device"});
-					return res;
+					return err;
 				}
 				console.log(device);
 				return res.json(device);
@@ -38,7 +38,7 @@
 			Device.find({}).exec(function findCB(err, found){
 				if(err) {
 					LogService.create({user_id: req.user.id, type: "Error", description: "Error : " + err + " trying to list devices."});
-					return res;
+					return err;
 				}
 				console.log(found);
 				return res.json(found);
