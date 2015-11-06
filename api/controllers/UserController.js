@@ -132,15 +132,15 @@ function UserCtrl(){
     },
 
     getMyLock: function(req, res){
-      if(!req.isSocket) return res.json({msg: "Nok User"});
-      if(!req.user) return res.json({msg: "Nok Socket"});
-      User.findOne({id:req.param('id')}).populate('deviceList').exec(function foundByUserCB(err, user){
-
-        if(err) return res.json(err)
-        Device.subscribe(req, _.pluck(user.deviceList, 'id'));
-        res.json({msg: "sucess"});
-      });
-    }
+			if(!req.isSocket) return res.json({msg: "is not a Socket"});
+			if(!req.user) return res.json({msg: "user is not defined"});
+						
+			User.findOne({id:req.user.id}).populate('deviceList').exec(function findOneCB(err, user){
+				if(err) return res.json(err)
+				Device.subscribe(req, _.pluck(user.deviceList, 'id'));
+				return res.json({msg: "sucess"});
+			});
+		}
   }
 }
 
