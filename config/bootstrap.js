@@ -10,22 +10,26 @@
  */
 
 module.exports.bootstrap = function(cb) {
-	
-	// Create Admin user
-	User.create({username: 'admin', firstname: 'Locka', lastname: 'Admin'}).exec(function (err, user){
+	// Import crypto for accessToken
+	var crypto    = require('crypto');
+	// It's very important to trigger this callback method when you are finished
+  // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
+  sails.services.passport.loadStrategies();
+  
+  // Create Admin user
+	User.create({username: 'admin', firstname: 'Locka', lastname: 'Admin', email: 'contact@locka.com'}).exec(function (err, user){
 		if(err){
 			console.log(err);
 		} else {
-			Passport.create({password: 'admin', user: user.id, protocol: 'local'}).exec(function (err, passport){
+			var token = crypto.randomBytes(48).toString('base64');
+			
+			Passport.create({protocol: 'local', password: 'admin', user: user.id, accessToken: token}).exec(function (err, passport){
 				if(err){
 					console.log(err)
 				}
-			})
+			});
 		}
-	})
-
-  // It's very important to trigger this callback method when you are finished
-  // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
-  sails.services.passport.loadStrategies();
+	});
+  
   cb();
 };

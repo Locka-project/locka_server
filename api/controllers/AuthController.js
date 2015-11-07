@@ -199,7 +199,7 @@ var AuthController = {
 					  });
 					});
         } else {
-	        	res.redirect('/');
+	      	res.redirect('/');
         }
       });
     });
