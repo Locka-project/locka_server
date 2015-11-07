@@ -7,3 +7,6 @@ a [Sails](http://sailsjs.org) application
 
 ## Start server
 `sails lift`
+
+## Default User
+* admin/admin
