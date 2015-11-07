@@ -65,14 +65,32 @@ function getAllDataForDashboard(){
 		});
 
 		$.when.apply($, promises).done(function() {
-			insertDataDashboard(array);
+			insertDataDashboard(array.sort(function(a,b) {
+				if(a.createdAt > b.createdAt){
+					return -1
+				}
+				if(a.createdAt < b.createdAt){
+					return 1
+				}
+				return 0
+				})
+			);
 	  });	
 	});
 }
 
 function getAllDataLogs(){
 	$.get( '/device/logs').done(function(logs) {
-		insertDataLog(logs);
+		insertDataLog(logs.sort(function(a,b) {
+			if(a.createdAt > b.createdAt){
+				return -1
+			}
+			if(a.createdAt < b.createdAt){
+				return 1
+			}
+			return 0
+			})
+		);
 	});
 }
 

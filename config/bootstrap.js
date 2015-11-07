@@ -16,20 +16,28 @@ module.exports.bootstrap = function(cb) {
   // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
   sails.services.passport.loadStrategies();
   
-  // Create Admin user
-	User.create({username: 'admin', firstname: 'Locka', lastname: 'Admin', email: 'contact@locka.com'}).exec(function (err, user){
-		if(err){
-			console.log(err);
-		} else {
-			var token = crypto.randomBytes(48).toString('base64');
-			
-			Passport.create({protocol: 'local', password: 'admin', user: user.id, accessToken: token}).exec(function (err, passport){
-				if(err){
-					console.log(err)
-				}
-			});
-		}
-	});
+  // Create Admin user is not exist
+  User.findOne({username: 'admin'}).exec(function(err, found){
+	  if(err) {
+		  console.log(err)
+	  } else {
+		  if(!found){
+				User.create({username: 'admin', firstname: 'Locka', lastname: 'Admin', email: 'contact@locka.com'}).exec(function (err, user){
+					if(err){
+						console.log(err);
+					} else {
+						var token = crypto.randomBytes(48).toString('base64');
+						
+						Passport.create({protocol: 'local', password: 'admin', user: user.id, accessToken: token}).exec(function (err, passport){
+							if(err){
+								console.log(err)
+							}
+						});
+					}
+				});
+		  }
+	  }
+  })
   
   cb();
 };
