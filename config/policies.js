@@ -46,6 +46,9 @@ module.exports.policies = {
 	FrontLogController : {
 		'*': ['passport','sessionAuth'],
 	},
+	FrontIdentifierController : {
+		'*': ['passport','sessionAuth'],
+	},
 	/* --------- API Request ---------- */
 	UserController : {
 	  '*': ['passport','bearerAuth'],
@@ -53,6 +56,7 @@ module.exports.policies = {
 	},
 	DeviceController : {
 	  '*': ['passport','bearerAuth'],
+	  'subscribe': ['passport','authSocket']
 	}
 
   /***************************************************************************

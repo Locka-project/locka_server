@@ -8,11 +8,12 @@
 module.exports = {
 
   attributes: {
+	  owner: {
+      model: 'device',
+      required: true
+    },
     identifier: {
       type: 'string',
-    },
-    device: {
-      model: 'device',
     }
   }
 };

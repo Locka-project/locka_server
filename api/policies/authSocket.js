@@ -10,7 +10,7 @@
 module.exports = function (req, res, next) {
 	
 	if(req.param('access_token')){
-		Passport.findOne({accessToken: req.param('access_token')}).populate('user').exec(function findOneCB(err, passport){
+		Passport.findOne({accessToken: req.param('access_token')}).populate('user', {email: req.param('email')}).exec(function findOneCB(err, passport){
 			if(err) return res.json(err)
 			if(passport) {
 				req.user = passport.user;

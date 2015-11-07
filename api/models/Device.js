@@ -22,7 +22,7 @@ module.exports = {
       required: true,
     },
     identifier: {
-      model: 'lock',
+      model: 'identifier',
     },
     userList:{
       collection: 'user',

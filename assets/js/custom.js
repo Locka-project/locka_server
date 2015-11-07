@@ -7,10 +7,11 @@ function insertDataDashboard(data){
 		} else {
 			var $lock = '<i onclick="door(\'close\','+ this['id'] + ')" class="small material-icons">lock_outline</i>';
 		}
-
+		
 		 var $row = $('<tr>'+
     '<td>'+this['id']+'</td>'+
     '<td>'+this['name']+'</td>'+
+    '<td>'+this['lock']['identifier']+'</td>'+
     '<td>'+this['state']+'</td>'+
     '<td><i class="small material-icons">videocam</i>'+$lock+'<i onclick="openEditDevice('+this['id']+',\''+this['name']+'\')" class="small material-icons">info_outline</i></td>'+
     '<td><div style="width:15px; height:15px; background:#f44336; border-radius:7.5px;"></div></td>'+
@@ -24,27 +25,25 @@ function insertDataLog(data){
 	$('.logs > tbody> tr').remove();
 
 	$.each(data,function(i){
-		$.get( "/user/"+this[0]["user_id"],function(userFound){
-			var $row = $('<tr>'+
-		 '<td>'+userFound[0]['username']+'</td>'+
-		 '<td>'+data[i][0]['device_id']+'</td>'+
-		 '<td>'+data[i][0]['type']+'</td>'+
-		'<td>'+data[i][0]['description']+'</td>'+
-		'<td>'+data[i][0]['updatedAt']+'</td>'+
-		 '</tr>');
-
+		// Format Date
+		var date = moment(data[i]['updatedAt']).format("DD/MM/YYYY HH:mm"); ;
+		
+		var $row = $('<tr>'+
+			'<td>'+data[i]['user']['username']+'</td>'+
+			'<td>'+data[i]['device']['name']+'</td>'+
+			'<td>'+data[i]['type']+'</td>'+
+			'<td>'+data[i]['description']+'</td>'+
+			'<td>'+date+'</td>'+
+			'</tr>');
+		
 		$('.logs > tbody').append($row);
-		});
 	});
 }
 
 function door(action, id) {
 	if(action != null || (action == 'open' || action == 'close')) {
 		if(id != null){
-			$.get('/device/'+action, {id: id}, function(res){
-				console.log('res', res)
-			});
-			Materialize.toast('Success', 4000)
+			$.get('/device/'+action, {id: id});
 		} else {
 			Materialize.toast('Id inconnu', 4000)
 		}
@@ -53,6 +52,31 @@ function door(action, id) {
 	}
 }
 
+// Get all logs and devices
+function getAllDataForDashboard(){
+	$.get("/user/getDevicesByUser", function(data) {
+		
+		var promises = [];
+		var array = data;
+		
+		$.each(data,function(i){
+			var promise = $.get( "/lock/"+data[i]['identifier']).done(function(lock){array[i]['lock'] = lock});
+			promises.push(promise);
+		});
+
+		$.when.apply($, promises).done(function() {
+			insertDataDashboard(array);
+	  });	
+	});
+}
+
+function getAllDataLogs(){
+	$.get( '/device/logs').done(function(logs) {
+		insertDataLog(logs);
+	});
+}
+
+// Socket IO //
 io.socket.on('connect', function(){
 	console.log("Connected...");
 
@@ -62,45 +86,23 @@ io.socket.on('connect', function(){
 	io.socket.on("device", function(data){
 		switch(data.verb) {
 	    case 'created':
-	        $.get( "/user/getDevicesByUser", function(data) {
-						insertData(data[0].deviceList)
-					});
+	        getAllDataForDashboard();
 	        break;
 	    case 'destroyed':
-	        $.get( "/user/getDevicesByUser", function(data) {
-						insertDataDashboard(data[0].deviceList)
-					});
+	       	getAllDataForDashboard();
 	        break;
 	    case 'removedFrom':
 	        console.log('Switch error')
 	        break;
 	    case 'updated':
-	        $.get( "/user/getDevicesByUser", function(data) {
-						insertDataDashboard(data[0].deviceList)
-					});
+	        getAllDataForDashboard();
 	        break;
 	    default:
 	        console.log('Switch error');
 		}
 	});
-
-	// Get all devices
-	$.get( "/user/getDevicesByUser", function(data) {
-		insertDataDashboard(data[0].deviceList);
-	});
-	// Get all logs
-	$.get( "/user/getDevicesByUser", function(data) {
-		var logList = [];
-		var promises = [];
-		$.each(data[0].deviceList,function(){
-			var promise = $.get( "/user/logs/device/"+this['id']).done(function(log) {
-				logList.push(log);
-			});
-			promises.push(promise);
-		});
-
-		$.when.apply($, promises).done(function() {
-			insertDataLog(logList);
-	  });
-	});
+	// Get All data
+	getAllDataForDashboard();
+	getAllDataLogs();
+	
 });

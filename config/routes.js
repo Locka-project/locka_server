@@ -67,10 +67,10 @@ module.exports.routes = {
   'POST /device/delete': 'FrontDeviceController.delete',
   'GET /device/getAllDevices': 'FrontDeviceController.getAllDevices',
   'GET /device/getUsersByDevice': 'FrontDeviceController.getUsersByDevice',
-
-	/* Front log controller */
-	'GET /user/logs/device/:id': 'FrontLogController.getLogByDevice',
-
+  'GET /device/logs': 'FrontDeviceController.getLogs',
+  
+  /* Lock identifier */
+  'GET /lock/:id': 'FrontIdentifierController.getLock',
 
 	/* --------- API Request  ----------------*/
 
@@ -102,9 +102,8 @@ module.exports.routes = {
 
 	/* ----------- Socket IO --------- */
 	'GET /socket/devices/subscribe': 'FrontDashboardController.getMyLock',
-	'GET /socket/users/logs': 'FrontLogController.getLogsByUser',
 	'GET /api/user/subscribe': 'UserController.getMyLock',
-	'GET /api/devices/subscribe/:id': 'DeviceController.subscribe',
+	'GET /api/devices/subscribe/:identifier': 'DeviceController.subscribe',
 
   /***************************************************************************
   *                                                                          *

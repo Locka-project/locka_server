@@ -10,6 +10,19 @@
  */
 
 module.exports.bootstrap = function(cb) {
+	
+	// Create Admin user
+	User.create({username: 'admin', firstname: 'Locka', lastname: 'Admin'}).exec(function (err, user){
+		if(err){
+			console.log(err);
+		} else {
+			Passport.create({password: 'admin', user: user.id, protocol: 'local'}).exec(function (err, passport){
+				if(err){
+					console.log(err)
+				}
+			})
+		}
+	})
 
   // It's very important to trigger this callback method when you are finished
   // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)

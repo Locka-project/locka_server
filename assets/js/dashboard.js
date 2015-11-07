@@ -20,6 +20,27 @@ function deleteDevice(e) {
   }).done(this.closeModal());
 }
 
+function addDevice() {
+	var deviceName = $('#deviceName').val();
+	var identifier = $('#identifier').val();
+
+	if(deviceName != null && identifier != null) {
+		$.post('/device/create', 
+		{name: deviceName, identifier: identifier}, function (data){
+			$('#modal2').closeModal();
+			if(data.msg == 'success'){
+				Materialize.toast('Successful', 3000);
+			} else {
+				Materialize.toast('Error', 3000);
+			}
+			
+		});
+	} else {
+		$('#modal2').closeModal();
+		Materialize.toast('Une erreur est survenue : le formulaire est incomplet', 3000);
+	}
+}
+
 function closeModal() {
 	$('#modal1').closeModal();
 	$('#modal2').closeModal();

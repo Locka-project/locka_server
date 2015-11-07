@@ -30,6 +30,7 @@ function FrontUserCtrl(){
       findPassport(req.user, res, function(err, passport){
         return res.view('user/myAccount', {
           user: req.user,
+          apiKey: passport.accessToken,
           passport: passport,
         });
       });
@@ -116,8 +117,7 @@ function FrontUserCtrl(){
     },
 
     getDevicesByUser: function (req, res) {
-      User.find({id: req.user.id}).populate('deviceList').exec(function (err, devices) {
-
+      Device.find().populate('userList',{id: req.user.id}).exec(function (err, devices) {
         if (err) {
           return res.json(err);
         }

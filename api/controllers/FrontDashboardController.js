@@ -9,21 +9,22 @@ var Dashboard = {
 
 	getDashboard:function(req,res){
 
-		Passport.find({user:req.user.id, protocol:'local'}).exec(function findCB(err, passport){
+		Passport.findOne({user:req.user.id, protocol:'local'}).exec(function findCB(err, passport){
       if(err){
-        console.log(err);
+        return res.json(err)
       }
 			if(!passport[0]){
 				Passport.create({ protocol: 'local', user : req.user.id }, function (err, passport) {
 					if (err) {
-						console.log(err);
+						return res.json(err)
 					}
 				});
 			}
-		});
-		return res.view('dashboard', {
-			user: req.user
-		});
+			return res.view('dashboard', {
+				user: req.user,
+				apiKey: passport.accessToken
+			});
+		});		
 	},
 
 	getMyLock: function(req, res){

@@ -15,7 +15,7 @@ module.exports = function(req, res, next) {
     return next();
   } else {
 	  // Fix warnings
-	  if(req.route.path != '/user/getDevicesByUser' && req.route.path != '/socket/devices/subscribe' && req.route.path != '/socket/users/logs') {
+	  if(req.route.path != '/user/getDevicesByUser' && req.route.path != '/socket/devices/subscribe' && req.route.path != '/device/logs') {
 		  res.redirect('/login')
 	  }
 // 	  return res.redirect('/login');

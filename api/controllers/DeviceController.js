@@ -111,7 +111,15 @@ function DeviceCtrl(){
 		subscribe: function(req, res){
 			if(!req.isSocket) return res.json({msg: "is not a Socket"});
 			if(!req.user) return res.json({msg: "user is not defined"});
-			return res.json({msg: "success...",id: req.params.id, token: req.param('access_token')});
+			if(!req.params.identifier) return res.json({msg: "identifier not found"});
+			
+			Device.find().populate('identifier').exec(function (err, device) {
+				if(err){
+					return res.json(err)
+				}
+				Device.subscribe(req, _.pluck(device, 'id'))
+				return res.json({msg: 'success'})
+			});
 		}
 	}
 }
