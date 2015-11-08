@@ -133,6 +133,25 @@ function FrontUserCtrl(){
         return res.json(user);
       });
     },
+
+    getUserLogs: function(req, res) {
+      if(!req.isSocket){
+        Device.find().populate('userList', {id: req.user.id}).exec(function (errDvc, devices) {
+          if (errDvc) {
+            return res.json(errDvc);
+          }
+          Log.find().populate('user').populate('device', {id: _.pluck(devices, 'id')}).exec(function (errLog, logs) {
+            if (errLog) {
+              return res.json(errLog);
+            }
+            return res.json(logs);
+          });
+        });
+      } else {
+        Log.watch(req);
+        return res.json({msg: 'success'});
+      }
+    }
   }
 }
 module.exports = FrontUserCtrl();
