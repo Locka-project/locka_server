@@ -26,11 +26,19 @@ function insertDataLog(data){
 
 	$.each(data,function(i){
 		// Format Date
-		var date = moment(data[i]['updatedAt']).format("DD/MM/YYYY HH:mm"); ;
+		var date = moment(data[i]['updatedAt']).format("DD/MM/YYYY HH:mm");
+		
+		console.log(data[i]);
+		
+		if(!data[i]['device']){
+			var name = "deleted";		
+		} else {
+			var name = data[i]['device']['name'];
+		}
 		
 		var $row = $('<tr>'+
 			'<td>'+data[i]['user']['username']+'</td>'+
-			'<td>'+data[i]['device']['name']+'</td>'+
+			'<td>'+name+'</td>'+
 			'<td>'+data[i]['type']+'</td>'+
 			'<td>'+data[i]['description']+'</td>'+
 			'<td>'+date+'</td>'+
@@ -40,6 +48,35 @@ function insertDataLog(data){
 	});
 }
 
+// Notification center
+function notification(type, text) {
+	if(type != null && text != null){
+		switch(type){
+			case 'add':
+				Materialize.toast('Add : ' + text, 4000);
+				break;
+			case 'update':
+				Materialize.toast('Update : ' + text, 4000);
+				break;
+			case 'del':
+				Materialize.toast('Delete : ' + text, 4000);
+				break;
+			case 'open':
+				Materialize.toast(text, 4000);
+				break;
+			case 'close':
+				Materialize.toast(text, 4000);
+				break;
+			default:
+				Materialize.toast("Error : type isn't defined => " + type, 4000);
+				break;
+		}
+	} else {
+		Materialize.toast("Error, your notification is unkonwn by system", 4000)
+	}
+}
+
+// Lock function
 function door(action, id) {
 	if(action != null || (action == 'open' || action == 'close')) {
 		if(id != null){
@@ -98,9 +135,11 @@ function getAllDataLogs(){
 io.socket.on('connect', function(){
 	console.log("Connected...");
 
+	// Subscribe events
 	io.socket.get('/socket/devices/subscribe');
-	io.socket.get('/socket/users/logs');
-		
+	io.socket.get('/socket/users/logs/subscribe');
+	
+	// Monitor device Model
 	io.socket.on("device", function(data){
 		switch(data.verb) {
 	    case 'created':
@@ -116,7 +155,39 @@ io.socket.on('connect', function(){
 	        getAllDataForDashboard();
 	        break;
 	    default:
-	        console.log('Switch error');
+	        notification('error', 'error switch');
+		    	break;
+		}
+	});
+	// Monitor log Model
+	io.socket.on("log", function(data){
+		log = data.data.log;
+		switch(data.verb) {
+	    case 'created':
+	    		switch(log.type){
+		    		case 'Create':
+		    			notification('add', log.description);
+		    			break;   
+		    		case 'Update':
+		    			notification('update', log.description);
+		    			break;
+		    		case 'Delete':
+		    			notification('del', log.description);
+		    			break;   
+		    		case 'Open':
+		    			notification('open', log.description);
+		    			break;   
+		    		case 'Close':
+		    			notification('close', log.description);
+		    			break;
+		    		default:
+		    			notification('error', 'error log type');
+		    			break;	
+		    	}
+	        getAllDataLogs();
+	        break;
+	    default:
+	      	notification('error', 'error verb socket');
 		}
 	});
 	// Get All data
