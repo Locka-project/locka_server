@@ -18,24 +18,41 @@
 			});
 		},
 		create:function(req,res){
-			Device.create({name:req.param('name'), state:"closed", connected:"false"}).exec(function createCB(err, device){
+			
+			function capitalize(string) {
+				return string.charAt(0).toUpperCase() + string.slice(1);
+			}
+			
+			var deviceName = capitalize(req.param('name'));
+			var deviceIdentifier = req.param('identifier').toUpperCase();
+			
+			Device.findOne({name: deviceName}).populate('identifier', {identifier: deviceIdentifier}).exec(function(err, find){
 				if(err){
-					return res.json({msg: 'error'})
+					return res.json(err);
 				}
-				Identifier.create({identifier: req.param('identifier').toUpperCase(), owner: device.id}).exec(function (err, lock){
-					if(err) {
-						return res.json({msg: 'error'});
-					}
-					device.userList.add(req.user);
-					device.save();		
-						
-					Device.update({id:device.id},{identifier:lock.id}).exec(function(err){
-						LogService.create({user: req.user, device: device.id, type: "Create", description: device.name + " correctly created." });
-						Device.publishCreate(device);	
-						return res.json({msg: 'success'});
-					})
-				});
-			});
+				if(!find){
+					Device.create({name:deviceName, state:"closed", connected:"false"}).exec(function createCB(err, device){
+						if(err){
+							return res.json({msg: 'error'})
+						}
+						Identifier.create({identifier: req.param('identifier').toUpperCase(), owner: device.id}).exec(function (err, lock){
+							if(err) {
+								return res.json({msg: 'error'});
+							}
+							device.userList.add(req.user);
+							device.save();		
+								
+							Device.update({id:device.id},{identifier:lock.id}).exec(function(err){
+								LogService.create({user: req.user, device: device.id, type: "Create", description: device.name + " correctly created." });
+								Device.publishCreate(device);	
+								return res.json({msg: 'success'});
+							})
+						});
+					});
+				} else {
+					res.json({code: 101, msg: 'user or identifier are already used'});
+				}
+			})
 		},
 		getAllDevices:function(req,res){
 			Device.find({}).exec(function findCB(err, found){
@@ -50,16 +67,11 @@
 				if(err) {
 					return res.json({msg : 'Error'})
 				}
-				Log.destroy({device: device[0].device}).exec(function(err){
-					if(err) {
-						return res.json(err);
-					}
-					Identifier.destroy({id:device[0].identifier}).exec(function destroyCB(err, identifier){
-						Device.publishDestroy(device[0].id,device[0]);
-						return res.json({msg : 'success'})
-					});
-					LogService.create({user: req.user, device:null, type: "Delete", description: device[0].name + " correctly deleted."});
+				Identifier.destroy({id:device[0].identifier}).exec(function destroyCB(err, identifier){
+					Device.publishDestroy(device[0].id,device[0]);
+					return res.json({msg : 'success'})
 				});
+				LogService.create({user: req.user, device:null, type: "Delete", description: device[0].name + " correctly deleted."});
 			})
 		},
 		update:function(req,res){

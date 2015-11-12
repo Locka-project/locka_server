@@ -9,10 +9,14 @@
 					 <input id="deviceName" name="name" type="text" style="text-transform: capitalize" class="validate">
 					 <label for="deviceName">Device Name</label>
 				 </div>
-				 <div class="input-field col s12">
-					 <input id="identifier" name="identifier" type="text" style="text-transform: uppercase" class="validate">
-					 <label for="identifier">Identifier</label>
+				 <div class="input-field col s11">
+					<input id="identifier" name="identifier" type="text" style="text-transform: uppercase" class="validate">
+					<label for="identifier">Identifier</label>
+					<p>Click on right button to generate a unique identifier</p>
 				 </div>
+				 <div class="input-field col s1">
+						<i onclick="generateIdentifier()" id="generataIdentifier" class="material-icons">replay</i>
+					</div>
 			 </div>
 			 <div class="modal-footer">
 				<input type="hidden" name="id" id="deviceId">
