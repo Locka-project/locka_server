@@ -3,9 +3,9 @@ function insertDataDashboard(data){
 
 	$.each(data,function(){
 		if(this['state'] == 'closed'){
-			var $lock = '<i onclick="door(\'open\','+ this['id'] + ')" class="small material-icons">lock_open</i>';
+			var $lock = '<span title="ca marche bien"><i onclick="door(\'open\','+ this['id'] + ')" class="small material-icons">lock_open</i></span>';
 		} else {
-			var $lock = '<i onclick="door(\'close\','+ this['id'] + ')" class="small material-icons">lock_outline</i>';
+			var $lock = '<span title="ca marche bien"><i onclick="door(\'close\','+ this['id'] + ')" class="small material-icons">lock_outline</i></span>';
 		}
 		
 		 var $row = $('<tr>'+
@@ -27,8 +27,6 @@ function insertDataLog(data){
 	$.each(data,function(i){
 		// Format Date
 		var date = moment(data[i]['updatedAt']).format("DD/MM/YYYY HH:mm");
-		
-		console.log(data[i]);
 		
 		if(!data[i]['device']){
 			var name = "deleted";		
