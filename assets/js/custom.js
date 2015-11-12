@@ -33,12 +33,8 @@ function insertDataLog(data){
 		} else {
 			var name = data[i]['device']['name'];
 		}
-<<<<<<< HEAD
-				var $row = $('<tr>'+
-=======
 
 		var $row = $('<tr>'+
->>>>>>> 647f73ace706fe869e358c77c2821807c077daea
 			'<td>'+data[i]['user']['username']+'</td>'+
 			'<td>'+name+'</td>'+
 			'<td>'+data[i]['type']+'</td>'+
