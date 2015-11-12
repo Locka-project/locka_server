@@ -7,7 +7,7 @@ function insertDataDashboard(data){
 		} else {
 			var $lock = '<span title = "Close"><i onclick="door(\'close\','+ this['id'] + ')" class="small material-icons">lock_outline</i></span>';
 		}
-
+		
 		 var $row = $('<tr>'+
     '<td>'+this['id']+'</td>'+
     '<td>'+this['name']+'</td>'+
@@ -19,7 +19,6 @@ function insertDataDashboard(data){
 
 		$('.dashboard> tbody').append($row);
 	});
-$('#deviceListData').DataTable();
 }
 
 function insertDataLog(data){
@@ -27,15 +26,14 @@ function insertDataLog(data){
 
 	$.each(data,function(i){
 		// Format Date
-
 		var date = moment(data[i]['updatedAt']).format("DD/MM/YYYY HH:mm");
-
+		
 		if(!data[i]['device']){
-			var name = "deleted";
+			var name = "deleted";		
 		} else {
 			var name = data[i]['device']['name'];
 		}
-
+		
 		var $row = $('<tr>'+
 			'<td>'+data[i]['user']['username']+'</td>'+
 			'<td>'+name+'</td>'+
@@ -43,10 +41,9 @@ function insertDataLog(data){
 			'<td>'+data[i]['description']+'</td>'+
 			'<td>'+date+'</td>'+
 			'</tr>');
-
+		
 		$('.logs > tbody').append($row);
 	});
-	$('#logListData').DataTable();
 }
 
 // Notification center
@@ -93,10 +90,10 @@ function door(action, id) {
 // Get all logs and devices
 function getAllDataForDashboard(){
 	$.get("/user/getDevicesByUser", function(data) {
-
+		
 		var promises = [];
 		var array = data;
-
+		
 		$.each(data,function(i){
 			var promise = $.get( "/lock/"+data[i]['identifier']).done(function(lock){array[i]['lock'] = lock});
 			promises.push(promise);
@@ -113,7 +110,7 @@ function getAllDataForDashboard(){
 				return 0
 				})
 			);
-	  });
+	  });	
 	});
 }
 
@@ -138,14 +135,9 @@ io.socket.on('connect', function(){
 
 	// Subscribe events
 	io.socket.get('/socket/devices/subscribe');
-<<<<<<< HEAD
-	io.socket.get('/socket/users/logs');
-
-=======
 	io.socket.get('/socket/users/logs/subscribe');
-
+	
 	// Monitor device Model
->>>>>>> 854556e18ae5672bdb5de4cbf936e5d245f1ce2d
 	io.socket.on("device", function(data){
 		switch(data.verb) {
 	    case 'created':
@@ -173,36 +165,31 @@ io.socket.on('connect', function(){
 	    		switch(log.type){
 		    		case 'Create':
 		    			notification('add', log.description);
-		    			break;
+		    			break;   
 		    		case 'Update':
 		    			notification('update', log.description);
 		    			break;
 		    		case 'Delete':
 		    			notification('del', log.description);
-		    			break;
+		    			break;   
 		    		case 'Open':
 		    			notification('open', log.description);
-		    			break;
+		    			break;   
 		    		case 'Close':
 		    			notification('close', log.description);
 		    			break;
 		    		default:
 		    			notification('error', 'error log type');
-		    			break;
+		    			break;	
 		    	}
 	        getAllDataLogs();
 	        break;
 	    default:
 	      	notification('error', 'error verb socket');
+	      	break;
 		}
 	});
 	// Get All data
 	getAllDataForDashboard();
 	getAllDataLogs();
-<<<<<<< HEAD
-
 });
-=======
-
-});
->>>>>>> 854556e18ae5672bdb5de4cbf936e5d245f1ce2d
