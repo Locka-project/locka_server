@@ -35,8 +35,7 @@ function insertDataLog(data){
 		} else {
 			var name = data[i]['device']['name'];
 		}
-
-		var $row = $('<tr>'+
+				var $row = $('<tr>'+
 			'<td>'+data[i]['user']['username']+'</td>'+
 			'<td>'+name+'</td>'+
 			'<td>'+data[i]['type']+'</td>'+
@@ -138,14 +137,9 @@ io.socket.on('connect', function(){
 
 	// Subscribe events
 	io.socket.get('/socket/devices/subscribe');
-<<<<<<< HEAD
-	io.socket.get('/socket/users/logs');
-
-=======
 	io.socket.get('/socket/users/logs/subscribe');
 
 	// Monitor device Model
->>>>>>> 854556e18ae5672bdb5de4cbf936e5d245f1ce2d
 	io.socket.on("device", function(data){
 		switch(data.verb) {
 	    case 'created':
@@ -194,15 +188,11 @@ io.socket.on('connect', function(){
 	        break;
 	    default:
 	      	notification('error', 'error verb socket');
+					break;
 		}
 	});
 	// Get All data
 	getAllDataForDashboard();
 	getAllDataLogs();
-<<<<<<< HEAD
 
 });
-=======
-
-});
->>>>>>> 854556e18ae5672bdb5de4cbf936e5d245f1ce2d
