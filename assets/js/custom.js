@@ -3,9 +3,9 @@ function insertDataDashboard(data){
 
 	$.each(data,function(){
 		if(this['state'] == 'closed'){
-			var $lock = '<i onclick="door(\'open\','+ this['id'] + ')" class="small material-icons">lock_open</i>';
+			var $lock = '<span title = "Open"><i onclick="door(\'open\','+ this['id'] + ')" class="small material-icons">lock_open</i></span>';
 		} else {
-			var $lock = '<i onclick="door(\'close\','+ this['id'] + ')" class="small material-icons">lock_outline</i>';
+			var $lock = '<span title = "Close"><i onclick="door(\'close\','+ this['id'] + ')" class="small material-icons">lock_outline</i></span>';
 		}
 		
 		 var $row = $('<tr>'+
@@ -13,7 +13,7 @@ function insertDataDashboard(data){
     '<td>'+this['name']+'</td>'+
     '<td>'+this['lock']['identifier']+'</td>'+
     '<td>'+this['state']+'</td>'+
-    '<td><i class="small material-icons">videocam</i>'+$lock+'<i onclick="openEditDevice('+this['id']+',\''+this['name']+'\')" class="small material-icons">info_outline</i></td>'+
+    '<td><span title = "Video"><i class="small material-icons">videocam</i></span>'+$lock+'<span title = "Informations"><i onclick="openEditDevice('+this['id']+',\''+this['name']+'\')" class="small material-icons">info_outline</i></span></td>'+
     '<td><div style="width:15px; height:15px; background:#f44336; border-radius:7.5px;"></div></td>'+
     '</tr>');
 
