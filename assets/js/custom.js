@@ -7,7 +7,7 @@ function insertDataDashboard(data){
 		} else {
 			var $lock = '<i onclick="door(\'close\','+ this['id'] + ')" class="small material-icons">lock_outline</i>';
 		}
-		
+
 		 var $row = $('<tr>'+
     '<td>'+this['id']+'</td>'+
     '<td>'+this['name']+'</td>'+
@@ -19,6 +19,7 @@ function insertDataDashboard(data){
 
 		$('.dashboard> tbody').append($row);
 	});
+$('#deviceListData').DataTable();
 }
 
 function insertDataLog(data){
@@ -27,7 +28,7 @@ function insertDataLog(data){
 	$.each(data,function(i){
 		// Format Date
 		var date = moment(data[i]['updatedAt']).format("DD/MM/YYYY HH:mm"); ;
-		
+
 		var $row = $('<tr>'+
 			'<td>'+data[i]['user']['username']+'</td>'+
 			'<td>'+data[i]['device']['name']+'</td>'+
@@ -35,9 +36,10 @@ function insertDataLog(data){
 			'<td>'+data[i]['description']+'</td>'+
 			'<td>'+date+'</td>'+
 			'</tr>');
-		
+
 		$('.logs > tbody').append($row);
 	});
+	$('#logListData').DataTable();
 }
 
 function door(action, id) {
@@ -55,10 +57,10 @@ function door(action, id) {
 // Get all logs and devices
 function getAllDataForDashboard(){
 	$.get("/user/getDevicesByUser", function(data) {
-		
+
 		var promises = [];
 		var array = data;
-		
+
 		$.each(data,function(i){
 			var promise = $.get( "/lock/"+data[i]['identifier']).done(function(lock){array[i]['lock'] = lock});
 			promises.push(promise);
@@ -75,7 +77,7 @@ function getAllDataForDashboard(){
 				return 0
 				})
 			);
-	  });	
+	  });
 	});
 }
 
@@ -100,7 +102,7 @@ io.socket.on('connect', function(){
 
 	io.socket.get('/socket/devices/subscribe');
 	io.socket.get('/socket/users/logs');
-		
+
 	io.socket.on("device", function(data){
 		switch(data.verb) {
 	    case 'created':
@@ -122,5 +124,5 @@ io.socket.on('connect', function(){
 	// Get All data
 	getAllDataForDashboard();
 	getAllDataLogs();
-	
+
 });
