@@ -19,7 +19,6 @@ function insertDataDashboard(data){
 
 		$('.dashboard> tbody').append($row);
 	});
-$('#deviceListData').DataTable();
 }
 
 function insertDataLog(data){
@@ -27,7 +26,6 @@ function insertDataLog(data){
 
 	$.each(data,function(i){
 		// Format Date
-
 		var date = moment(data[i]['updatedAt']).format("DD/MM/YYYY HH:mm");
 
 		if(!data[i]['device']){
@@ -35,7 +33,12 @@ function insertDataLog(data){
 		} else {
 			var name = data[i]['device']['name'];
 		}
+<<<<<<< HEAD
 				var $row = $('<tr>'+
+=======
+
+		var $row = $('<tr>'+
+>>>>>>> 647f73ace706fe869e358c77c2821807c077daea
 			'<td>'+data[i]['user']['username']+'</td>'+
 			'<td>'+name+'</td>'+
 			'<td>'+data[i]['type']+'</td>'+
@@ -45,7 +48,6 @@ function insertDataLog(data){
 
 		$('.logs > tbody').append($row);
 	});
-	$('#logListData').DataTable();
 }
 
 // Notification center
@@ -194,5 +196,4 @@ io.socket.on('connect', function(){
 	// Get All data
 	getAllDataForDashboard();
 	getAllDataLogs();
-
 });
