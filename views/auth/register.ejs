@@ -1,16 +1,17 @@
 <main>
-  <div id= "global-size" class="z-depth-3">
-    <p> You can subscribe</p>
-    <% if (Object.keys(providers).length) {%>
-      <% Object.keys(providers).forEach(function (key) { %>
-        <a id="socialButton" class="waves-effect waves-light btn-large" href="/auth/<%= providers[key].slug %>" role="button"><%= providers[key].name %><i class="material-icons right">cloud</i></a>
-      <% }) %>
-    <% } %>
-  </br>
-    <div class="progress">
-          <div class="determinate" style="width: 100%"></div>
-    </div>
-    <% include errors %>
+  <div class="row">
+		<div class="z-depth-3 col s8 offset-s2 m4 offset-m4 l4 offset-l4 global-size">
+	    <p> You can subscribe</p>
+	    <% if (Object.keys(providers).length) {%>
+	      <% Object.keys(providers).forEach(function (key) { %>
+	        <a class="waves-effect waves-light btn-large flatButton" href="/auth/<%= providers[key].slug %>" role="button"><%= providers[key].name %><i class="material-icons right">cloud</i></a>
+	      <% }) %>
+	    <% } %>
+			</br>
+	    <div class="progress">
+	          <div class="determinate" style="width: 100%"></div>
+	    </div>
+			<% include errors %>
       <form role="form" action="/auth/local/register" method="post">
         <div class="input-field col s12">
           <input id="username" type="text" name="username">
@@ -24,9 +25,10 @@
           <input type="password" name="password" id="pass">
           <label for="pass">Password</label>
         </div>
-        <button type="submit" class="waves-effect waves-light btn-large" id="registerButton2">Sign up</button>
+        <button type="submit" class="waves-effect waves-light btn-large flatButton">Sign up</button>
       </form>
       <p>If you are already registered...</p>
-      <a  id="loginButton" class="waves-effect waves-light btn-large" href="login">Login<i class="material-icons right">send</i></a>
-  </div>
+      <a  class="waves-effect waves-light btn-large flatButton" href="login">Login<i class="material-icons right">send</i></a>
+	  </div>
+	</div>
 </main>

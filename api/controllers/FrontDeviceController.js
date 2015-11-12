@@ -30,7 +30,7 @@
 					device.save();		
 						
 					Device.update({id:device.id},{identifier:lock.id}).exec(function(err){
-						LogService.create({user: req.user, device: device.id, type: "Create", description: "Device correctly created." });
+						LogService.create({user: req.user, device: device.id, type: "Create", description: device.name + " correctly created." });
 						Device.publishCreate(device);	
 						return res.json({msg: 'success'});
 					})
@@ -50,11 +50,16 @@
 				if(err) {
 					return res.json({msg : 'Error'})
 				}
-				Identifier.destroy({id:device[0].identifier}).exec(function destroyCB(err, identifier){
-					Device.publishDestroy(device[0].id,device[0]);
-					return res.json({msg : 'success'})
+				Log.destroy({device: device[0].device}).exec(function(err){
+					if(err) {
+						return res.json(err);
+					}
+					Identifier.destroy({id:device[0].identifier}).exec(function destroyCB(err, identifier){
+						Device.publishDestroy(device[0].id,device[0]);
+						return res.json({msg : 'success'})
+					});
+					LogService.create({user: req.user, device:null, type: "Delete", description: device[0].name + " correctly deleted."});
 				});
-				LogService.create({user: req.user, device: device[0], type: "Delete", description: "Device correctly deleted."});
 			})
 		},
 		update:function(req,res){
@@ -62,7 +67,7 @@
 				if(err) {
 					return res.redirect('/');
 				}
-				LogService.create({user: req.user, device: device, type: "Update", description: "Device correctly updated."});
+				LogService.create({user: req.user, device: device, type: "Update", description: device[0].name + " correctly updated."});
 				Device.publishUpdate(device[0].id,device[0]);
 				return res.redirect('/');
 			});
@@ -77,7 +82,7 @@
 						if(errUpdate) {
 							return res.json(errUpdate);
 						}
-						LogService.create({user: req.user, device: deviceOne, type: "Close", description: "Lock closed."});
+						LogService.create({user: req.user, device: deviceOne, type: "Close", description: device[0].name + " is now closed."});
 						Device.publishUpdate(device[0].id,device[0]);
 						return res.json(device);
 					});
@@ -96,7 +101,7 @@
 						if(errUpdate) {
 							return res.json(errUpdate);
 						}
-						LogService.create({user: req.user, device: deviceOne, type: "Open", description: "Lock opened."});
+						LogService.create({user: req.user, device: deviceOne, type: "Open", description: device[0].name + " is now opened."});
 						Device.publishUpdate(device[0].id,device[0]);
 						return res.json(device);
 					});

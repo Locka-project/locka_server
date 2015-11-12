@@ -102,6 +102,7 @@ module.exports.routes = {
 
 	/* ----------- Socket IO --------- */
 	'GET /socket/devices/subscribe': 'FrontDashboardController.getMyLock',
+	'GET /socket/users/logs/subscribe': 'FrontDashboardController.watchLogs',
 	'GET /api/user/subscribe': 'UserController.getMyLock',
 	'GET /api/devices/subscribe/:identifier': 'DeviceController.subscribe',
 

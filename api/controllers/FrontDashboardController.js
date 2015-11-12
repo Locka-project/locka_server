@@ -30,13 +30,22 @@ var Dashboard = {
 	getMyLock: function(req, res){
 		if(!req.isSocket) return res.json({msg: "is not a Socket"});
 		if(!req.user) return res.json({msg: "user is not defined"});
+		
+		Device.watch(req);
 
 		User.findOne({id:req.user.id}).populate('deviceList').exec(function foundByUserCB(err, user){
 			if(err) return res.json(err);
 			Device.subscribe(req, _.pluck(user.deviceList, 'id'));
-			Device.watch(req);
 			return res.json({msg: "success"});
 		});
+	},
+	
+	watchLogs: function(req, res){
+		if(!req.isSocket) return res.json({msg: "is not a Socket"});
+		if(!req.user) return res.json({msg: "user is not defined"});
+		
+		Log.watch(req);
+		return res.json({msg: "success"});
 	}
 };
 

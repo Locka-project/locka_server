@@ -1,38 +1,44 @@
 <% include ../header %>
 <main>
-<div id="global-size">
-  <p><%= __('Update profil') %></p>
-  <form  id="form-login" role="form" action="/user/update" method="post">
-    <div>
-      <div class="input-field col s12">
-        <input type="text" name="username"  placeholder="Username" class="validate" value="<%- user.username %>">
-      </div>
-      <div class="input-field col s12">
-        <input type="text" name="email"  placeholder="Email" class="validate" value="<%- user.email %>">
-      </div>
-      <div class="input-field col s12">
-        <input type="text" name="firstname"  placeholder="Firstname" class="validate" value="<%- user.firstname %>">
-      </div>
-      <div class="input-field col s12">
-        <input type="text" name="lastname"  placeholder="Lastname" class="validate" value="<%- user.lastname %>">
-      </div>
-    </div>
-    <input type="text" name="id" value="<%- user.id %>" hidden>
-    <button id="signinButton" class="waves-effect waves-light btn-large" role="button" type="submit">Update</button>
-  </form>
-  <p>Change password</p>
-  <form  id="form-login" role="form" action="/user/changePassword" method="post">
-    <div>
-      <div class="input-field col s12">
-        <input type="text" name="password"  placeholder="Password" class="validate">
-      </div>
-      <div class="input-field col s12">
-        <input type="text" name="confirm"  placeholder="Confirm" class="validate">
-      </div>
-    </div>
-    <input type="text" name="id" value="<%- passport.id %>" hidden>
-    <button id="signinButton" class="waves-effect waves-light btn-large" role="button" type="submit">Update</button>
-  </form>
-</div>
+	<div class="container"> 
+	  <div class="row">
+			<div class="z-depth-3 col s12 m6 l6 global-size">
+			  <p><%= __('Update profil') %></p>
+			  <form  id="form-login" role="form" action="/user/update" method="post">
+			    <div>
+			      <div class="input-field col s12">
+			        <input type="text" name="username"  placeholder="Username" class="validate" value="<%- user.username %>">
+			      </div>
+			      <div class="input-field col s12">
+			        <input type="text" name="email"  placeholder="Email" class="validate" value="<%- user.email %>">
+			      </div>
+			      <div class="input-field col s12">
+			        <input type="text" name="firstname"  placeholder="Firstname" class="validate" value="<%- user.firstname %>">
+			      </div>
+			      <div class="input-field col s12">
+			        <input type="text" name="lastname"  placeholder="Lastname" class="validate" value="<%- user.lastname %>">
+			      </div>
+			    </div>
+			    <input type="text" name="id" value="<%- user.id %>" hidden>
+			    <button class="waves-effect waves-light btn-large flatButton" role="button" type="submit">Update</button>
+			  </form>
+			</div>
+			<div class="z-depth-3 col s12 m5 offset-m1 l5 offset-l1 global-size">
+			  <p>Change password</p>
+			  <form  id="form-login" role="form" action="/user/changePassword" method="post">
+			    <div>
+			      <div class="input-field col s12">
+			        <input type="text" name="password"  placeholder="Password" class="validate">
+			      </div>
+			      <div class="input-field col s12">
+			        <input type="text" name="confirm"  placeholder="Confirm" class="validate">
+			      </div>
+			    </div>
+			    <input type="text" name="id" value="<%- passport.id %>" hidden>
+			    <button class="waves-effect waves-light btn-large flatButton" role="button" type="submit">Update</button>
+			  </form>
+			</div>
+		</div>
+	</div>
 </main>
 <% include ../footer %>

@@ -28,11 +28,6 @@ function addDevice() {
 		$.post('/device/create', 
 		{name: deviceName, identifier: identifier}, function (data){
 			$('#modal2').closeModal();
-			if(data.msg == 'success'){
-				Materialize.toast('Successful', 3000);
-			} else {
-				Materialize.toast('Error', 3000);
-			}
 			
 		});
 	} else {
