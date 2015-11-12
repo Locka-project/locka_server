@@ -19,6 +19,7 @@ function insertDataDashboard(data){
 
 		$('.dashboard> tbody').append($row);
 	});
+	$('#deviceListData').DataTable();
 }
 
 function insertDataLog(data){
@@ -44,6 +45,7 @@ function insertDataLog(data){
 
 		$('.logs > tbody').append($row);
 	});
+  $('#logListData').DataTable();
 }
 
 // Notification center
