@@ -1,5 +1,5 @@
 function insertDataDashboard(data){
-	$('.dashboard tbody> tr').remove();
+	deviceList.clear();
 
 	$.each(data,function(){
 		if(this['state'] == 'closed'){
@@ -7,24 +7,17 @@ function insertDataDashboard(data){
 		} else {
 			var $lock = '<span title = "Close"><i onclick="door(\'close\','+ this['id'] + ')" class="small material-icons">lock_outline</i></span>';
 		}
-
-		 var $row = $('<tr>'+
-    '<td>'+this['id']+'</td>'+
-    '<td>'+this['name']+'</td>'+
-    '<td>'+this['lock']['identifier']+'</td>'+
-    '<td>'+this['state']+'</td>'+
-    '<td><span title = "Video"><i class="small material-icons">videocam</i></span>'+$lock+'<span title = "Informations"><i onclick="openEditDevice('+this['id']+',\''+this['name']+'\')" class="small material-icons">info_outline</i></span></td>'+
-    '<td><div style="width:15px; height:15px; background:#f44336; border-radius:7.5px;"></div></td>'+
-    '</tr>');
-
-		$('.dashboard> tbody').append($row);
+		
+		var actionBar = '<span title = "Video"><i class="small material-icons">videocam</i></span>'+$lock+'<span title = "Informations"><i onclick="openEditDevice('+this['id']+',\''+this['name']+'\')" class="small material-icons">info_outline</i></span>';
+		var connected = '<div style="width:15px; height:15px; background:#f44336; border-radius:7.5px;"></div>';
+    
+    deviceList.row.add([this['id'], this['name'], this['lock']['identifier'], this['state'], actionBar, connected]).draw( false );
 	});
-	$('#deviceListData').DataTable();
 }
 
 function insertDataLog(data){
-	$('.logs > tbody> tr').remove();
-
+	logList.clear();
+	
 	$.each(data,function(i){
 		// Format Date
 		var date = moment(data[i]['updatedAt']).format("DD/MM/YYYY HH:mm");
@@ -34,18 +27,9 @@ function insertDataLog(data){
 		} else {
 			var name = data[i]['device']['name'];
 		}
-
-		var $row = $('<tr>'+
-			'<td>'+data[i]['user']['username']+'</td>'+
-			'<td>'+name+'</td>'+
-			'<td>'+data[i]['type']+'</td>'+
-			'<td>'+data[i]['description']+'</td>'+
-			'<td>'+date+'</td>'+
-			'</tr>');
-
-		$('.logs > tbody').append($row);
+		
+		logList.row.add([data[i]['user']['username'], name, data[i]['type'], data[i]['description'], date]).draw( false );
 	});
-  $('#logListData').DataTable();
 }
 
 // Notification center
@@ -195,3 +179,14 @@ io.socket.on('connect', function(){
 	getAllDataForDashboard();
 	getAllDataLogs();
 });
+
+
+// Init
+// Device table
+var deviceList = $('#deviceListData').DataTable();
+// Remove show entries
+$('#deviceListData_length').remove();
+// Log table
+var logList = $('#logListData').DataTable();
+// Remove show entries
+$('#logListData_length').remove();
