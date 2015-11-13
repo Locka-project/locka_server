@@ -26,33 +26,25 @@
 			var deviceName = capitalize(req.param('name'));
 			var deviceIdentifier = req.param('identifier').toUpperCase();
 			
-			Device.findOne({name: deviceName}).populate('identifier', {identifier: deviceIdentifier}).exec(function(err, find){
+			Device.create({name:deviceName, state:"closed", connected:"false"}).exec(function createCB(err, device){
 				if(err){
-					return res.json(err);
+					return res.json(err)
 				}
-				if(!find){
-					Device.create({name:deviceName, state:"closed", connected:"false"}).exec(function createCB(err, device){
-						if(err){
-							return res.json({msg: 'error'})
-						}
-						Identifier.create({identifier: req.param('identifier').toUpperCase(), owner: device.id}).exec(function (err, lock){
-							if(err) {
-								return res.json({msg: 'error'});
-							}
-							device.userList.add(req.user);
-							device.save();		
-								
-							Device.update({id:device.id},{identifier:lock.id}).exec(function(err){
-								LogService.create({user: req.user, device: device.id, type: "Create", description: device.name + " correctly created." });
-								Device.publishCreate(device);	
-								return res.json({msg: 'success'});
-							})
-						});
-					});
-				} else {
-					res.json({code: 101, msg: 'user or identifier are already used'});
-				}
-			})
+				Identifier.create({identifier: req.param('identifier').toUpperCase(), owner: device.id}).exec(function (err, lock){
+					if(err) {
+						return res.json(err);
+					}
+					console.log("test");
+					device.userList.add(req.user);
+					device.save();		
+						
+					Device.update({id:device.id},{identifier:lock.id}).exec(function(err){
+						LogService.create({user: req.user, device: device.id, type: "Create", description: device.name + " correctly created." });
+						Device.publishCreate(device);	
+						return res.json({msg: 'success'});
+					})
+				});
+			});
 		},
 		getAllDevices:function(req,res){
 			Device.find({}).exec(function findCB(err, found){
@@ -75,13 +67,13 @@
 			})
 		},
 		update:function(req,res){
-			Device.update({id:req.allParams().id},{name:req.allParams().name}).exec(function afterwards(err, device){
+			Device.update({id:req.param('id')},{name:req.param('name')}).exec(function afterwards(err, device){
 				if(err) {
-					return res.redirect('/');
+					return res.json(err);
 				}
-				LogService.create({user: req.user, device: device, type: "Update", description: device[0].name + " correctly updated."});
+				LogService.create({user: req.user, device: device[0].id, type: "Update", description: device[0].name + " correctly updated."});
 				Device.publishUpdate(device[0].id,device[0]);
-				return res.redirect('/');
+				return res.json({msg: 'success'});
 			});
 		},
 		close:function(req,res){

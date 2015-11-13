@@ -11,13 +11,13 @@
 				 </div>
 			 </div>
 			 <div class="modal-footer">
-				<input type="hidden" name="id" id="deviceId">
+				<input type="hidden" name="id" id="deviceEditId">
 				<div class="col s12">
 					<div class="col s4">
 						<button style="width:100%" type="button" onclick="deleteDevice($(this).attr('meta'))" id="deleteButton" class="waves-effect waves-light red btn">Delete</button>
 					</div>
 					<div class="col s4">
-						<button style="width:100%" type="submit"class="waves-effect waves-light btn">Save</button>
+						<button style="width:100%" type="button" onclick="editDevice()" class="waves-effect waves-light btn">Save</button>
 					</div>
 					<div class="col s4">
 						<button style="width:100%" type="button" onclick="closeModal()" class="waves-effect waves-light btn">Close</button>

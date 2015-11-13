@@ -14,6 +14,7 @@ module.exports = {
     },
     identifier: {
       type: 'string',
+      unique: true
     }
   }
 };

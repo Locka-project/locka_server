@@ -7,7 +7,7 @@ function insertDataDashboard(data){
 		} else {
 			var $lock = '<span title = "Close"><i onclick="door(\'close\','+ this['id'] + ')" class="small material-icons">lock_outline</i></span>';
 		}
-		
+
 		var actionBar = '<span title = "Video"><i class="small material-icons">videocam</i></span>'+$lock+'<span title = "Informations"><i onclick="openEditDevice('+this['id']+',\''+this['name']+'\')" class="small material-icons">info_outline</i></span>';
 		var connected = '<div style="width:15px; height:15px; background:#f44336; border-radius:7.5px;"></div>';
     
@@ -27,9 +27,25 @@ function insertDataLog(data){
 		} else {
 			var name = data[i]['device']['name'];
 		}
-		
 		logList.row.add([data[i]['user']['username'], name, data[i]['type'], data[i]['description'], date]).draw( false );
 	});
+}
+
+
+function insertDataStats(dataToProcess){
+	var openLocks = 0;
+	var closedLocks = 0;
+	$.each(dataToProcess,function(i){
+		if(dataToProcess[i].state=='Open') {
+			openLocks++;
+		}
+		if(dataToProcess[i].state=='Closed') {
+			closedLocks++;
+		}
+	});
+	console.log(data[0].value);
+	data[0].value = openLocks;
+	data[1].value = closedLocks;
 }
 
 // Notification center
@@ -87,6 +103,22 @@ function getAllDataForDashboard(){
 
 		$.when.apply($, promises).done(function() {
 			insertDataDashboard(array.sort(function(a,b) {
+					if(a.createdAt > b.createdAt){
+						return -1
+					}
+					if(a.createdAt < b.createdAt){
+						return 1
+					}
+					return 0
+				})
+			);
+		});
+	});
+}
+
+function getAllDataLogs(){
+	$.get( '/device/logs').done(function(logs) {
+		insertDataLog(logs.sort(function(a,b) {
 				if(a.createdAt > b.createdAt){
 					return -1
 				}
@@ -94,24 +126,14 @@ function getAllDataForDashboard(){
 					return 1
 				}
 				return 0
-				})
-			);
-	  });
+			})
+		);
 	});
 }
 
-function getAllDataLogs(){
-	$.get( '/device/logs').done(function(logs) {
-		insertDataLog(logs.sort(function(a,b) {
-			if(a.createdAt > b.createdAt){
-				return -1
-			}
-			if(a.createdAt < b.createdAt){
-				return 1
-			}
-			return 0
-			})
-		);
+function getAllDataStats(){
+	$.get("/user/getDevicesByUser", function(array) {
+		insertDataStats(array);
 	});
 }
 
@@ -125,22 +147,26 @@ io.socket.on('connect', function(){
 
 	// Monitor device Model
 	io.socket.on("device", function(data){
+		console.log(data.verb);
 		switch(data.verb) {
-	    case 'created':
-	        getAllDataForDashboard();
-	        break;
-	    case 'destroyed':
-	       	getAllDataForDashboard();
-	        break;
-	    case 'removedFrom':
-	        console.log('Switch error')
-	        break;
-	    case 'updated':
-	        getAllDataForDashboard();
-	        break;
-	    default:
-	        notification('error', 'error switch');
-		    	break;
+			case 'created':
+				getAllDataForDashboard();
+				getAllDataStats();
+				break;
+			case 'destroyed':
+				getAllDataForDashboard();
+				getAllDataStats();
+				break;
+			case 'removedFrom':
+				console.log('Switch error');
+				break;
+			case 'updated':
+				getAllDataForDashboard();
+				getAllDataStats();
+				break;
+			default:
+				notification('error', 'error switch');
+				break;
 		}
 	});
 	// Monitor log Model
@@ -190,3 +216,5 @@ $('#deviceListData_length').remove();
 var logList = $('#logListData').DataTable();
 // Remove show entries
 $('#logListData_length').remove();
+
+
