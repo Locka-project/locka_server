@@ -26,6 +26,7 @@
 					if(err) {
 						return res.json({msg: 'error'});
 					}
+					console.log("test");
 					device.userList.add(req.user);
 					device.save();		
 						
@@ -67,6 +68,7 @@
 				if(err) {
 					return res.redirect('/');
 				}
+				console.log(device);
 				LogService.create({user: req.user, device: device, type: "Update", description: device[0].name + " correctly updated."});
 				Device.publishUpdate(device[0].id,device[0]);
 				return res.redirect('/');

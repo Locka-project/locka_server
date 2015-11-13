@@ -7,15 +7,15 @@ function insertDataDashboard(data){
 		} else {
 			var $lock = '<span title = "Close"><i onclick="door(\'close\','+ this['id'] + ')" class="small material-icons">lock_outline</i></span>';
 		}
-		
-		 var $row = $('<tr>'+
-    '<td>'+this['id']+'</td>'+
-    '<td>'+this['name']+'</td>'+
-    '<td>'+this['lock']['identifier']+'</td>'+
-    '<td>'+this['state']+'</td>'+
-    '<td><span title = "Video"><i class="small material-icons">videocam</i></span>'+$lock+'<span title = "Informations"><i onclick="openEditDevice('+this['id']+',\''+this['name']+'\')" class="small material-icons">info_outline</i></span></td>'+
-    '<td><div style="width:15px; height:15px; background:#f44336; border-radius:7.5px;"></div></td>'+
-    '</tr>');
+
+		var $row = $('<tr>'+
+			'<td>'+this['id']+'</td>'+
+			'<td>'+this['name']+'</td>'+
+			'<td>'+this['lock']['identifier']+'</td>'+
+			'<td>'+this['state']+'</td>'+
+			'<td><span title = "Video"><i class="small material-icons">videocam</i></span>'+$lock+'<span title = "Informations"><i onclick="openEditDevice('+this['id']+',\''+this['name']+'\')" class="small material-icons">info_outline</i></span></td>'+
+			'<td><div style="width:15px; height:15px; background:#f44336; border-radius:7.5px;"></div></td>'+
+			'</tr>');
 
 		$('.dashboard> tbody').append($row);
 	});
@@ -27,13 +27,13 @@ function insertDataLog(data){
 	$.each(data,function(i){
 		// Format Date
 		var date = moment(data[i]['updatedAt']).format("DD/MM/YYYY HH:mm");
-		
+
 		if(!data[i]['device']){
-			var name = "deleted";		
+			var name = "deleted";
 		} else {
 			var name = data[i]['device']['name'];
 		}
-		
+
 		var $row = $('<tr>'+
 			'<td>'+data[i]['user']['username']+'</td>'+
 			'<td>'+name+'</td>'+
@@ -41,9 +41,26 @@ function insertDataLog(data){
 			'<td>'+data[i]['description']+'</td>'+
 			'<td>'+date+'</td>'+
 			'</tr>');
-		
+
 		$('.logs > tbody').append($row);
 	});
+}
+
+
+function insertDataStats(dataToProcess){
+	var openLocks = 0;
+	var closedLocks = 0;
+	$.each(dataToProcess,function(i){
+		if(dataToProcess[i].state=='Open') {
+			openLocks++;
+		}
+		if(dataToProcess[i].state=='Closed') {
+			closedLocks++;
+		}
+	});
+	console.log(data[0].value);
+	data[0].value = openLocks;
+	data[1].value = closedLocks;
 }
 
 // Notification center
@@ -90,10 +107,10 @@ function door(action, id) {
 // Get all logs and devices
 function getAllDataForDashboard(){
 	$.get("/user/getDevicesByUser", function(data) {
-		
+
 		var promises = [];
 		var array = data;
-		
+
 		$.each(data,function(i){
 			var promise = $.get( "/lock/"+data[i]['identifier']).done(function(lock){array[i]['lock'] = lock});
 			promises.push(promise);
@@ -101,6 +118,22 @@ function getAllDataForDashboard(){
 
 		$.when.apply($, promises).done(function() {
 			insertDataDashboard(array.sort(function(a,b) {
+					if(a.createdAt > b.createdAt){
+						return -1
+					}
+					if(a.createdAt < b.createdAt){
+						return 1
+					}
+					return 0
+				})
+			);
+		});
+	});
+}
+
+function getAllDataLogs(){
+	$.get( '/device/logs').done(function(logs) {
+		insertDataLog(logs.sort(function(a,b) {
 				if(a.createdAt > b.createdAt){
 					return -1
 				}
@@ -108,24 +141,14 @@ function getAllDataForDashboard(){
 					return 1
 				}
 				return 0
-				})
-			);
-	  });	
+			})
+		);
 	});
 }
 
-function getAllDataLogs(){
-	$.get( '/device/logs').done(function(logs) {
-		insertDataLog(logs.sort(function(a,b) {
-			if(a.createdAt > b.createdAt){
-				return -1
-			}
-			if(a.createdAt < b.createdAt){
-				return 1
-			}
-			return 0
-			})
-		);
+function getAllDataStats(){
+	$.get("/user/getDevicesByUser", function(array) {
+		insertDataStats(array);
 	});
 }
 
@@ -136,60 +159,64 @@ io.socket.on('connect', function(){
 	// Subscribe events
 	io.socket.get('/socket/devices/subscribe');
 	io.socket.get('/socket/users/logs/subscribe');
-	
+
 	// Monitor device Model
 	io.socket.on("device", function(data){
+		console.log(data.verb);
 		switch(data.verb) {
-	    case 'created':
-	        getAllDataForDashboard();
-	        break;
-	    case 'destroyed':
-	       	getAllDataForDashboard();
-	        break;
-	    case 'removedFrom':
-	        console.log('Switch error')
-	        break;
-	    case 'updated':
-	        getAllDataForDashboard();
-	        break;
-	    default:
-	        notification('error', 'error switch');
-		    	break;
+			case 'created':
+				getAllDataForDashboard();
+				getAllDataStats();
+				break;
+			case 'destroyed':
+				getAllDataForDashboard();
+				getAllDataStats();
+				break;
+			case 'removedFrom':
+				console.log('Switch error');
+				break;
+			case 'updated':
+				getAllDataForDashboard();
+				getAllDataStats();
+				break;
+			default:
+				notification('error', 'error switch');
+				break;
 		}
 	});
 	// Monitor log Model
 	io.socket.on("log", function(data){
 		log = data.data.log;
 		switch(data.verb) {
-	    case 'created':
-	    		switch(log.type){
-		    		case 'Create':
-		    			notification('add', log.description);
-		    			break;   
-		    		case 'Update':
-		    			notification('update', log.description);
-		    			break;
-		    		case 'Delete':
-		    			notification('del', log.description);
-		    			break;   
-		    		case 'Open':
-		    			notification('open', log.description);
-		    			break;   
-		    		case 'Close':
-		    			notification('close', log.description);
-		    			break;
-		    		default:
-		    			notification('error', 'error log type');
-		    			break;	
-		    	}
-	        getAllDataLogs();
-	        break;
-	    default:
-	      	notification('error', 'error verb socket');
+			case 'created':
+				switch(log.type){
+					case 'Create':
+						notification('add', log.description);
+						break;
+					case 'Update':
+						notification('update', log.description);
+						break;
+					case 'Delete':
+						notification('del', log.description);
+						break;
+					case 'Open':
+						notification('open', log.description);
+						break;
+					case 'Close':
+						notification('close', log.description);
+						break;
+					default:
+						notification('error', 'error log type');
+						break;
+				}
+				getAllDataLogs();
+				break;
+			default:
+				notification('error', 'error verb socket');
 		}
 	});
 	// Get All data
 	getAllDataForDashboard();
 	getAllDataLogs();
-	
+
 });
