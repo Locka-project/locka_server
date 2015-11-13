@@ -11,7 +11,8 @@ module.exports = {
     name:{
       type: 'string',
       required: true,
-      minLength: 3
+      minLength: 3,
+      unique: true
     },
     state:{
       type: 'string',

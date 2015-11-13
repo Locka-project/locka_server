@@ -1,5 +1,5 @@
 function openEditDevice(deviceId, deviceName) {
-		$('#deviceId').val(deviceId);
+		$('#deviceEditId').val(deviceId);
 		$('#deleteButton').attr('meta', deviceId);
 		$('#deviceNameEdit').val(deviceName);
 		$('#modal1').openModal();
@@ -30,11 +30,11 @@ function addDevice() {
 	if(deviceName != null && identifier != null) {
 		if(identifier.length == 8){
 			$.post('/device/create', 
-			{name: deviceName, identifier: identifier}, function (data){
+			{name: deviceName, identifier: identifier}, function (data){			
 				$('#modal2').closeModal();
-				if(data.code == 101){
-					Materialize.toast(data.msg, 4000);
-				}	
+				if(!data.msg && data.msg != 'success'){
+					Materialize.toast(data.invalidAttributes.name[0].message, 4000);
+				}
 			});
 		} else {
 			$('#identifier').after('<p id="passwordMinLength" >Your identifier must be 8 characters');
@@ -45,9 +45,22 @@ function addDevice() {
 	}
 }
 
-function closeModal() {
-	$('#modal1').closeModal();
-	$('#modal2').closeModal();
+function editDevice() {
+	var deviceName = $('#deviceNameEdit').val();
+	var deviceId = $('#deviceEditId').val();
+
+	if(deviceName != null && deviceId != null) {
+		$.post('/device/update', 
+		{name: deviceName, id: deviceId}, function (data){			
+			$('#modal1').closeModal();
+			if(!data.msg && data.msg != 'success'){
+				Materialize.toast(data.invalidAttributes.name[0].message, 4000);
+			}
+		});
+	} else {
+		$('#modal1').closeModal();
+		Materialize.toast('Une erreur est survenue : le formulaire est incomplet', 4000);
+	}
 }
 
 function generateIdentifier(){
