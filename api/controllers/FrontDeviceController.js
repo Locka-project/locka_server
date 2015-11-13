@@ -34,6 +34,7 @@
 					if(err) {
 						return res.json(err);
 					}
+					console.log("test");
 					device.userList.add(req.user);
 					device.save();		
 						

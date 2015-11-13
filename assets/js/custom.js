@@ -8,7 +8,6 @@ function insertDataDashboard(data){
 		} else {
 			var $lock = '<span title="Close"><i onclick="door(\'close\','+ this['id'] + ')" class="fa fa-lock"> </i></span>';
 		}
-		
 		var actionBar = '<span title="Video"><i class="fa fa-camera"></i></span>'+$lock+'<span title="Informations"> <i onclick="openEditDevice('+this['id']+',\''+this['name']+'\')" class="fa fa-info"></i></span><span title="Share"><i onclick="openShareModal('+this['id']+')" class="fa fa-retweet"></i></span>';
 		var connected = '<div style="width:15px; height:15px; background:#f44336; border-radius:7.5px;"></div>';
     
@@ -29,9 +28,24 @@ function insertDataLog(data){
 		} else {
 			var name = data[i]['device']['name'];
 		}
-		
 		logList.row.add([data[i]['user']['username'], name, data[i]['type'], data[i]['description'], date]).draw( false );
 	});
+}
+
+
+function insertDataStats(dataToProcess){
+	var openLocks = 0;
+	var closedLocks = 0;
+	$.each(dataToProcess,function(i){
+		if(dataToProcess[i].state=='Open') {
+			openLocks++;
+		}
+		if(dataToProcess[i].state=='Closed') {
+			closedLocks++;
+		}
+	});
+	openChart.data["Open"].value = openLocks;
+	openChart.data["Closed"].value = closedLocks;
 }
 
 // Notification center
@@ -78,7 +92,6 @@ function door(action, id) {
 // Get all logs and devices
 function getAllDataForDashboard(){
 	$.get("/user/getDevicesByUser", function(data) {
-		
 		if(data.length != 0){
 			var promises = [];
 			var array = data;
@@ -109,15 +122,21 @@ function getAllDataForDashboard(){
 function getAllDataLogs(){
 	$.get( '/device/logs').done(function(logs) {
 		insertDataLog(logs.sort(function(a,b) {
-			if(a.createdAt > b.createdAt){
-				return -1
-			}
-			if(a.createdAt < b.createdAt){
-				return 1
-			}
-			return 0
+				if(a.createdAt > b.createdAt){
+					return -1
+				}
+				if(a.createdAt < b.createdAt){
+					return 1
+				}
+				return 0
 			})
 		);
+	});
+}
+
+function getAllDataStats(){
+	$.get("/user/getDevicesByUser", function(array) {
+		insertDataStats(array);
 	});
 }
 
@@ -131,22 +150,26 @@ io.socket.on('connect', function(){
 
 	// Monitor device Model
 	io.socket.on("device", function(data){
+		console.log(data.verb);
 		switch(data.verb) {
-	    case 'created':
-	        getAllDataForDashboard();
-	        break;
-	    case 'destroyed':
-	      	getAllDataForDashboard();
-	        break;
-	    case 'removedFrom':
-	        console.log('Switch error')
-	        break;
-	    case 'updated':
-	        getAllDataForDashboard();
-	        break;
-	    default:
-	        notification('error', 'error switch');
-		    	break;
+			case 'created':
+				getAllDataForDashboard();
+				getAllDataStats();
+				break;
+			case 'destroyed':
+				getAllDataForDashboard();
+				getAllDataStats();
+				break;
+			case 'removedFrom':
+				console.log('Switch error');
+				break;
+			case 'updated':
+				getAllDataForDashboard();
+				getAllDataStats();
+				break;
+			default:
+				notification('error', 'error switch');
+				break;
 		}
 	});
 	// Monitor log Model
@@ -196,3 +219,12 @@ $('#deviceListData_length').remove();
 var logList = $('#logListData').DataTable();
 // Remove show entries
 $('#logListData_length').remove();
+var openChart = new Morris.Donut({
+	element: 'opn_clsd_stat',
+	data: [
+		{label: 'Open', value: 0},
+		{label: 'Closed', value: 0}
+	]
+});
+
+
