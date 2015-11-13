@@ -46,7 +46,7 @@ function DeviceCtrl(){
 				if(err) {
 					return res.json(err);
 				}
-				LogService.create({user: req.user, device: device, type: "Delete", description: "Device correctly deleted."});
+				LogService.create({user: req.user, device: devices[0], type: "Delete", description: "Device correctly deleted."});
 				Device.publishDestroy(devices[0].id,devices[0]);
 				return res.json({msg: 'success'});
 			})
@@ -56,7 +56,7 @@ function DeviceCtrl(){
 				if(err) {
 					return res.json(err);
 				}
-				LogService.create({user: req.user, device: device, type: "Update", description: "Device correctly updated."});
+				LogService.create({user: req.user, device: devices[0], type: "Update", description: "Device correctly updated."});
 				Device.publishUpdate(devices[0].id,devices[0]);
 				return res.json({msg: 'success'});
 			});
@@ -71,7 +71,7 @@ function DeviceCtrl(){
 						if(errUpdate) {
 							return res.json(errUpdate);
 						}
-						LogService.create({user: req.user, device: device, type: "Close", description: "Lock closed."});
+						LogService.create({user: req.user, device: devices[0], type: "Close", description: "Lock closed."});
 						Device.publishUpdate(devices[0].id,devices[0]);
 						return res.json({msg: 'success'});
 					});
@@ -90,7 +90,7 @@ function DeviceCtrl(){
 						if(err) {
 							return res.json(err);
 						}
-						LogService.create({user: req.user, device: device, type: "Open", description: "Lock opened."});
+						LogService.create({user: req.user, device: devices[0], type: "Open", description: "Lock opened."});
 						Device.publishUpdate(devices[0].id,devices[0]);
 						return res.json({msg: 'success'});
 					});
