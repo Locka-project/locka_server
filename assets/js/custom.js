@@ -1,14 +1,14 @@
 function insertDataDashboard(data){
 	deviceList.clear();
+	deviceList.draw();
 
 	$.each(data,function(){
 		if(this['state'] == 'closed'){
-			var $lock = '<span title = "Open"><i onclick="door(\'open\','+ this['id'] + ')" class="small material-icons">lock_open</i></span>';
+			var $lock = '<span title="Open"><i onclick="door(\'open\','+ this['id'] + ')" class="fa fa-unlock-alt"> </i></span>';
 		} else {
-			var $lock = '<span title = "Close"><i onclick="door(\'close\','+ this['id'] + ')" class="small material-icons">lock_outline</i></span>';
+			var $lock = '<span title="Close"><i onclick="door(\'close\','+ this['id'] + ')" class="fa fa-lock"> </i></span>';
 		}
-
-		var actionBar = '<span title = "Video"><i class="small material-icons">videocam</i></span>'+$lock+'<span title = "Informations"><i onclick="openEditDevice('+this['id']+',\''+this['name']+'\')" class="small material-icons">info_outline</i></span>';
+		var actionBar = '<span title="Video"><i class="fa fa-camera"></i></span>'+$lock+'<span title="Informations"> <i onclick="openEditDevice('+this['id']+',\''+this['name']+'\')" class="fa fa-info"></i></span><span title="Share"><i onclick="openShareModal('+this['id']+')" class="fa fa-retweet"></i></span>';
 		var connected = '<div style="width:15px; height:15px; background:#f44336; border-radius:7.5px;"></div>';
     
     deviceList.row.add([this['id'], this['name'], this['lock']['identifier'], this['state'], actionBar, connected]).draw( false );
@@ -17,6 +17,7 @@ function insertDataDashboard(data){
 
 function insertDataLog(data){
 	logList.clear();
+	logList.draw();
 	
 	$.each(data,function(i){
 		// Format Date
@@ -91,17 +92,17 @@ function door(action, id) {
 // Get all logs and devices
 function getAllDataForDashboard(){
 	$.get("/user/getDevicesByUser", function(data) {
-
-		var promises = [];
-		var array = data;
-
-		$.each(data,function(i){
-			var promise = $.get( "/lock/"+data[i]['identifier']).done(function(lock){array[i]['lock'] = lock});
-			promises.push(promise);
-		});
-
-		$.when.apply($, promises).done(function() {
-			insertDataDashboard(array.sort(function(a,b) {
+		if(data.length != 0){
+			var promises = [];
+			var array = data;
+	
+			$.each(data,function(i){
+				var promise = $.get( "/lock/"+data[i]['identifier']).done(function(lock){array[i]['lock'] = lock});
+				promises.push(promise);
+			});
+	
+			$.when.apply($, promises).done(function() {
+				insertDataDashboard(array.sort(function(a,b) {
 					if(a.createdAt > b.createdAt){
 						return -1
 					}
@@ -109,9 +110,12 @@ function getAllDataForDashboard(){
 						return 1
 					}
 					return 0
-				})
-			);
-		});
+					})
+				);
+		  });	
+		} else {
+			insertDataDashboard([]);
+		}
 	});
 }
 
