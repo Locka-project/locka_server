@@ -43,9 +43,8 @@ function insertDataStats(dataToProcess){
 			closedLocks++;
 		}
 	});
-	console.log(data[0].value);
-	data[0].value = openLocks;
-	data[1].value = closedLocks;
+	openChart.data["Open"].value = openLocks;
+	openChart.data["Closed"].value = closedLocks;
 }
 
 // Notification center
@@ -216,5 +215,12 @@ $('#deviceListData_length').remove();
 var logList = $('#logListData').DataTable();
 // Remove show entries
 $('#logListData_length').remove();
+var openChart = new Morris.Donut({
+	element: 'opn_clsd_stat',
+	data: [
+		{label: 'Open', value: 0},
+		{label: 'Closed', value: 0}
+	]
+});
 
 
