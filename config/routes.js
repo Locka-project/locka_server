@@ -70,12 +70,12 @@ module.exports.routes = {
   'GET /device/getUsersByDevice': 'FrontDeviceController.getUsersByDevice',
   'GET /device/logs': 'FrontDeviceController.getLogs',
   'GET /device/share/status/:id': 'FrontDeviceController.shareStatus',
-  
+
   /* Lock identifier */
   'GET /lock/:id': 'FrontIdentifierController.getLock',
-  
+
   /* Share Device */
-  'POST /shareKey/create/:userId': 'FrontShareLockController.create', 
+  'POST /shareKey/create/:userId': 'FrontShareLockController.create',
   'POST /shareKey/update/:id': 'FrontShareLockController.update',
   'POST /shareKey/delete/:id': 'FrontShareLockController.delete',
   'POST /shareKey/activate/:key': 'FrontShareLockController.activateSharing',
@@ -89,7 +89,7 @@ module.exports.routes = {
 	'GET /api/auth/:provider/callback': 'AuthController.callback',
 
 	/* User routing */
-	'GET /api/users': 'UserController.myAccount',
+	'GET /api/users/:id': 'UserController.show',
 	'PUT /api/users/:id': 'UserController.update',
 	'DELETE /api/users/:id': 'UserController.delete',
 	'PUT /api/users/:id/changePassword': 'UserController.changePassword',
