@@ -48,6 +48,7 @@ module.exports.routes = {
 
 	/* User Front routing */
   'GET /user': 'FrontUserController.myAccount',
+  'GET /user/username/:username': 'FrontUserController.getUserByUsername',
 	'GET /:lang/user': 'FrontUserController.myAccount',
   'POST /user/update': 'FrontUserController.update',
   'POST /user/delete': 'FrontUserController.delete',
@@ -68,9 +69,16 @@ module.exports.routes = {
   'GET /device/getAllDevices': 'FrontDeviceController.getAllDevices',
   'GET /device/getUsersByDevice': 'FrontDeviceController.getUsersByDevice',
   'GET /device/logs': 'FrontDeviceController.getLogs',
+  'GET /device/share/status/:id': 'FrontDeviceController.shareStatus',
   
   /* Lock identifier */
   'GET /lock/:id': 'FrontIdentifierController.getLock',
+  
+  /* Share Device */
+  'POST /shareKey/create/:userId': 'FrontShareLockController.create', 
+  'POST /shareKey/update/:id': 'FrontShareLockController.update',
+  'POST /shareKey/delete/:id': 'FrontShareLockController.delete',
+  'POST /shareKey/activate/:key': 'FrontShareLockController.activateSharing',
 
 	/* --------- API Request  ----------------*/
 

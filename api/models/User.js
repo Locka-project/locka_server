@@ -42,6 +42,14 @@ var User = {
     logList:{
       collection: 'log',
       via: 'user',
+    },
+    availablesSharedKey:{
+      collection: 'shareLock',
+      via: 'user',
+    },
+    sharedKey:{
+      collection: 'shareLock',
+      via: 'owner',
     }
   }
 };

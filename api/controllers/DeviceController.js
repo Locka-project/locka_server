@@ -25,8 +25,8 @@ function DeviceCtrl(){
 					if(err) {
 						return res.json(err);
 					}
-					created.userList.add(req.user);
-					created.save();
+					device.userList.add(req.user);
+					device.save();
 					LogService.create({user: req.user, device: device.id, type: "Create", description: "Device correctly created." });
 					Device.publishCreate(device);
 					return res.json({msg: 'success'});

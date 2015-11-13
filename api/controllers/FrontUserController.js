@@ -117,16 +117,26 @@ function FrontUserCtrl(){
     },
 
     getDevicesByUser: function (req, res) {
-      Device.find().populate('userList',{id: req.user.id}).exec(function (err, devices) {
+      User.findOne({id: req.user.id}).populate('deviceList').exec(function (err, user) {
         if (err) {
           return res.json(err);
         }
-        return res.json(devices);
+				return res.json(user.deviceList);
       });
     },
 
     getUserById: function (req, res) {
-      User.find({id: req.params.id}).exec(function (err, user) {
+      User.findOne({id: req.params.id}).exec(function (err, user) {
+        if (err) {
+          return res.json(err);
+        }
+        return res.json(user);
+      });
+    },
+    
+    getUserByUsername: function (req, res) {
+	    var userName = req.params.username.toLowerCase();
+      User.findOne({username: userName}).exec(function (err, user) {
         if (err) {
           return res.json(err);
         }

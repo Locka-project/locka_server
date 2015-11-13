@@ -32,6 +32,10 @@ module.exports = {
     logList:{
       collection: 'log',
       via: 'device',
+    },
+    sharedKey:{
+	    collection: 'shareLock',
+      via: 'device',
     }
   }
 };
