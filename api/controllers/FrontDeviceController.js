@@ -18,13 +18,21 @@
 			});
 		},
 		create:function(req,res){
-			Device.create({name:req.param('name'), state:"closed", connected:"false"}).exec(function createCB(err, device){
+			
+			function capitalize(string) {
+				return string.charAt(0).toUpperCase() + string.slice(1);
+			}
+			
+			var deviceName = capitalize(req.param('name'));
+			var deviceIdentifier = req.param('identifier').toUpperCase();
+			
+			Device.create({name:deviceName, state:"closed", connected:"false"}).exec(function createCB(err, device){
 				if(err){
-					return res.json({msg: 'error'})
+					return res.json(err)
 				}
 				Identifier.create({identifier: req.param('identifier').toUpperCase(), owner: device.id}).exec(function (err, lock){
 					if(err) {
-						return res.json({msg: 'error'});
+						return res.json(err);
 					}
 					console.log("test");
 					device.userList.add(req.user);
@@ -51,27 +59,21 @@
 				if(err) {
 					return res.json({msg : 'Error'})
 				}
-				Log.destroy({device: device[0].device}).exec(function(err){
-					if(err) {
-						return res.json(err);
-					}
-					Identifier.destroy({id:device[0].identifier}).exec(function destroyCB(err, identifier){
-						Device.publishDestroy(device[0].id,device[0]);
-						return res.json({msg : 'success'})
-					});
-					LogService.create({user: req.user, device:null, type: "Delete", description: device[0].name + " correctly deleted."});
+				Identifier.destroy({id:device[0].identifier}).exec(function destroyCB(err, identifier){
+					Device.publishDestroy(device[0].id,device[0]);
+					return res.json({msg : 'success'})
 				});
+				LogService.create({user: req.user, device:null, type: "Delete", description: device[0].name + " correctly deleted."});
 			})
 		},
 		update:function(req,res){
-			Device.update({id:req.allParams().id},{name:req.allParams().name}).exec(function afterwards(err, device){
+			Device.update({id:req.param('id')},{name:req.param('name')}).exec(function afterwards(err, device){
 				if(err) {
-					return res.redirect('/');
+					return res.json(err);
 				}
-				console.log(device);
-				LogService.create({user: req.user, device: device, type: "Update", description: device[0].name + " correctly updated."});
+				LogService.create({user: req.user, device: device[0].id, type: "Update", description: device[0].name + " correctly updated."});
 				Device.publishUpdate(device[0].id,device[0]);
-				return res.redirect('/');
+				return res.json({msg: 'success'});
 			});
 		},
 		close:function(req,res){

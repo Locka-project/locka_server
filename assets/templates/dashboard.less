@@ -1,7 +1,7 @@
 html {
   font-family: GillSans, Calibri, Trebuchet, sans-serif;
 }
-     
+
 body {
 
   background: -webkit-linear-gradient(90deg, #136a8a 10%, #267871 90%); /* Chrome 10+, Saf5.1+ */
@@ -73,7 +73,77 @@ td {
 i {
 	cursor: pointer;
 }
+table#deviceListData tbody tr{
+  background-color: transparent;
+}
+.sorting_1 {
+    background-color: transparent !important;
+}
+div#deviceListData_length.dataTables_length, #deviceListData_wrapper label, .dataTables_wrapper .dataTables_paginate .paginate_button, .dataTables_wrapper .dataTables_info{
+  color: white;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+  color: black !important;
+}
+table.dataTable thead th, table.dataTable thead td, table.dataTable.no-footer {
+  color: white !important;
+  border-bottom: 1px solid white;
+  font-size: 15px !important;
+}
 
+table#logListData tbody tr{
+  background-color: transparent;
+}
+div#logListData_length.dataTables_length, #logListData_wrapper label, .dataTables_wrapper .dataTables_paginate .paginate_button, .dataTables_wrapper .dataTables_info{
+  color: white;
+}
 .apiKey {
 	padding-left: 10px;
+}
+
+#generataIdentifier {
+	color: #9e9e9e;
+	padding-top: 15px;
+}
+
+#passwordMinLength {
+	color: red;
+}
+
+// Datatables
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+	color: white !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+	background: transparent;
+	border: none;
+	color: white !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+	background: transparent;
+	border: none;
+	color: white !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:active {
+	box-shadow: none;
+	color: grey !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+	background: transparent;
+	border: none;
+	color: white !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:active {
+	box-shadow: none;
+	color: grey !important;
+}
+
+table.dataTable {
+	border-collapse: collapse;
 }
