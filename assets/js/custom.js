@@ -10,14 +10,14 @@ function insertDataDashboard(data){
 
 		var actionBar = '<span title = "Video"><i class="small material-icons">videocam</i></span>'+$lock+'<span title = "Informations"><i onclick="openEditDevice('+this['id']+',\''+this['name']+'\')" class="small material-icons">info_outline</i></span>';
 		var connected = '<div style="width:15px; height:15px; background:#f44336; border-radius:7.5px;"></div>';
-    
-    deviceList.row.add([this['id'], this['name'], this['lock']['identifier'], this['state'], actionBar, connected]).draw( false );
+
+		deviceList.row.add([this['id'], this['name'], this['lock']['identifier'], this['state'], actionBar, connected]).draw( false );
 	});
 }
 
 function insertDataLog(data){
 	logList.clear();
-	
+
 	$.each(data,function(i){
 		// Format Date
 		var date = moment(data[i]['updatedAt']).format("DD/MM/YYYY HH:mm");
@@ -35,16 +35,94 @@ function insertDataLog(data){
 function insertDataStats(dataToProcess){
 	var openLocks = 0;
 	var closedLocks = 0;
+	var table = [];
 	$.each(dataToProcess,function(i){
-		if(dataToProcess[i].state=='Open') {
+		if(dataToProcess[i].state=='open') {
 			openLocks++;
 		}
-		if(dataToProcess[i].state=='Closed') {
+		if(dataToProcess[i].state=='closed') {
 			closedLocks++;
 		}
 	});
-	openChart.data["Open"].value = openLocks;
-	openChart.data["Closed"].value = closedLocks;
+	if(closedLocks + openLocks == 0) {
+		$('#opn_clsd_stat').highcharts({
+			chart: {
+				plotBackgroundColor: null,
+				plotBorderWidth: null,
+				plotShadow: false,
+				type: 'pie'
+			},
+			title: {
+				text: 'Browser market shares January, 2015 to May, 2015'
+			},
+			tooltip: {
+				pointFormat: '{series.label}: <b>{point.percentage}</b>'
+			},
+			plotOptions: {
+				pie: {
+					allowPointSelect: true,
+					cursor: 'pointer',
+					width: '100%',
+					dataLabels: {
+						enabled: true
+					},
+					showInLegend: false
+				}
+			},
+			series: [{
+				name: 'Count',
+				colorByPoint: true,
+				data: []
+			}]
+		});
+	} else {
+		$('#opn_clsd_stat').highcharts({
+			chart: {
+				style: {
+					color: "#fff"
+				},
+				backgroundColor: 'transparent',
+				plotBorderWidth: null,
+				plotShadow: false,
+				type: 'pie'
+			},
+			title: {
+				style: {
+					color: "#fff"
+				},
+				text: 'Open and closed locks'
+			},
+			tooltip: {
+				pointFormat: '{series.name}: <b>{point.y}</b>'
+			},
+			plotOptions: {
+				pie: {
+					allowPointSelect: true,
+					cursor: 'pointer',
+					dataLabels: {
+						enabled: true
+					},
+					showInLegend: false
+				},
+				series: {
+					dataLabels: {
+						color: '#fff'
+					},
+				},
+			},
+			series: [{
+				name: 'Count',
+				colorByPoint: true,
+				data: [
+					{name: "Open", y: openLocks},
+					{name: "Closed", y: closedLocks}
+				]
+			}],
+			credits: {
+				enabled: false
+			},
+		});
+	}
 }
 
 // Notification center
@@ -172,37 +250,38 @@ io.socket.on('connect', function(){
 	io.socket.on("log", function(data){
 		log = data.data.log;
 		switch(data.verb) {
-	    case 'created':
-	    		switch(log.type){
-		    		case 'Create':
-		    			notification('add', log.description);
-		    			break;
-		    		case 'Update':
-		    			notification('update', log.description);
-		    			break;
-		    		case 'Delete':
-		    			notification('del', log.description);
-		    			break;
-		    		case 'Open':
-		    			notification('open', log.description);
-		    			break;
-		    		case 'Close':
-		    			notification('close', log.description);
-		    			break;
-		    		default:
-		    			notification('error', 'error log type');
-		    			break;
-		    	}
-	        getAllDataLogs();
-	        break;
-	    default:
-	      	notification('error', 'error verb socket');
-					break;
+			case 'created':
+				switch(log.type){
+					case 'Create':
+						notification('add', log.description);
+						break;
+					case 'Update':
+						notification('update', log.description);
+						break;
+					case 'Delete':
+						notification('del', log.description);
+						break;
+					case 'Open':
+						notification('open', log.description);
+						break;
+					case 'Close':
+						notification('close', log.description);
+						break;
+					default:
+						notification('error', 'error log type');
+						break;
+				}
+				getAllDataLogs();
+				break;
+			default:
+				notification('error', 'error verb socket');
+				break;
 		}
 	});
 	// Get All data
 	getAllDataForDashboard();
 	getAllDataLogs();
+	getAllDataStats();
 });
 
 
@@ -215,12 +294,32 @@ $('#deviceListData_length').remove();
 var logList = $('#logListData').DataTable();
 // Remove show entries
 $('#logListData_length').remove();
-var openChart = new Morris.Donut({
-	element: 'opn_clsd_stat',
-	data: [
-		{label: 'Open', value: 0},
-		{label: 'Closed', value: 0}
-	]
+var openChart = $('#opn_clsd_stat').highcharts({
+	chart: {
+		plotBackgroundColor: null,
+		plotBorderWidth: null,
+		plotShadow: false,
+		type: 'pie'
+	},
+	title: {
+		text: 'Open and closed locks'
+	},
+	tooltip: {
+		pointFormat: '{series.label}: <b>{point.percentage}</b>'
+	},
+	plotOptions: {
+		pie: {
+			allowPointSelect: true,
+			cursor: 'pointer',
+			dataLabels: {
+				enabled: true
+			},
+			showInLegend: false
+		}
+	},
+	series: [{
+		name: 'Count',
+		colorByPoint: true,
+		data: []
+	}]
 });
-
-
