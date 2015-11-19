@@ -30,8 +30,6 @@ var Dashboard = {
 	getMyLock: function(req, res){
 		if(!req.isSocket) return res.json({msg: "is not a Socket"});
 		if(!req.user) return res.json({msg: "user is not defined"});
-		
-		Device.watch(req);
 
 		User.findOne({id:req.user.id}).populate('deviceList').exec(function foundByUserCB(err, user){
 			if(err) return res.json(err);
@@ -40,12 +38,31 @@ var Dashboard = {
 		});
 	},
 	
-	watchLogs: function(req, res){
-		if(!req.isSocket) return res.json({msg: "is not a Socket"});
-		if(!req.user) return res.json({msg: "user is not defined"});
+	getSharedDevice: function(req,res){
+		var deviceId = req.params.id;
+		var user = req.user;
 		
-		Log.watch(req);
-		return res.json({msg: "success"});
+		Device.findOne({id: deviceId}).populate('sharedKey').exec(function(err,device){
+			if(err){
+				return res.json(err)
+			}
+			if(device){
+				if(device.sharedKey.length == 0){
+					return res.view('dashboard/share/shareDevice',  {device: device, layout: null})
+				} else if(user.id == device.sharedKey[0].owner) {
+					return res.view('dashboard/share/listAllSharedDevice',  {device: device, layout: null})
+				} else if (user.id != device.sharedKey[0].owner) {
+					var sharedKey = device.sharedKey.filter(function(e){
+						return user.id == e.user && deviceId == e.device 
+					})
+					return res.view('dashboard/share/stopShareDevice',  {device: device, key: sharedKey[0], layout: null})
+				}
+			} else {
+				console.log('Error your id is not found.')
+			}
+		})
+	
+		
 	}
 };
 

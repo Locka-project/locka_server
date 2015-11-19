@@ -38,9 +38,8 @@
 					device.save();		
 						
 					Device.update({id:device.id},{identifier:lock.id}).exec(function(err){
-						LogService.create({user: req.user, device: device.id, type: "Create", description: device.name + " correctly created." });
-						Device.publishCreate(device);	
-						return res.json({msg: 'success'});
+						LogService.create({user: req.user, deviceId: device.id, type: "Create", description: device.name + " correctly created." });
+						return res.json({msg: 'success', device: device});
 					})
 				});
 			});
@@ -54,38 +53,46 @@
 			});
 		},
 		delete:function(req,res){
-			ShareLock.destroy({owner: req.user.id, device: req.param('id')}).exec(function destroyCB(err, shareLock){
-				if(err) {
+			ShareLock.findOne({user: req.user.id, device: req.param('id')}).exec(function(err, find){
+				if(err){
 					return res.json(err)
 				}
-				console.log(shareLock)
-				if(shareLock){
-					Device.destroy({id:req.param('id')}).exec(function destroyCB(err, device){
+				if(find != null){
+					return res.json({msg : 'error this device is currently shared with you !'})						
+				} else {
+					ShareLock.destroy({owner: req.user.id, device: req.param('id')}).exec(function destroyCB(err, shareLock){
 						if(err) {
 							return res.json(err)
-						}
-						Identifier.destroy({id: device[0].identifier}).exec(function destroyCB(err, identifier){
+						}	
+						Device.destroy({id:req.param('id')}).exec(function destroyCB(err, device){
 							if(err) {
 								return res.json(err)
 							}
-							Device.publishDestroy(device[0].id,device[0]);
-							LogService.create({user: req.user, device:null, type: "Delete", description: device[0].name + " correctly deleted."});
-							return res.json({msg : 'success'})
-						})
+							Identifier.destroy({id: device[0].identifier}).exec(function destroyCB(err, identifier){
+								if(err) {
+									return res.json(err)
+								}
+								Device.publishDestroy(device[0].id);
+								Log.destroy({device: device[0].id}).exec(function(err){
+									if(err){
+										return res.json(err)
+									}
+									return res.json({msg : 'success'})
+								});
+							});
+						});
 					});
-				} else {
-					return res.json({msg : 'error you are not authorized to remove this device'})
 				}
-			})
+			});
 		},
 		update:function(req,res){
 			Device.update({id:req.param('id')},{name:req.param('name')}).exec(function afterwards(err, device){
 				if(err) {
 					return res.json(err);
 				}
-				LogService.create({user: req.user, device: device[0].id, type: "Update", description: device[0].name + " correctly updated."});
+				LogService.create({user: req.user, deviceId: device[0].id, type: "Update", description: device[0].name + " correctly updated."});
 				Device.publishUpdate(device[0].id,device[0]);
-				return res.json({msg: 'success'});
+				return res.json({msg: 'success', device: device[0]});
 			});
 		},
 		close:function(req,res){
@@ -98,9 +105,14 @@
 						if(errUpdate) {
 							return res.json(errUpdate);
 						}
-						LogService.create({user: req.user, device: deviceOne, type: "Close", description: device[0].name + " is now closed."});
-						Device.publishUpdate(device[0].id,device[0]);
-						return res.json(device);
+						Device.findOne({id:device[0].id}).populateAll().exec(function(err,goodDevice){
+							if(err){
+								return res.json(err)
+							}
+							LogService.create({user: req.user, deviceId: deviceOne.id, type: "Close", description: device[0].name + " is now closed."});
+							Device.publishUpdate(goodDevice.id,goodDevice);
+							return res.json(goodDevice);
+						});
 					});
 				} else {
 					return res.json({msg : 'Already closed'});
@@ -117,9 +129,14 @@
 						if(errUpdate) {
 							return res.json(errUpdate);
 						}
-						LogService.create({user: req.user, device: deviceOne, type: "Open", description: device[0].name + " is now opened."});
-						Device.publishUpdate(device[0].id,device[0]);
-						return res.json(device);
+						Device.findOne({id:device[0].id}).populateAll().exec(function(err,goodDevice){
+							if(err){
+								return res.json(err)
+							}
+							LogService.create({user: req.user, deviceId: deviceOne.id, type: "Open", description: device[0].name + " is now opened."});
+							Device.publishUpdate(goodDevice.id,goodDevice);
+							return res.json(goodDevice);
+						});
 					});
 				} else {
 					return res.json({msg : 'Already opened'});
@@ -153,19 +170,7 @@
 			} else {
 				Log.watch(req);
 				return res.json({msg: 'success'});
-			}	
-		},
-		shareStatus: function(req, res){
-			Device.findOne({id: req.params.id}).populate('shareKey').exec(function(err, find){
-				if(err){
-					return res.json(err)
-				}
-				if(find){
-					return res.json({msg: 'shared'})
-				} else {
-					return res.json({msg: 'not shared'})
-				}
-			});
+			}
 		}
 	}
 }

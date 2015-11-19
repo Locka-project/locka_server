@@ -69,7 +69,6 @@ module.exports.routes = {
   'GET /device/getAllDevices': 'FrontDeviceController.getAllDevices',
   'GET /device/getUsersByDevice': 'FrontDeviceController.getUsersByDevice',
   'GET /device/logs': 'FrontDeviceController.getLogs',
-  'GET /device/share/status/:id': 'FrontDeviceController.shareStatus',
 
   /* Lock identifier */
   'GET /lock/:id': 'FrontIdentifierController.getLock',
@@ -79,6 +78,7 @@ module.exports.routes = {
   'POST /shareKey/update/:id': 'FrontShareLockController.update',
   'POST /shareKey/delete/:id': 'FrontShareLockController.delete',
   'POST /shareKey/activate/:key': 'FrontShareLockController.activateSharing',
+  'POST /shareKey/unshare/:id/:key': 'FrontShareLockController.removeShare',
 
 	/* --------- API Request  ----------------*/
 
@@ -110,9 +110,9 @@ module.exports.routes = {
 
 	/* ----------- Socket IO --------- */
 	'GET /socket/devices/subscribe': 'FrontDashboardController.getMyLock',
-	'GET /socket/users/logs/subscribe': 'FrontDashboardController.watchLogs',
 	'GET /api/user/subscribe': 'UserController.getMyLock',
 	'GET /api/devices/subscribe/:identifier': 'DeviceController.subscribe',
+	'GET /device/share/status/:id': 'FrontDashboardController.getSharedDevice'
 
   /***************************************************************************
   *                                                                          *

@@ -15,25 +15,34 @@ function openCreateDevice() {
 }
 
 function openShareModal(deviceId) {
-	$('#shareDevice').trigger('reset');
-	$('#deviceIdShare').val(deviceId);
-	$('#userName').siblings('label, i').removeClass('active');
-	$('#modal3').openModal();
+	$.get('/device/share/status/'+deviceId, function(res){
+			$('#modal3').remove();
+			$('body').append(res);
+		}).done(function(){
+			$('#shareDevice').trigger('reset');
+			$('#userName').siblings('label, i').removeClass('active');
+			$('#modal3').openModal();
+		})
 }
 
-function shareDevice() {
+function shareDevice(deviceId) {
 	var userName = $('#userName').val();
-	var deviceId = $('#deviceIdShare').val();
 	
 	$.get('/user/username/' + userName, function(data){
 		if(data){
 			if((data.msg && data.msg == 'User does not exist') || userName.length == 0){
 				$('#passwordMinLength').remove();
 				$('#userName').after('<p id="passwordMinLength" >User does not exist');
-			} else {
+			}	else {
 				id = data.id;
 				$.post('/shareKey/create/' + id, {deviceId: deviceId}, function(data){
 					$('#modal3').closeModal();
+					console.log(data, deviceId, id)
+					if (data.code && data.code == 101){
+						notification('error', "It's not possible to share this device with you because you are the owner");
+					} else {
+						notification('update', data.device.name + " is awaiting activation");
+					}
 				});
 			}
 		}
@@ -43,6 +52,9 @@ function shareDevice() {
 function deleteDevice(e) {
 	$.post('device/delete',{id: e}, function(data){
 		$('#modal1').closeModal();
+		if(data.msg && data.msg != "success"){
+			notification('error', data.msg);
+		}
 	});
 }
 
@@ -59,6 +71,12 @@ function addDevice() {
 				if(!data.msg && data.msg != 'success'){
 					Materialize.toast(data.invalidAttributes.name[0].message, 4000);
 				}
+				io.socket.get('/socket/devices/subscribe');
+				setTimeout(function(){
+					getAllDataForDashboard();
+				}	, 1000);
+				notification('add', data.device.name + " is now created");
+
 			});
 		} else {
 			$('#passwordMinLength').remove();
@@ -74,12 +92,13 @@ function addDevice() {
 					} else if (data.msg && data.msg == 'invalid key'){
 						Materialize.toast("Error your shared key isn't valid", 4000);
 					} else {
-						// Subscribe events
-						io.socket.get('/socket/devices/subscribe');
-						io.socket.get('/socket/users/logs/subscribe');
-						
-						getAllDataForDashboard();
-						getAllDataLogs();	
+						// Subscribe new events
+						io.socket.get('/socket/devices/subscribe');	
+						setTimeout(function(){
+							getAllDataForDashboard();
+						}	, 1000);
+						console.log(data)
+						notification('add', data.device.name + " is now shared");
 					}
 				}
 			);
@@ -104,11 +123,27 @@ function editDevice() {
 			if(!data.msg && data.msg != 'success'){
 				Materialize.toast(data.invalidAttributes.name[0].message, 4000);
 			}
+			notification('update', data.device.name + "has been updated");
 		});
 	} else {
 		$('#modal1').closeModal();
 		Materialize.toast('Une erreur est survenue : le formulaire est incomplet', 4000);
 	}
+}
+
+function unShareDevice(id, key){
+	$.post('/shareKey/unshare/'+id+'/'+key, function(res){
+		if(res.msg && res.msg != "success"){
+			notification('error', res.msg);
+		} else {
+			io.socket.get('/socket/devices/subscribe');	
+			setTimeout(function(){
+				getAllDataForDashboard();
+			}	, 1000);
+			$('#modal3').closeModal();
+			notification('del', 'the current lock is not shared')
+		}
+	});
 }
 
 function generateIdentifier(){

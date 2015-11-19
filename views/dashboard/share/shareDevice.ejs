@@ -1,0 +1,28 @@
+<!-- Modal adding device -->
+<div id="modal3" class="modal">
+	<div class="modal-content">
+		<h4>Share this device (<%- device.name %>) with your friends</h4>
+		<div class="row">
+		 <form id="shareDevice" class="col s12">
+		 	<div class="row">
+				<div class="input-field col s12">
+				 <input id="userName" name="userName" type="text" class="validate">
+				 <label for="userName">Username</label>
+				 <p>Enter the username to share the lock</p>
+				 <br/>
+				</div>
+			<div class="modal-footer">
+			<input type="hidden" name="id" id="deviceIdShare" value="<%- device.id %>">
+			<div class="col s12">
+				<div class="col s6">
+					<button style="width:100%" type="button" onclick="shareDevice()" class="waves-effect waves-light btn">Share</button>
+				</div>
+				<div class="col s6">
+					<button style="width:100%" type="button" onclick="$('#modal3').closeModal()" class="waves-effect waves-light btn">Close</button>
+				</div>
+			</div>
+			 </div>
+		 </form>
+	 </div>
+	</div>
+</div>

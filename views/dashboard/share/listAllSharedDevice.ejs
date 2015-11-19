@@ -1,0 +1,49 @@
+<!-- Modal adding device -->
+<div id="modal3" class="modal">
+	<div class="modal-content">
+		<h4>List of all active share</h4>
+		<div class="row">
+		 <form id="shareDevice" class="col s12">
+		 	<div class="row">
+				<div class="input-field col s12">
+				 <input id="userName" name="userName" type="text" class="validate">
+				 <label for="userName">Username</label>
+				 <p>Enter the username to share the lock</p>
+				 <br/>
+				</div>
+			<div class="modal-footer">
+				<div class="col s12">
+					<div class="col s6">
+						<button style="width:100%" type="button" onclick="shareDevice(<%- device.id %>)" class="waves-effect waves-light btn">Share</button>
+					</div>
+					<div class="col s6">
+						<button style="width:100%" type="button" onclick="$('#modal3').closeModal()" class="waves-effect waves-light btn">Close</button>
+					</div>
+				</div>
+				<div class="col s12 sharedList">
+					 <table>
+						<thead>
+						  <tr>
+					      <th data-field="id">#</th>
+					      <th data-field="name">Shared Key</th>
+					      <th data-field="price">Activate</th>
+					      <th data-field="price">Option</th>
+						  </tr>
+						</thead>
+						<tbody>
+						  <% for(var i=0; i<device.sharedKey.length; i++) {%>
+								<tr>
+								<td><%= device.sharedKey[i].id %></td>
+								<td><%= device.sharedKey[i].sharedKey %></td>
+								<td><%= device.sharedKey[i].activate %></td>
+								<td><span title="Remove share"><i onclick="unShareDevice(<%= device.id %>,'<%= device.sharedKey[i].sharedKey %>')" class="fa fa-ban"></i></span></td
+								</tr>
+							<% } %>
+						</tbody>
+		      </table>
+				</div>
+			</div>
+		 </form>
+	 </div>
+	</div>
+</div>

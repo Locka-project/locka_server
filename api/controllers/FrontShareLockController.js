@@ -11,6 +11,10 @@ module.exports = {
 		var device = req.param('deviceId');
 		var user = req.params.userId ;
 		
+		if(owner.toString() === user){
+			return res.json({code: 101})
+		} 
+		
 		function makeid()
 		{
 	    var text = "";
@@ -23,14 +27,13 @@ module.exports = {
 		}
 		
 		var sharedKey = makeid();
-		
-		
+	
 		ShareLock.findOne({owner: owner, device: device, user: user}).exec(function(err,find){
 			if(err){
 				return res.json(err)
 			}
 			if(!find){
-				ShareLock.create({owner:owner, device:device, user:user, sharedKey: sharedKey}).exec(function(err, shareKey){
+				ShareLock.create({owner: owner, device: device, user: user, sharedKey: sharedKey}).exec(function(err, shareKey){
 					if(err){
 						return res.json(err)
 					}
@@ -38,7 +41,7 @@ module.exports = {
 						if(err){
 							return res.json(err)
 						}
-						LogService.create({user: owner, device: device, type: "Update", description: shareLock.device.name + " is now shared with " + shareLock.user.username + "."});
+						LogService.create({user: owner, deviceId: shareLock.device.id, type: "Update", description: shareLock.device.name + " is waiting shared with " + shareLock.user.username + "."});
 						return res.json(shareLock)
 					});
 				});
@@ -53,17 +56,7 @@ module.exports = {
 	},
 	
 	delete: function(req, res){
-		ShareLock.destroy({id: req.params.id}).exec(function(err, shareKey){
-			if(err){
-				return res.json(err)
-			}
-			User.findOne({id: req.params.userId}).exec(function(err,user){
-				if(err){
-					return res.json(err)
-				}
-				return res.json({msg: 'success'})
-			});
-		});
+		
 	},
 	
 	activateSharing: function(req, res){
@@ -83,14 +76,42 @@ module.exports = {
 						}
 						device.userList.add(shareLock[0].user);
 						device.save();
-						LogService.create({user: req.user.id, device: shareLock[0].device, type: "Update", description: shareLock[0].device.name + " is now succefully shared"});
-						return res.json({msg: 'success'})
+						LogService.create({user: req.user.id, deviceId: device.id, type: "Update", description: device.name + " is now succefully shared"});
+						return res.json({msg: 'success', device: device})
 					});
 				});
 			} else {
 				return res.json({msg:'invalid key'})
 			}
 		})
+	},
+	
+	removeShare: function(req, res){
+		var id = req.params.id;
+		var key = req.params.key;
+
+		ShareLock.findOne({sharedKey:key}).exec(function(err,found){
+			if(err){
+				return res.json(err)
+			} else {
+				Device.findOne({id:id}).populate('sharedKey',{sharedKey: key}).exec(function(err,device){
+					if(err){
+						return res.json(err)
+					}	else {
+						device.userList.remove(found.user);
+						device.save();
+						ShareLock.destroy({sharedKey: key}).exec(function(err,key){
+							if(err){
+								return res.json(err)
+							}	else {
+								LogService.create({user: req.user.id, deviceId: device.id, type: "Delete", description: device.name + " is no longer shared"});
+								return res.json({msg: 'success', device: device})
+							}
+						});
+					}
+				});
+			}	
+		});
 	}
 };
 
