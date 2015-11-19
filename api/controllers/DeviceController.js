@@ -20,18 +20,31 @@ function DeviceCtrl(){
 			});
 		},
 		create:function(req,res){
-			if(!req.isSocket){
-				Device.create({name:req.allParams().name, state:"closed", connected:"false"}).exec(function createCB(err, device){
+			function capitalize(string) {
+				return string.charAt(0).toUpperCase() + string.slice(1);
+			}
+
+			var deviceName = capitalize(req.param('name'));
+			var deviceIdentifier = req.param('identifier').toUpperCase();
+
+			Device.create({name:deviceName, state:"closed", connected:"false"}).exec(function createCB(err, device){
+				if(err){
+					return res.json(err)
+				}
+				Identifier.create({identifier: req.param('identifier').toUpperCase(), owner: device.id}).exec(function (err, lock){
 					if(err) {
 						return res.json(err);
 					}
 					device.userList.add(req.user);
 					device.save();
-					LogService.create({user: req.user, device: device.id, type: "Create", description: "Device correctly created." });
-					Device.publishCreate(device);
-					return res.json({msg: 'success'});
+					Device.update({id:device.id},{identifier:lock.id}).exec(function(err){
+						LogService.create({user: req.user, device: device.id, type: "Create", description: device.name + " correctly created." });
+						Device.publishCreate(device);
+						return res.json(device);
+					})
 				});
-			}
+			});
+
 		},
 		getAllDevices:function(req,res){
 			Device.find({}).exec(function findCB(err, devices){
@@ -58,7 +71,7 @@ function DeviceCtrl(){
 				}
 				LogService.create({user: req.user, device: devices[0], type: "Update", description: "Device correctly updated."});
 				Device.publishUpdate(devices[0].id,devices[0]);
-				return res.json({msg: 'success'});
+				return res.json(devices[0]);
 			});
 		},
 		close:function(req,res){
@@ -73,7 +86,7 @@ function DeviceCtrl(){
 						}
 						LogService.create({user: req.user, device: devices[0], type: "Close", description: "Lock closed."});
 						Device.publishUpdate(devices[0].id,devices[0]);
-						return res.json({msg: 'success'});
+						return res.json(devices[0]);
 					});
 				} else {
 					return res.json("Lock " + device.name + " already " + device.state + ".");
@@ -82,7 +95,7 @@ function DeviceCtrl(){
 		},
 		open:function(req,res){
 			Device.findOne({id:req.allParams().id}).exec(function checkOpenCB(err,device){
-				if(err) {
+				if(err || !device) {
 					return res.json(err);
 				}
 				if(device.state == "closed"){
@@ -92,7 +105,7 @@ function DeviceCtrl(){
 						}
 						LogService.create({user: req.user, device: devices[0], type: "Open", description: "Lock opened."});
 						Device.publishUpdate(devices[0].id,devices[0]);
-						return res.json({msg: 'success'});
+						return res.json(devices[0]);
 					});
 				} else {
 					return res.json("Lock " + device.name + " already " + device.state + ".");
