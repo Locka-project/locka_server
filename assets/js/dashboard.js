@@ -15,7 +15,9 @@ function openCreateDevice() {
 }
 
 function openShareModal(deviceId) {
+	$('#shareDevice').trigger('reset');
 	$('#deviceIdShare').val(deviceId);
+	$('#userName').siblings('label, i').removeClass('active');
 	$('#modal3').openModal();
 }
 
@@ -25,12 +27,15 @@ function shareDevice() {
 	
 	$.get('/user/username/' + userName, function(data){
 		if(data){
-			console.log(data)
-			id = data.id;
-			$.post('/shareKey/create/' + id, {deviceId: deviceId}, function(data){
-				console.log(data);
-				$('#modal3').closeModal();
-			});
+			if((data.msg && data.msg == 'User does not exist') || userName.length == 0){
+				$('#passwordMinLength').remove();
+				$('#userName').after('<p id="passwordMinLength" >User does not exist');
+			} else {
+				id = data.id;
+				$.post('/shareKey/create/' + id, {deviceId: deviceId}, function(data){
+					$('#modal3').closeModal();
+				});
+			}
 		}
 	});
 }

@@ -140,7 +140,10 @@ function FrontUserCtrl(){
         if (err) {
           return res.json(err);
         }
-        return res.json(user);
+        if(user){
+					return res.json(user);
+				}
+        return res.json({msg: 'User does not exist'});
       });
     },
 
