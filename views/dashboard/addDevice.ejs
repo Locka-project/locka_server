@@ -5,30 +5,50 @@
 		<div class="row">
 		 <form id="createdEdit" class="col s12">
 			 <div class="row">
-				 <div class="input-field col s12">
-					 <input id="deviceName" name="name" type="text" style="text-transform: capitalize" class="validate">
-					 <label for="deviceName">Device Name</label>
-				 </div>
-				 <div class="input-field col s11">
+				<div class="input-field col s12">
+				 <input id="deviceName" name="name" type="text" style="text-transform: capitalize" class="validate">
+				 <label for="deviceName">Device Name</label>
+				</div>
+				<div class="input-field col s11">
 					<input id="identifier" name="identifier" type="text" style="text-transform: uppercase" class="validate">
 					<label for="identifier">Identifier</label>
 					<p>Click on right button to generate a unique identifier</p>
-				 </div>
-				 <div class="input-field col s1">
-						<i onclick="generateIdentifier()" id="generataIdentifier" class="material-icons">replay</i>
-					</div>
-			 </div>
-			 <div class="modal-footer">
-				<input type="hidden" name="id" id="deviceId">
-				<div class="col s12">
-					<div class="col s6">
-						<button style="width:100%" type="button" onclick="addDevice()" class="waves-effect waves-light btn">Save</button>
-					</div>
-					<div class="col s6">
-						<button style="width:100%" type="button" onclick="closeModal()" class="waves-effect waves-light btn">Close</button>
-					</div>
 				</div>
-		 	 </div>
+			 	<div class="input-field col s1">
+					<i onclick="generateIdentifier()" id="generataIdentifier" class="material-icons">replay</i>
+				</div>
+			 </div>
+			<div class="row">
+			 <div class="input-field col s12">
+				<div class="col s5 progress">
+        	<div class="determinate" style="width: 100%"></div>
+        </div>
+        <div class="col s2">
+        	<p class="separator">or</p>
+        </div>
+        <div class="col s5 progress">
+        	<div class="determinate" style="width: 100%"></div>
+        </div>
+			 </div>
+			</div>
+			<div class="row">
+				<div class="input-field col s12">
+					<input id="sharedKey" name="sharedKey" type="text" class="validate">
+					<label for="sharedKey">Shared Key</label>
+					<p>Insert a valide shared key</p>
+				</div>
+			</div>
+			<div class="modal-footer">
+			<input type="hidden" name="id" id="deviceId">
+			<div class="col s12">
+				<div class="col s6">
+					<button style="width:100%" type="button" onclick="addDevice()" class="waves-effect waves-light btn">Save</button>
+				</div>
+				<div class="col s6">
+					<button style="width:100%" type="button" onclick="$('#modal2').closeModal()" class="waves-effect waves-light btn">Close</button>
+				</div>
+			</div>
+			 </div>
 		 </form>
 	 </div>
 	</div>

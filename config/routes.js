@@ -48,6 +48,7 @@ module.exports.routes = {
 
 	/* User Front routing */
   'GET /user': 'FrontUserController.myAccount',
+  'GET /user/username/:username': 'FrontUserController.getUserByUsername',
 	'GET /:lang/user': 'FrontUserController.myAccount',
   'POST /user/update': 'FrontUserController.update',
   'POST /user/delete': 'FrontUserController.delete',
@@ -68,9 +69,16 @@ module.exports.routes = {
   'GET /device/getAllDevices': 'FrontDeviceController.getAllDevices',
   'GET /device/getUsersByDevice': 'FrontDeviceController.getUsersByDevice',
   'GET /device/logs': 'FrontDeviceController.getLogs',
-  
+  'GET /device/share/status/:id': 'FrontDeviceController.shareStatus',
+
   /* Lock identifier */
   'GET /lock/:id': 'FrontIdentifierController.getLock',
+
+  /* Share Device */
+  'POST /shareKey/create/:userId': 'FrontShareLockController.create',
+  'POST /shareKey/update/:id': 'FrontShareLockController.update',
+  'POST /shareKey/delete/:id': 'FrontShareLockController.delete',
+  'POST /shareKey/activate/:key': 'FrontShareLockController.activateSharing',
 
 	/* --------- API Request  ----------------*/
 
@@ -81,7 +89,7 @@ module.exports.routes = {
 	'GET /api/auth/:provider/callback': 'AuthController.callback',
 
 	/* User routing */
-	'GET /api/users': 'UserController.myAccount',
+	'GET /api/users/:id': 'UserController.show',
 	'PUT /api/users/:id': 'UserController.update',
 	'DELETE /api/users/:id': 'UserController.delete',
 	'PUT /api/users/:id/changePassword': 'UserController.changePassword',
@@ -99,21 +107,12 @@ module.exports.routes = {
 	'DELETE /api/devices/:id/delete': 'DeviceController.delete',
 	'GET /api/devices/getAllDevices': 'DeviceController.getAllDevices',
 	'GET /api/devices/getUsersByDevice': 'DeviceController.getUsersByDevice',
+	'GET /api/devices/:id/logs': 'DeviceController.getDeviceLogs',
 
 	/* ----------- Socket IO --------- */
 	'GET /socket/devices/subscribe': 'FrontDashboardController.getMyLock',
 	'GET /socket/users/logs/subscribe': 'FrontDashboardController.watchLogs',
 	'GET /api/user/subscribe': 'UserController.getMyLock',
 	'GET /api/devices/subscribe/:identifier': 'DeviceController.subscribe',
-
-  /***************************************************************************
-  *                                                                          *
-  * Custom routes here...                                                    *
-  *                                                                          *
-  * If a request to a URL doesn't match any of the custom routes above, it   *
-  * is matched against Sails route blueprints. See `config/blueprints.js`    *
-  * for configuration options and examples.                                  *
-  *                                                                          *
-  ***************************************************************************/
 
 };

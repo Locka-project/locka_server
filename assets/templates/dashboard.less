@@ -76,14 +76,17 @@ i {
 table#deviceListData tbody tr{
   background-color: transparent;
 }
+a .dataTables_paginate .paginate_button.disabled  {
+  color: red !important;
+}
 .sorting_1 {
     background-color: transparent !important;
 }
 div#deviceListData_length.dataTables_length, #deviceListData_wrapper label, .dataTables_wrapper .dataTables_paginate .paginate_button, .dataTables_wrapper .dataTables_info{
   color: white;
 }
-.dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
-  color: black !important;
+.dataTables_wrapper {
+  color: black ;
 }
 table.dataTable thead th, table.dataTable thead td, table.dataTable.no-footer {
   color: white !important;
@@ -146,4 +149,16 @@ div#logListData_length.dataTables_length, #logListData_wrapper label, .dataTable
 
 table.dataTable {
 	border-collapse: collapse;
+}
+
+// Add device
+.separator {
+	text-align: center;
+	font-size: 1em;
+	margin: 0 0 0;
+}
+
+// Icon 
+i {
+	margin-right: 4px;
 }

@@ -15,10 +15,12 @@ function UserCtrl(){
   }
 
   return {
-//controller actions
-    myAccount: function (req, res) {
-      return res.view('user/myAccount', {
-        user: req.user
+    show: function (req, res) {
+      User.findOne({id: req.allParams().id}).exec(function (err, user) {
+        if (err) {
+          return res.json(err);
+        }
+        res.json(user);
       });
     },
 

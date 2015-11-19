@@ -54,15 +54,28 @@
 			});
 		},
 		delete:function(req,res){
-			Device.destroy({id:req.allParams().id}).exec(function destroyCB(err, device){
+			ShareLock.destroy({owner: req.user.id, device: req.param('id')}).exec(function destroyCB(err, shareLock){
 				if(err) {
-					return res.json({msg : 'Error'})
+					return res.json(err)
 				}
-				Identifier.destroy({id:device[0].identifier}).exec(function destroyCB(err, identifier){
-					Device.publishDestroy(device[0].id,device[0]);
-					return res.json({msg : 'success'})
-				});
-				LogService.create({user: req.user, device:null, type: "Delete", description: device[0].name + " correctly deleted."});
+				console.log(shareLock)
+				if(shareLock){
+					Device.destroy({id:req.param('id')}).exec(function destroyCB(err, device){
+						if(err) {
+							return res.json(err)
+						}
+						Identifier.destroy({id: device[0].identifier}).exec(function destroyCB(err, identifier){
+							if(err) {
+								return res.json(err)
+							}
+							Device.publishDestroy(device[0].id,device[0]);
+							LogService.create({user: req.user, device:null, type: "Delete", description: device[0].name + " correctly deleted."});
+							return res.json({msg : 'success'})
+						})
+					});
+				} else {
+					return res.json({msg : 'error you are not authorized to remove this device'})
+				}
 			})
 		},
 		update:function(req,res){
@@ -123,16 +136,36 @@
 		},
 		getLogs: function(req, res){
 			if(!req.isSocket){
-				Log.find().populate('user').populate('device').exec(function(err, devices) {
-					if(err) {
-						return res.json(err);
+				User.findOne({id:req.user.id}).populate('deviceList').exec(function(err, user){
+					if(err){
+						return res.json(err)
 					}
-					return res.json(devices);
+					if(user.deviceList.length != 0){
+						var ids = _.pluck(user.deviceList, 'id');
+						Log.find({device: ids}).populate('user').populate('device').exec(function(err, devices) {
+							if(err) {
+								return res.json(err);
+							}
+							return res.json(devices);
+						});
+					}
 				});
 			} else {
 				Log.watch(req);
 				return res.json({msg: 'success'});
 			}	
+		},
+		shareStatus: function(req, res){
+			Device.findOne({id: req.params.id}).populate('shareKey').exec(function(err, find){
+				if(err){
+					return res.json(err)
+				}
+				if(find){
+					return res.json({msg: 'shared'})
+				} else {
+					return res.json({msg: 'not shared'})
+				}
+			});
 		}
 	}
 }
