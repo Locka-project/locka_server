@@ -120,6 +120,14 @@ function DeviceCtrl(){
 				return res.json(users.deviseList);
 			});
 		},
+		getDeviceLogs: function(req, res) {
+			Log.find({device : req.allParams().id}).exec(function findLog(err, logList){
+				if(err) {
+					return res.json(err);
+				}
+				return res.json(logList);
+			});
+		},
 		// Virtual lock
 		subscribe: function(req, res){
 			if(!req.isSocket) return res.json({msg: "is not a Socket"});

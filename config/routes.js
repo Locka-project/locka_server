@@ -107,21 +107,12 @@ module.exports.routes = {
 	'DELETE /api/devices/:id/delete': 'DeviceController.delete',
 	'GET /api/devices/getAllDevices': 'DeviceController.getAllDevices',
 	'GET /api/devices/getUsersByDevice': 'DeviceController.getUsersByDevice',
+	'GET /api/devices/:id/logs': 'DeviceController.getDeviceLogs',
 
 	/* ----------- Socket IO --------- */
 	'GET /socket/devices/subscribe': 'FrontDashboardController.getMyLock',
 	'GET /socket/users/logs/subscribe': 'FrontDashboardController.watchLogs',
 	'GET /api/user/subscribe': 'UserController.getMyLock',
 	'GET /api/devices/subscribe/:identifier': 'DeviceController.subscribe',
-
-  /***************************************************************************
-  *                                                                          *
-  * Custom routes here...                                                    *
-  *                                                                          *
-  * If a request to a URL doesn't match any of the custom routes above, it   *
-  * is matched against Sails route blueprints. See `config/blueprints.js`    *
-  * for configuration options and examples.                                  *
-  *                                                                          *
-  ***************************************************************************/
 
 };
