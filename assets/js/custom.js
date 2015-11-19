@@ -8,6 +8,7 @@ function insertDataDashboard(data){
 		} else {
 			var $lock = '<span title="Close"><i onclick="door(\'close\','+ this['id'] + ')" class="fa fa-lock"> </i></span>';
 		}
+
 		var actionBar = $lock+'<span title="Informations"> <i onclick="openEditDevice('+this['id']+',\''+this['name']+'\')" class="fa fa-info"></i></span><span title="Share"><i onclick="openShareModal('+this['id']+')" class="fa fa-retweet"></i></span>';
     
     deviceList.row.add([this['id'], this['name'], this['lock']['identifier'], this['state'], actionBar]).draw( false );
@@ -17,7 +18,6 @@ function insertDataDashboard(data){
 function insertDataLog(data){
 	logList.clear();
 	logList.draw();
-	
 	$.each(data,function(i){
 		// Format Date
 		var date = moment(data[i]['updatedAt']).format("DD/MM/YYYY HH:mm");
@@ -29,6 +29,98 @@ function insertDataLog(data){
 		}
 		logList.row.add([data[i]['user']['username'], name, data[i]['type'], data[i]['description'], date]).draw( false );
 	});
+}
+
+function insertDataStats(dataToProcess){
+	var openLocks = 0;
+	var closedLocks = 0;
+	var table = [];
+	$.each(dataToProcess,function(i){
+		if(dataToProcess[i].state=='open') {
+			openLocks++;
+		}
+		if(dataToProcess[i].state=='closed') {
+			closedLocks++;
+		}
+	});
+	if(closedLocks + openLocks == 0) {
+		$('#opn_clsd_stat').highcharts({
+			chart: {
+				backgroundColor: 'transparent',
+				plotBorderWidth: null,
+				plotShadow: false,
+				type: 'pie',
+
+			},
+			tooltip: {
+				pointFormat: '{series.label}: <b>{point.percentage}</b>'
+			},
+			plotOptions: {
+				pie: {
+					allowPointSelect: true,
+					cursor: 'pointer',
+					width: '100%',
+					dataLabels: {
+						enabled: true
+					},
+					showInLegend: false
+				}
+			},
+			series: [{
+				name: 'Count',
+				colorByPoint: true,
+				data: []
+			}]
+		});
+	} else {
+		$('#opn_clsd_stat').highcharts({
+			chart: {
+				style: {
+					color: "#fff"
+				},
+				backgroundColor: 'transparent',
+				plotBorderWidth: null,
+				plotShadow: false,
+				type: 'pie'
+			},
+			title: {
+				style: {
+					color: "#fff"
+				},
+				text: ''
+			},
+			tooltip: {
+				pointFormat: '{series.name}: <b>{point.y}</b>'
+			},
+			plotOptions: {
+				pie: {
+					allowPointSelect: true,
+					cursor: 'pointer',
+					dataLabels: {
+						enabled: true
+					},
+					size: '100%',
+					showInLegend: false
+				},
+				series: {
+					dataLabels: {
+						color: '#fff'
+					},
+				},
+			},
+			series: [{
+				name: 'Count',
+				colorByPoint: true,
+				data: [
+					{name: "Open", y: openLocks},
+					{name: "Closed", y: closedLocks}
+				]
+			}],
+			credits: {
+				enabled: false
+			},
+		});
+	}
 }
 
 // Notification center
@@ -72,7 +164,7 @@ function door(action, id) {
 	}
 }
 
-// Get all logs and devices
+// Get all logs and devices and stats
 function getAllDataForDashboard(){
 	$.get("/user/getDevicesByUser", function(data) {
 		if(data.length != 0){
@@ -97,6 +189,13 @@ function getAllDataForDashboard(){
 function getAllDataLogs(){
 	$.get( '/device/logs').done(function(logs) {
 		insertDataLog(logs)
+		getAllDataStats();
+	});
+}
+
+function getAllDataStats(){
+	$.get("/user/getDevicesByUser", function(array) {
+		insertDataStats(array);
 	});
 }
 
@@ -178,12 +277,32 @@ $('#deviceListData_length').remove();
 var logList = $('#logListData').DataTable();
 // Remove show entries
 $('#logListData_length').remove();
-var openChart = new Morris.Donut({
-	element: 'opn_clsd_stat',
-	data: [
-		{label: 'Open', value: 0},
-		{label: 'Closed', value: 0}
-	]
+var openChart = $('#opn_clsd_stat').highcharts({
+	chart: {
+		plotBackgroundColor: null,
+		plotBorderWidth: null,
+		plotShadow: false,
+		type: 'pie'
+	},
+	title: {
+		text: 'Open and closed locks'
+	},
+	tooltip: {
+		pointFormat: '{series.label}: <b>{point.percentage}</b>'
+	},
+	plotOptions: {
+		pie: {
+			allowPointSelect: true,
+			cursor: 'pointer',
+			dataLabels: {
+				enabled: true
+			},
+			showInLegend: false
+		}
+	},
+	series: [{
+		name: 'Count',
+		colorByPoint: true,
+		data: []
+	}]
 });
-
-
