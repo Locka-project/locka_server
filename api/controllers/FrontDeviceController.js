@@ -34,7 +34,6 @@
 					if(err) {
 						return res.json(err);
 					}
-					console.log("test");
 					device.userList.add(req.user);
 					device.save();		
 						
@@ -55,23 +54,28 @@
 			});
 		},
 		delete:function(req,res){
-			Device.destroy({id:req.allParams().id}).exec(function destroyCB(err, device){
+			ShareLock.destroy({owner: req.user.id, device: req.param('id')}).exec(function destroyCB(err, shareLock){
 				if(err) {
 					return res.json(err)
 				}
-				Identifier.destroy({id: device[0].identifier}).exec(function destroyCB(err, identifier){
-					if(err) {
-						return res.json(err)
-					}
-					ShareLock.destroy({device: device[0].id}).exec(function destroyCB(err, shareLock){
+				console.log(shareLock)
+				if(shareLock){
+					Device.destroy({id:req.param('id')}).exec(function destroyCB(err, device){
 						if(err) {
 							return res.json(err)
 						}
-						Device.publishDestroy(device[0].id,device[0]);
-						LogService.create({user: req.user, device:null, type: "Delete", description: device[0].name + " correctly deleted."});
-						return res.json({msg : 'success'})
-					})
-				});
+						Identifier.destroy({id: device[0].identifier}).exec(function destroyCB(err, identifier){
+							if(err) {
+								return res.json(err)
+							}
+							Device.publishDestroy(device[0].id,device[0]);
+							LogService.create({user: req.user, device:null, type: "Delete", description: device[0].name + " correctly deleted."});
+							return res.json({msg : 'success'})
+						})
+					});
+				} else {
+					return res.json({msg : 'error you are not authorized to remove this device'})
+				}
 			})
 		},
 		update:function(req,res){

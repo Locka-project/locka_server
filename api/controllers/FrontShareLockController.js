@@ -83,6 +83,7 @@ module.exports = {
 						}
 						device.userList.add(shareLock[0].user);
 						device.save();
+						LogService.create({user: req.user.id, device: shareLock[0].device, type: "Update", description: shareLock[0].device.name + " is now succefully shared"});
 						return res.json({msg: 'success'})
 					});
 				});

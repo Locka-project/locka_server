@@ -33,6 +33,7 @@ function insertDataLog(data){
 }
 
 
+/*
 function insertDataStats(dataToProcess){
 	var openLocks = 0;
 	var closedLocks = 0;
@@ -47,6 +48,7 @@ function insertDataStats(dataToProcess){
 	openChart.data["Open"].value = openLocks;
 	openChart.data["Closed"].value = closedLocks;
 }
+*/
 
 // Notification center
 function notification(type, text) {
@@ -134,11 +136,13 @@ function getAllDataLogs(){
 	});
 }
 
+/*
 function getAllDataStats(){
 	$.get("/user/getDevicesByUser", function(array) {
 		insertDataStats(array);
 	});
 }
+*/
 
 // Socket IO //
 io.socket.on('connect', function(){
@@ -150,22 +154,21 @@ io.socket.on('connect', function(){
 
 	// Monitor device Model
 	io.socket.on("device", function(data){
-		console.log(data.verb);
 		switch(data.verb) {
 			case 'created':
 				getAllDataForDashboard();
-				getAllDataStats();
+// 				getAllDataStats();
 				break;
 			case 'destroyed':
 				getAllDataForDashboard();
-				getAllDataStats();
+// 				getAllDataStats();
 				break;
 			case 'removedFrom':
 				console.log('Switch error');
 				break;
 			case 'updated':
 				getAllDataForDashboard();
-				getAllDataStats();
+// 				getAllDataStats();
 				break;
 			default:
 				notification('error', 'error switch');
@@ -174,34 +177,38 @@ io.socket.on('connect', function(){
 	});
 	// Monitor log Model
 	io.socket.on("log", function(data){
-		log = data.data.log;
-		switch(data.verb) {
-	    case 'created':
+		console.log(data)
+		if(data){
+			log = data.data.log;
+			switch(data.verb) {
+		    case 'created':
 	    		switch(log.type){
 		    		case 'Create':
 		    			notification('add', log.description);
+		    			getAllDataLogs();
 		    			break;
 		    		case 'Update':
 		    			notification('update', log.description);
+		    			getAllDataLogs();
 		    			break;
 		    		case 'Delete':
 		    			notification('del', log.description);
+		    			getAllDataLogs();
 		    			break;
 		    		case 'Open':
 		    			notification('open', log.description);
+		    			getAllDataLogs();
 		    			break;
 		    		case 'Close':
 		    			notification('close', log.description);
+		    			getAllDataLogs();
 		    			break;
 		    		default:
 		    			notification('error', 'error log type');
+		    			getAllDataLogs();
 		    			break;
 		    	}
-	        getAllDataLogs();
-	        break;
-	    default:
-	      	notification('error', 'error verb socket');
-					break;
+			}
 		}
 	});
 	// Get All data
