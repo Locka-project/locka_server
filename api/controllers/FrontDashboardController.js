@@ -50,7 +50,14 @@ var Dashboard = {
 				if(device.sharedKey.length == 0){
 					return res.view('dashboard/share/shareDevice',  {device: device, layout: null})
 				} else if(user.id == device.sharedKey[0].owner) {
-					return res.view('dashboard/share/listAllSharedDevice',  {device: device, layout: null})
+					ShareLock.find({device:deviceId}).populateAll().exec(function(err,keys){
+						if(err){
+							return res.json(err)
+						} else {
+							console.log(keys)
+							return res.view('dashboard/share/listAllSharedDevice',  {device: device, shareLock:keys, layout: null})	
+						}
+					});
 				} else if (user.id != device.sharedKey[0].owner) {
 					var sharedKey = device.sharedKey.filter(function(e){
 						return user.id == e.user && deviceId == e.device 

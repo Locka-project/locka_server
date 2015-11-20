@@ -38,6 +38,9 @@
 					device.save();		
 						
 					Device.update({id:device.id},{identifier:lock.id}).exec(function(err){
+						if(err){
+							return res.json(err);
+						}
 						LogService.create({user: req.user, deviceId: device.id, type: "Create", description: device.name + " correctly created." });
 						return res.json({msg: 'success', device: device});
 					})
@@ -110,7 +113,6 @@
 								return res.json(err)
 							}
 							LogService.create({user: req.user, deviceId: deviceOne.id, type: "Close", description: device[0].name + " is now closed."});
-							Device.publishUpdate(goodDevice.id,goodDevice);
 							return res.json(goodDevice);
 						});
 					});
@@ -134,7 +136,6 @@
 								return res.json(err)
 							}
 							LogService.create({user: req.user, deviceId: deviceOne.id, type: "Open", description: device[0].name + " is now opened."});
-							Device.publishUpdate(goodDevice.id,goodDevice);
 							return res.json(goodDevice);
 						});
 					});
@@ -168,7 +169,6 @@
 					}
 				});
 			} else {
-				Log.watch(req);
 				return res.json({msg: 'success'});
 			}
 		}

@@ -12,10 +12,9 @@
 				 <br/>
 				</div>
 			<div class="modal-footer">
-			<input type="hidden" name="id" id="deviceIdShare" value="<%- device.id %>">
 			<div class="col s12">
 				<div class="col s6">
-					<button style="width:100%" type="button" onclick="shareDevice()" class="waves-effect waves-light btn">Share</button>
+					<button style="width:100%" type="button" onclick="shareDevice(<%- device.id %>)" class="waves-effect waves-light btn">Share</button>
 				</div>
 				<div class="col s6">
 					<button style="width:100%" type="button" onclick="$('#modal3').closeModal()" class="waves-effect waves-light btn">Close</button>

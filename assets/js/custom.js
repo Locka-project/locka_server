@@ -18,6 +18,7 @@ function insertDataDashboard(data){
 function insertDataLog(data){
 	logList.clear();
 	logList.draw();
+	
 	$.each(data,function(i){
 		// Format Date
 		var date = moment(data[i]['updatedAt']).format("DD/MM/YYYY HH:mm");
@@ -182,13 +183,14 @@ function getAllDataForDashboard(){
 		  });	
 		} else {
 			insertDataDashboard([]);
+			insertDataLog([]);
 		}
 	});
 }
 
 function getAllDataLogs(){
 	$.get( '/device/logs').done(function(logs) {
-		insertDataLog(logs)
+		insertDataLog(logs);
 		getAllDataStats();
 	});
 }
@@ -215,9 +217,6 @@ io.socket.on('connect', function(){
 			case 'destroyed':
 				getAllDataForDashboard();
 				break;
-			case 'addedTo':
-				getAllDataForDashboard();
-				break;
 			case 'updated':
 				getAllDataForDashboard();
 				break;
@@ -225,7 +224,6 @@ io.socket.on('connect', function(){
 				notification('error', 'error switch');
 				break;
 		}
-		console.log(data)
 		
 		if(data.data != null){
 			if(data.data.logList != null){

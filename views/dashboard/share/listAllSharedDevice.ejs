@@ -26,6 +26,7 @@
 						  <tr>
 					      <th data-field="id">#</th>
 					      <th data-field="name">Shared Key</th>
+					      <th data-field="name">Shared with</th>
 					      <th data-field="price">Activate</th>
 					      <th data-field="price">Option</th>
 						  </tr>
@@ -35,6 +36,7 @@
 								<tr>
 								<td><%= device.sharedKey[i].id %></td>
 								<td><%= device.sharedKey[i].sharedKey %></td>
+								<td><%= shareLock[i].user.username %></td>
 								<td><%= device.sharedKey[i].activate %></td>
 								<td><span title="Remove share"><i onclick="unShareDevice(<%= device.id %>,'<%= device.sharedKey[i].sharedKey %>')" class="fa fa-ban"></i></span></td
 								</tr>

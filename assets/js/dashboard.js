@@ -37,11 +37,8 @@ function shareDevice(deviceId) {
 				id = data.id;
 				$.post('/shareKey/create/' + id, {deviceId: deviceId}, function(data){
 					$('#modal3').closeModal();
-					console.log(data, deviceId, id)
 					if (data.code && data.code == 101){
 						notification('error', "It's not possible to share this device with you because you are the owner");
-					} else {
-						notification('update', data.device.name + " is awaiting activation");
 					}
 				});
 			}
@@ -75,8 +72,6 @@ function addDevice() {
 				setTimeout(function(){
 					getAllDataForDashboard();
 				}	, 1000);
-				notification('add', data.device.name + " is now created");
-
 			});
 		} else {
 			$('#passwordMinLength').remove();
@@ -97,8 +92,6 @@ function addDevice() {
 						setTimeout(function(){
 							getAllDataForDashboard();
 						}	, 1000);
-						console.log(data)
-						notification('add', data.device.name + " is now shared");
 					}
 				}
 			);
@@ -141,7 +134,6 @@ function unShareDevice(id, key){
 				getAllDataForDashboard();
 			}	, 1000);
 			$('#modal3').closeModal();
-			notification('del', 'the current lock is not shared')
 		}
 	});
 }
