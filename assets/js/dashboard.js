@@ -117,7 +117,6 @@ function editDevice() {
 			if(!data.msg && data.msg != 'success'){
 				Materialize.toast(data.invalidAttributes.name[0].message, 4000);
 			}
-			notification('update', data.device.name + "has been updated");
 		});
 	} else {
 		$('#modal1').closeModal();

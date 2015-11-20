@@ -94,7 +94,6 @@
 					return res.json(err);
 				}
 				LogService.create({user: req.user, deviceId: device[0].id, type: "Update", description: device[0].name + " correctly updated."});
-				Device.publishUpdate(device[0].id,device[0]);
 				return res.json({msg: 'success', device: device[0]});
 			});
 		},

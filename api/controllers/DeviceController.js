@@ -39,7 +39,6 @@ function DeviceCtrl(){
 					device.save();
 					Device.update({id:device.id},{identifier:lock.id}).exec(function(err){
 						LogService.create({user: req.user, device: device.id, type: "Create", description: device.name + " correctly created." });
-						Device.publishCreate(device);
 						return res.json(device);
 					})
 				});
@@ -70,7 +69,6 @@ function DeviceCtrl(){
 					return res.json(err);
 				}
 				LogService.create({user: req.user, device: devices[0], type: "Update", description: "Device correctly updated."});
-				Device.publishUpdate(devices[0].id,devices[0]);
 				return res.json(devices[0]);
 			});
 		},
@@ -85,7 +83,6 @@ function DeviceCtrl(){
 							return res.json(errUpdate);
 						}
 						LogService.create({user: req.user, device: devices[0], type: "Close", description: "Lock closed."});
-						Device.publishUpdate(devices[0].id,devices[0]);
 						return res.json(devices[0]);
 					});
 				} else {
@@ -104,7 +101,6 @@ function DeviceCtrl(){
 							return res.json(err);
 						}
 						LogService.create({user: req.user, device: devices[0], type: "Open", description: "Lock opened."});
-						Device.publishUpdate(devices[0].id,devices[0]);
 						return res.json(devices[0]);
 					});
 				} else {
@@ -127,6 +123,26 @@ function DeviceCtrl(){
 				}
 				return res.json(logList);
 			});
+		},
+		getLogs: function(req, res){
+			if(!req.isSocket){
+				User.findOne({id:req.user.id}).populate('deviceList').exec(function(err, user){
+					if(err){
+						return res.json(err)
+					}
+					if(user.deviceList.length != 0){
+						var ids = _.pluck(user.deviceList, 'id');
+						Log.find({device: ids}).populate('user').populate('device').exec(function(err, devices) {
+							if(err) {
+								return res.json(err);
+							}
+							return res.json(devices);
+						});
+					}
+				});
+			} else {
+				return res.json({msg: 'success'});
+			}
 		},
 		// Virtual lock
 		subscribe: function(req, res){
