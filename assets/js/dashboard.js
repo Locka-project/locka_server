@@ -51,8 +51,9 @@ function deleteDevice(e) {
 		$('#modal1').closeModal();
 		if(data.msg && data.msg != "success"){
 			notification('error', data.msg);
+		} else {
+			notification('update', 'Your device has been correctly removed');
 		}
-		notification('update', 'Your device has been correctly removed');
 	});
 }
 
