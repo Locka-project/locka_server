@@ -54,7 +54,6 @@ var Dashboard = {
 						if(err){
 							return res.json(err)
 						} else {
-							console.log(keys)
 							return res.view('dashboard/share/listAllSharedDevice',  {device: device, shareLock:keys, layout: null})	
 						}
 					});
@@ -64,8 +63,6 @@ var Dashboard = {
 					})
 					return res.view('dashboard/share/stopShareDevice',  {device: device, key: sharedKey[0], layout: null})
 				}
-			} else {
-				console.log('Error your id is not found.')
 			}
 		})
 	

@@ -70,7 +70,6 @@ exports.register = function (req, res, next) {
     , accessToken : token
     }, function (err, passport) {
       if (err) {
-        console.log(err);
         if (err.code === 'E_VALIDATION') {
           req.flash('error', 'Error.Passport.Password.Invalid');
         }

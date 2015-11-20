@@ -84,17 +84,7 @@ function UserCtrl(){
           if(!response){
             return res.json({msg: 'email not sent'});
           }
-          /*EmailService.forgetPassword(updated[0], newPassword).then(function emailCB(err, response){
-           if(!response){
-           res = "Error : " + err + " trying to send mail.";
-           console.log(res);
-           return res;
-           }
-           });*/
         });
-        /* Password à hasher */
-        /*res = "New password generated for user of id " + found[0].id + " : " + newPassword/!*.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0)*!/;
-         console.log(res);*/
         return res.redirect('/login');
       });
     },

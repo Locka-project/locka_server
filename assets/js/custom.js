@@ -51,7 +51,12 @@ function insertDataStats(dataToProcess){
 				plotBorderWidth: null,
 				plotShadow: false,
 				type: 'pie',
-
+			},
+			title: {
+				text: 'No lock to display',
+				style: {
+					color: "#fff"
+				},
 			},
 			tooltip: {
 				pointFormat: '{series.label}: <b>{point.percentage}</b>'
@@ -71,7 +76,10 @@ function insertDataStats(dataToProcess){
 				name: 'Count',
 				colorByPoint: true,
 				data: []
-			}]
+			}],
+			credits: {
+				enabled: false
+			},
 		});
 	} else {
 		$('#opn_clsd_stat').highcharts({
@@ -82,13 +90,13 @@ function insertDataStats(dataToProcess){
 				backgroundColor: 'transparent',
 				plotBorderWidth: null,
 				plotShadow: false,
-				type: 'pie'
+				type: 'pie',
 			},
 			title: {
+				text: ' ',
 				style: {
 					color: "#fff"
 				},
-				text: ''
 			},
 			tooltip: {
 				pointFormat: '{series.name}: <b>{point.y}</b>'
@@ -184,6 +192,7 @@ function getAllDataForDashboard(){
 		} else {
 			insertDataDashboard([]);
 			insertDataLog([]);
+			getAllDataStats();
 		}
 	});
 }
@@ -277,13 +286,16 @@ var logList = $('#logListData').DataTable();
 $('#logListData_length').remove();
 var openChart = $('#opn_clsd_stat').highcharts({
 	chart: {
-		plotBackgroundColor: null,
+		backgroundColor: 'transparent',
 		plotBorderWidth: null,
 		plotShadow: false,
 		type: 'pie'
 	},
 	title: {
-		text: 'Open and closed locks'
+		text: 'No lock to display',
+		style: {
+			color: '#fff'
+		}
 	},
 	tooltip: {
 		pointFormat: '{series.label}: <b>{point.percentage}</b>'
@@ -302,5 +314,8 @@ var openChart = $('#opn_clsd_stat').highcharts({
 		name: 'Count',
 		colorByPoint: true,
 		data: []
-	}]
+	}],
+	credits: {
+		enabled: false
+	},
 });
