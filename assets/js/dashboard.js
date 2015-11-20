@@ -52,6 +52,7 @@ function deleteDevice(e) {
 		if(data.msg && data.msg != "success"){
 			notification('error', data.msg);
 		}
+		notification('update', 'Your device has been correctly removed');
 	});
 }
 

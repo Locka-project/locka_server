@@ -45,14 +45,16 @@ function insertDataStats(dataToProcess){
 		}
 	});
 	if(closedLocks + openLocks == 0) {
-		$('#opn_clsd_stat').highcharts({
+		$('#statContainer').highcharts({
 			chart: {
 				backgroundColor: 'transparent',
 				plotBorderWidth: null,
 				plotShadow: false,
 				type: 'pie',
+				spacingTop: 100,
 			},
 			title: {
+				align: "center",
 				text: 'No lock to display',
 				style: {
 					color: "#fff"
@@ -82,7 +84,7 @@ function insertDataStats(dataToProcess){
 			},
 		});
 	} else {
-		$('#opn_clsd_stat').highcharts({
+		$('#statContainer').highcharts({
 			chart: {
 				style: {
 					color: "#fff"
@@ -91,8 +93,10 @@ function insertDataStats(dataToProcess){
 				plotBorderWidth: null,
 				plotShadow: false,
 				type: 'pie',
+				spacingTop: 100,
 			},
 			title: {
+				align: "center",
 				text: ' ',
 				style: {
 					color: "#fff"
