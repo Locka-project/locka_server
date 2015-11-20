@@ -10,7 +10,7 @@ a [Sails](http://sailsjs.org) application
 ## Start server
 `sails lift`
 
-## IP Serveur
+## Server ip
 `149.12.192.138:1337`
 
 ## Default User
