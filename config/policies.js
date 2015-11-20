@@ -56,7 +56,9 @@ module.exports.policies = {
 	},
 	DeviceController : {
 	  '*': ['passport','bearerAuth'],
-	  'subscribe': ['passport','authSocket']
+	  'subscribe': ['passport','authSocket'],
+	  'open': ['passport','authSocket','bearerAuth'],
+	  'close': ['passport','authSocket','bearerAuth'],
 	}
 
   /***************************************************************************
