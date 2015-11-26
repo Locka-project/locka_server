@@ -27,7 +27,8 @@ module.exports.passport = {
     strategy: require('passport-twitter').Strategy,
     options: {
       consumerKey: 'onjAC4sVoaTFI520NFEg',
-      consumerSecret: 'hLbylkwFgPW9y1d3jTwb80wprQHz6IjcHQLAOntRwYY'
+      consumerSecret: 'hLbylkwFgPW9y1d3jTwb80wprQHz6IjcHQLAOntRwYY',
+      callbackURL: 'http://149.12.192.138:1337/auth/twitter/callback'
     }
   },
 /**
